@@ -15,4 +15,9 @@
 //= require tether
 //= require bootstrap-sprockets
 //= require turbolinks
-//= require_tree .
+//= require jquery.min
+//= require metisMenu.min
+//= require raphael.min
+//= require morris.min
+//= require morris-data
+//= require sb-admin-2.min
