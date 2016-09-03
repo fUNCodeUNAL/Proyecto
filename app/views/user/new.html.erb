@@ -1,0 +1,78 @@
+<%
+  @error = ""
+  @error_class = ""
+
+  def check_error(param)
+    if @user.errors.include?(param) 
+      @error_class = " has-error"
+      @error = "*" + @user.errors.full_messages_for(param)[0]
+    else 
+      @error = ""
+      @error_class = ""
+    end
+  end
+%>
+
+<div class="form-horizontal">
+  <legend>Sign up</legend>
+  <%= form_for (@user), url: user_index_path  do |f| %>
+    <%check_error(:full_name)%>
+    <div class="form-group <%= @error_class %>" >
+      <label class="col-md-4 control-label">Full Name</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.text_field :full_name, class: "form-control input-md", placeholder: "name" %>
+        </div>
+        <p class="help-block"> <%= @error %></p> 
+      </div>
+    </div>
+    <%check_error(:email)%>
+    <div class="form-group <%= @error_class %>">
+      <label class="col-md-4 control-label">Username</label>
+      <div class="col-md-5">
+        <div class="input-group">
+          <%= f.text_field :email, class: "form-control", placeholder: "example" %>
+          <span class="input-group-addon">@unal.edu.co</span>
+        </div>
+        <p class="help-block">Insert your university's username</p>
+        <p class="help-block"> <%= @error %></p> 
+      </div>
+    </div>
+    <%check_error(:email_confirmation)%>
+    <div class="form-group <%= @error_class %>">
+      <label class="col-md-4 control-label">Username confirmation</label>
+      <div class="col-md-5">
+        <div class="input-group">
+          <%= f.text_field :email_confirmation, class: "form-control", placeholder: "example" %>
+          <span class="input-group-addon">@unal.edu.co</span>
+        </div>
+        <p class="help-block">Confirm your university's username</p>
+        <p class="help-block"> <%= @error %></p> 
+      </div>
+    </div>
+    <%check_error(:password)%>
+    <div class="form-group  <%= @error_class %>">
+      <label class="col-md-4 control-label">Password</label>
+      <div class="col-md-5">
+        <%= f.password_field :password, class: "form-control input-md", placeholder: "******" %>
+        <span class="help-block">At least 6 characters</span>
+        <p class="help-block"> <%= @error %></p> 
+      </div>
+    </div>
+    <%check_error(:password_confirmation)%>
+    <div class="form-group  <%= @error_class %>">
+      <label class="col-md-4 control-label">Password confirmation</label>
+      <div class="col-md-5">
+        <%= f.password_field :password_confirmation, class: "form-control input-md", placeholder: "******" %>
+        <span class="help-block">Confirm your password</span>
+        <p class="help-block"> <%= @error %></p> 
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-4 control-label"></label>
+      <div class="col-md-4">
+        <%= f.submit "Register", class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
