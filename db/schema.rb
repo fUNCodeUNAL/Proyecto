@@ -33,9 +33,9 @@ ActiveRecord::Schema.define(version: 20160904074120) do
   end
 
   create_table "users", id: false, force: :cascade do |t|
-    t.string   "full_name"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.string   "full_name"
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
