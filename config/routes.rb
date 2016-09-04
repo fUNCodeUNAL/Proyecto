@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   root 'pages#index'
-
+  get 'pages/index'
+  devise_for :users, :controllers => { registrations: 'registrations' }
   resources :user, only: [:new, :create], param: :email
+
 
   #Modificar primary kay, en caso de implementar metodos
 
