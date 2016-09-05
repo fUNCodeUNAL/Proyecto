@@ -17,7 +17,7 @@ module FUNCode
 		:port					=> '587',
 		:user_name				=> 'confirmacionfuncode@gmail.com',
 		:password				=> 'UNAL2016',
-		:authentication			=> "login", 
+		:authentication			=> :plain, 
 		:enable_starttls_auto	=> true
 	}
 
