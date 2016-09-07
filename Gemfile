@@ -32,8 +32,9 @@ gem 'omniauth-twitter'
 gem 'bootstrap-sass', '~> 3.3.4.1'
 gem 'rails-assets-tether', '>= 1.1.0'
 gem "font-awesome-rails"
-
 gem "devise"
+
+gem 'figaro'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
