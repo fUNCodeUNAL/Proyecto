@@ -4,9 +4,11 @@ class UserController < ApplicationController
     @user = User.new
   end
   def create
+    render :new
+=begin
     @user = User.new(user_params)
-    @user.email = @user.email.downcase
-
+    #@user.email = @user.email.downcase
+    @user.email = @user.email+"@unal.edu.co"
     #Se asume que si se pasa la validaciónde user también pasa la de student.
     #Los atributos cod y semester de student no son obligatorios aún.
     if @user.save
@@ -15,7 +17,7 @@ class UserController < ApplicationController
     else
       render :new
     end
-
+=end
   end
 
   private

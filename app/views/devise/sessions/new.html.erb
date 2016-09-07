@@ -1,26 +1,42 @@
-<h2>Log in</h2>
-
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
-    </div>
-  <% end -%>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
+<form class="form-horizontal">
+  <fieldset>
+    <legend>Log in</legend>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form-group">
+        <label class="col-md-4 control-label">Username</label>
+        <div class="col-md-5">
+          <div class="input-group">
+            <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "username" %>
+            <span class="input-group-addon">@unal.edu.co</span>
+          </div>
+          <p class="help-block">Insert your university's username</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4 control-label" for="passwordinput">Password</label>
+        <div class="col-md-5">
+          <%= f.password_field :password, autocomplete: "off", class: "form-control input-md", placeholder: "******" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4 control-label" for="checkboxes"></label>
+        <div class="col-md-4">
+          <label>
+            <% if devise_mapping.rememberable? -%>
+              <%= f.check_box :remember_me %>
+            <% end -%>
+            Remember me
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4 control-label" for="singlebutton"></label>
+        <div class="col-md-4">
+          <%= f.submit "Log in", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </fieldset>
+</form>
 
 <%= render "devise/shared/links" %>
