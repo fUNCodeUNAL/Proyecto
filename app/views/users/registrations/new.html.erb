@@ -15,38 +15,30 @@
 
 <div class="form-horizontal">
   <legend>Sign up</legend>
-  <%= form_for (@user), url: user_index_path  do |f| %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%check_error(:full_name)%>
     <div class="form-group <%= @error_class %>" >
       <label class="col-md-4 control-label">Full Name</label>  
       <div class="col-md-5">
         <div>
-          <%= f.text_field :full_name, class: "form-control input-md", placeholder: "name" %>
+          <%= f.text_field :full_name, autocomplete: false, class: "form-control", placeholder: "name" %>
         </div>
         <p class="help-block"> <%= @error %></p> 
       </div>
     </div>
     <%check_error(:email)%>
+    <%  position = @user.email.index( "@" )
+        if position != nil
+          @user.email= @user.email[0..position-1]
+        end %>
     <div class="form-group <%= @error_class %>">
       <label class="col-md-4 control-label">Username</label>
       <div class="col-md-5">
         <div class="input-group">
-          <%= f.text_field :email, class: "form-control", placeholder: "example" %>
+          <%= f.text_field :email, class: "form-control", placeholder: "username" %>
           <span class="input-group-addon">@unal.edu.co</span>
         </div>
         <p class="help-block">Insert your university's username</p>
-        <p class="help-block"> <%= @error %></p> 
-      </div>
-    </div>
-    <%check_error(:email_confirmation)%>
-    <div class="form-group <%= @error_class %>">
-      <label class="col-md-4 control-label">Username confirmation</label>
-      <div class="col-md-5">
-        <div class="input-group">
-          <%= f.text_field :email_confirmation, class: "form-control", placeholder: "example" %>
-          <span class="input-group-addon">@unal.edu.co</span>
-        </div>
-        <p class="help-block">Confirm your university's username</p>
         <p class="help-block"> <%= @error %></p> 
       </div>
     </div>
@@ -71,8 +63,10 @@
     <div class="form-group">
       <label class="col-md-4 control-label"></label>
       <div class="col-md-4">
-        <%= f.submit "Register", class: "btn btn-primary" %>
+        <%= f.submit "Sign up", class: "btn btn-primary" %>
       </div>
     </div>
   <% end %>
 </div>
+
+<%= render "devise/shared/links" %>
