@@ -1,16 +1,39 @@
-<h2>Forgot your password?</h2>
+<%
+  @error = ""
+  @error_class = ""
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= devise_error_messages! %>
+  def check_error(param)
+    if @user.errors.include?(param) 
+      @error_class = " has-error"
+      @error = "*" + @user.errors.full_messages_for(param)[0]
+    else 
+      @error = ""
+      @error_class = ""
+    end
+  end
+%>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
+<div class="form-horizontal">
+  <legend>Forgot your password?</legend>
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+    <%check_error(:email)%>
+    <div class="form-group <%= @error_class %>" >
+      <label class="col-md-4 control-label">Email</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.email_field :email, autofocus: true, class: "form-control input-md", placeholder: "username@unal.edu.co" %>
+        </div>
+        <p class="help-block">Insert your university's email</p>
+        <p class="help-block"> <%= @error %></p> 
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-4 control-label"></label>
+      <div class="col-md-4">
+        <%= f.submit "Send me reset password instructions", class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
 
 <%= render "devise/shared/links" %>

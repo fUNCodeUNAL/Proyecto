@@ -1,26 +1,58 @@
-<h2>Log in</h2>
+<%
+  @error = ""
+  @error_class = ""
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
+  def check_error(param)
+    if @user.errors.include?(param) 
+      @error_class = " has-error"
+      @error = "*" + @user.errors.full_messages_for(param)[0]
+    else 
+      @error = ""
+      @error_class = ""
+    end
+  end
+%>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+<div class="form-horizontal">
+  <legend>Log in</legend>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <%check_error(:email)%>
+    <div class="form-group <%= @error_class %>" >
+      <label class="col-md-4 control-label">Email</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.email_field :email, autofocus: true, class: "form-control input-md", placeholder: "username@unal.edu.co" %>
+        </div>
+        <p class="help-block">Insert your university's email</p>
+        <p class="help-block"> <%= @error %></p> 
+      </div>
     </div>
-  <% end -%>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
+    <%check_error(:password)%>
+    <div class="form-group  <%= @error_class %>">
+      <label class="col-md-4 control-label">Password</label>
+      <div class="col-md-5">
+        <%= f.password_field :password, autocomplete: "off", class: "form-control input-md", placeholder: "******" %>
+        <p class="help-block"> <%= @error %></p> 
+      </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="checkboxes"></label>
+        <div class="col-md-4">
+          <label>
+            <% if devise_mapping.rememberable? -%>
+              <%= f.check_box :remember_me %>
+            <% end -%>
+            Remember me
+          </label>
+        </div>
+      </div>
+    <div class="form-group">
+      <label class="col-md-4 control-label"></label>
+      <div class="col-md-4">
+        <%= f.submit "Log in", class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
 
 <%= render "devise/shared/links" %>
