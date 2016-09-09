@@ -10,8 +10,11 @@ class UserController < ApplicationController
     #Se asume que si se pasa la validaciónde user también pasa la de student.
     #Los atributos cod y semester de student no son obligatorios aún.
     if @user.save
-      @student = Student.create( email: params[:user][:email] )
-      redirect_to root_path
+      @student = Student.new( email: params[:user][:email] )
+      if @student.save
+        print("works")
+      end
+      #redirect_to root_path
     else
       render :new
     end
