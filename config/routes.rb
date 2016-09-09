@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => { registrations: 'registrations' }
   resources :user, only: [:new, :create], param: :email
 
+  get 'pages/ok'
+  get 'pages/wrong'
 
   #Modificar primary kay, en caso de implementar metodos
 
