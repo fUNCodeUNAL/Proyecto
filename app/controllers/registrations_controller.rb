@@ -1,5 +1,10 @@
 class RegistrationsController < Devise::RegistrationsController
 
+  def create
+  	super
+  	@student = Student.create( email: params[:user][:email])
+  end
+
   private
 
   def sign_up_params
