@@ -5,9 +5,10 @@ class Users::PasswordsController < Devise::PasswordsController
   # end
 
   # POST /resource/password
-  # def create
-  #   super
-  # end
+  def create
+    params[:user][:email] = params[:user][:email]+"@unal.edu.co"
+    super
+  end
 
   # GET /resource/password/edit?reset_password_token=abcdef
   # def edit

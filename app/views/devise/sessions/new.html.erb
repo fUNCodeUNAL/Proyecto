@@ -2,20 +2,25 @@
   <fieldset>
     <legend>Log in</legend>
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="form-group">
+      <% e = check_error(:email) %>
+      <% modify_email() %>
+      <div class="form-group <%= e.style %>">
         <label class="col-md-4 control-label">Username</label>
         <div class="col-md-5">
           <div class="input-group">
-            <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "username" %>
+            <%= f.text_field :email, autofocus: true, class: "form-control", placeholder: "username" %>
             <span class="input-group-addon">@unal.edu.co</span>
           </div>
           <p class="help-block">Insert your university's username</p>
+          <p class="help-block"> <%= e.message %></p> 
         </div>
       </div>
-      <div class="form-group">
+      <% e = check_error(:password) %>
+      <div class="form-group <%= e.style %>">
         <label class="col-md-4 control-label" for="passwordinput">Password</label>
         <div class="col-md-5">
           <%= f.password_field :password, autocomplete: "off", class: "form-control input-md", placeholder: "******" %>
+          <p class="help-block"> <%= e.message %></p> 
         </div>
       </div>
       <div class="form-group">

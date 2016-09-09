@@ -5,9 +5,10 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # POST /resource/confirmation
-  # def create
-  #   super
-  # end
+  def create
+    params[:user][:email] = params[:user][:email]+"@unal.edu.co"
+    super
+  end
 
   # GET /resource/confirmation?confirmation_token=abcdef
   # def show

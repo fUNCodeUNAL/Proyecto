@@ -1,34 +1,19 @@
-<%
-  @error = ""
-  @error_class = ""
-
-  def check_error(param)
-    if @user.errors.include?(param) 
-      @error_class = " has-error"
-      @error = "*" + @user.errors.full_messages_for(param)[0]
-    else 
-      @error = ""
-      @error_class = ""
-    end
-  end
-%>
-
 <div class="form-horizontal">
   <legend>Sign up</legend>
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-    <%= devise_error_messages! %>
-    <%check_error(:full_name)%>
-    <div class="form-group <%= @error_class %>" >
+    <% e = check_error(:full_name) %>
+    <div class="form-group <%= e.style %>" >
       <label class="col-md-4 control-label">Full Name</label>  
       <div class="col-md-5">
         <div>
-          <%= f.text_field :full_name, autofocus: true, class: "form-control input-md", placeholder: "name" %>
+          <%= f.text_field :full_name, autocomplete: false, class: "form-control", placeholder: "name" %>
         </div>
-        <p class="help-block"> <%= @error %></p> 
+        <p class="help-block"> <%= e.message %></p> 
       </div>
     </div>
-    <%check_error(:email)%>
-    <div class="form-group <%= @error_class %>">
+    <% e = check_error(:email) %>
+    <% modify_email() %>
+    <div class="form-group <%= e.style %>">
       <label class="col-md-4 control-label">Username</label>
       <div class="col-md-5">
         <div class="input-group">
@@ -36,25 +21,25 @@
           <span class="input-group-addon">@unal.edu.co</span>
         </div>
         <p class="help-block">Insert your university's username</p>
-        <p class="help-block"> <%= @error %></p> 
+        <p class="help-block"> <%= e.message %></p> 
       </div>
     </div>
-    <%check_error(:password)%>
-    <div class="form-group  <%= @error_class %>">
+    <% e = check_error(:password) %>
+    <div class="form-group  <%= e.style %>">
       <label class="col-md-4 control-label">Password</label>
       <div class="col-md-5">
         <%= f.password_field :password, class: "form-control input-md", placeholder: "******" %>
         <span class="help-block">At least 6 characters</span>
-        <p class="help-block"> <%= @error %></p> 
+        <p class="help-block"> <%= e.message %></p> 
       </div>
     </div>
-    <%check_error(:password_confirmation)%>
-    <div class="form-group  <%= @error_class %>">
+    <% e = check_error(:password_confirmation)%>
+    <div class="form-group  <%= e.style %>">
       <label class="col-md-4 control-label">Password confirmation</label>
       <div class="col-md-5">
         <%= f.password_field :password_confirmation, class: "form-control input-md", placeholder: "******" %>
         <span class="help-block">Confirm your password</span>
-        <p class="help-block"> <%= @error %></p> 
+        <p class="help-block"> <%= e.message %></p> 
       </div>
     </div>
     <div class="form-group">

@@ -2,14 +2,17 @@
   <fieldset>
     <legend>Resend confirmation instructions</legend>
     <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-      <div class="form-group">
+      <% e = check_error(:email) %>
+      <% modify_email() %>
+      <div class="form-group <%= e.style %>">
         <label class="col-md-4 control-label" for="appendedtext">Username</label>
         <div class="col-md-5">
           <div class="input-group">
-            <%= f.email_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: "form-control", placeholder: "username" %>
+            <%= f.text_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: "form-control", placeholder: "username" %>
             <span class="input-group-addon">@unal.edu.co</span>
           </div>
           <p class="help-block">Insert your university's username</p>
+          <p class="help-block"> <%= e.message %></p> 
         </div>
       </div>
       <div class="form-group">
