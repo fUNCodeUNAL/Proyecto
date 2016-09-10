@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
   root 'pages#index'
   get 'pages/index'
+
   devise_for :users, :controllers => { registrations: 'registrations' }
   resources :user, only: [:new, :create], param: :email
 
   get 'pages/ok'
   get 'pages/wrong'
+
+  get 'profile/:id', to: 'pages#profile'
 
   #Modificar primary kay, en caso de implementar metodos
 

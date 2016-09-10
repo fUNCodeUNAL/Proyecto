@@ -1,6 +1,7 @@
 class Group < ApplicationRecord
-	has_and_belongs_to_many :students
 	belongs_to :teacher
+	has_many :has_groups
+	has_many :students, through: :has_groups
 	validates :name, presence: { message: "is required" }
 
 end
