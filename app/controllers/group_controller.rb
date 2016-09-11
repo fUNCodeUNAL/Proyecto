@@ -5,11 +5,19 @@ class GroupController < ApplicationController
 	end
 	def create
 		@group = Group.new(group_params)
+		path_home = '/teacher/'+@group.teacher_id
 		if @group.save
-			redirect_to '/teacher/'+@group.teacher_id
+			redirect_to path_home
 		else
 			render :new
 		end
+	end
+	def destroy
+		@group = Group.find(params[:id])
+		path_home = '/teacher/'+@group.teacher_id
+
+		@group.destroy
+		redirect_to path_home
 	end
 
 	private

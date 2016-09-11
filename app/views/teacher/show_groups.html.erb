@@ -7,13 +7,47 @@ Email: <%= @user.email %>
 </div>
 
 <h3> Has the following groups: </h3>
-<% @teacher.groups.each do |group| %>
-	<%= group.name %> <br>
-	<ul>
-		<% group.students.each do |student| %>
-			<li> <%= student.email %></li>
-		<%end%>
-	</ul>
-<% end %> 
 
-<%= button_to "Add group", 'groups/new', params: {teacher_id: @user.email} %>
+
+<div class="container">
+    <div class="row clearfix">
+		<div class="col-md-12 column">
+			<table class="table table-bordered table-hover" id="tab_logic">
+				<thead>
+					<tr >
+						<th class="text-center">
+							Name
+						</th>
+						<th class="text-center">
+							Members
+						</th>
+						<th class="text-center">
+							Options
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				<% @teacher.groups.each do |group| %>
+					<tr id='addr0'>
+						<td>
+						<%= group.name %>
+						</td>
+						<td>
+						<ul>
+						<% group.students.each do |student| %>
+							<li> <%= student.email %></li>
+						<%end%>
+						</ul>
+						</td>
+						<td>
+						<%= button_to 'Delete group', 'groups/'+group.id.to_s, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-default" %>
+						</td>
+					</tr>
+				<% end %> 
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<%= button_to "Add group", 'groups/new', params: {teacher_id: @user.email}, class: "btn btn-default"  %>
+
+</div>

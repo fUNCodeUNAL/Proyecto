@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   post 'teacher/groups/new', to: 'group#new'
   post 'teacher/groups', to: 'group#create'
+  delete 'teacher/groups/:id', to: 'group#destroy'
 
   #Modificar primary kay, en caso de implementar metodos
 
