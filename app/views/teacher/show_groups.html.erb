@@ -1,0 +1,19 @@
+<h1>Professor's profile</h1>
+<div>
+Name: <%= @user.full_name %>
+</div>
+<div>
+Email: <%= @user.email %>
+</div>
+
+<h3> Has the following groups: </h3>
+<% @teacher.groups.each do |group| %>
+	<%= group.name %> <br>
+	<ul>
+		<% group.students.each do |student| %>
+			<li> <%= student.email %></li>
+		<%end%>
+	</ul>
+<% end %> 
+
+<%= button_to "Add group", 'groups/new', params: {teacher_id: @user.email} %>

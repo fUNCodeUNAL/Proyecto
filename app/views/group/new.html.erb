@@ -1,0 +1,15 @@
+<h1>Create new group</h1>
+<%= @group.errors.full_messages %> 
+<%= form_for :group ,url: teacher_groups_path do |f| %>
+  <p>
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :teacher_id %><br>
+    <%= f.hidden_field :teacher_id%>
+  </p>
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>

@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   get 'pages/wrong'
 
   get 'profile/:id', to: 'pages#profile'
+  get 'teacher/:id', to: 'teacher#show_groups'
+
+  post 'teacher/groups/new', to: 'group#new'
+  post 'teacher/groups', to: 'group#create'
 
   #Modificar primary kay, en caso de implementar metodos
 
