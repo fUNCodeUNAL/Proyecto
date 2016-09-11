@@ -9,6 +9,7 @@ class PagesController < ApplicationController
   		render pages_wrong_path
   	else
   		@student = @allStudent[0]
+  		@user = User.find(@student.email)
   	end
 
   end
