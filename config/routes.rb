@@ -3,13 +3,13 @@ Rails.application.routes.draw do
   get 'pages/index'
 
   devise_for :users, :controllers => { registrations: 'registrations' }
-  resources :user, only: [:new, :create], param: :email
 
   get 'pages/ok'
   get 'pages/wrong'
 
-  get 'profile/:id', to: 'pages#profile'
-  get 'teacher/:id', to: 'teacher#show_groups'
+  get 'pages/profile', to: 'pages#profile'
+
+  #get 'teacher/:email', to: 'teacher#show_groups'
 
   post 'teacher/groups/new', to: 'group#new'
   post 'teacher/groups', to: 'group#create'

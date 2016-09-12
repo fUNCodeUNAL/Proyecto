@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20160910061301) do
   end
 
   create_table "students", id: false, force: :cascade do |t|
-    t.string   "email",      null: false
+    t.string   "username",   null: false
     t.integer  "cod"
     t.integer  "semester"
     t.datetime "created_at", null: false
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20160910061301) do
   end
 
   create_table "teachers", id: false, force: :cascade do |t|
-    t.string   "email",      null: false
+    t.string   "username",   null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20160910061301) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "full_name"
+    t.string   "username",               default: "", null: false
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -61,6 +62,7 @@ ActiveRecord::Schema.define(version: 20160910061301) do
     t.string   "unconfirmed_email"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
 end

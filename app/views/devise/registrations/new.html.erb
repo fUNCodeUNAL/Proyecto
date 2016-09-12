@@ -26,6 +26,16 @@
         <p class="help-block"> <%= @error %></p> 
       </div>
     </div>
+    <%check_error(:username)%>
+    <div class="form-group <%= @error_class %>" >
+      <label class="col-md-4 control-label">Username</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.text_field :username, class: "form-control input-md", placeholder: "username" %>
+        </div>
+        <p class="help-block"> <%= @error %></p> 
+      </div>
+    </div>
     <%check_error(:email)%>
     <div class="form-group <%= @error_class %>" >
       <label class="col-md-4 control-label">Email</label>  
