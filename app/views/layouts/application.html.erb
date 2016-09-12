@@ -40,7 +40,7 @@
                         </li>
                         <% if user_signed_in? %>
                             <li>
-                                <%= link_to (" Perfil " + current_user.full_name), pages_index_path, class: "fa fa-bar-chart-o" %>
+                                <%= link_to (" Perfil " + current_user.full_name), '/profile/'+current_user.username, class: "fa fa-bar-chart-o" %>
                             </li>
                         <%end%>
                         <li>
@@ -51,7 +51,7 @@
                         </li>
                         <% if user_signed_in? %>
                             <li>
-                                <%= link_to " Grupos ", pages_index_path, class: "fa fa-heart" %>
+                                <%= link_to " Grupos ", '/teacher/'+current_user.username, class: "fa fa-heart" %>
                             </li>
                             <li> 
                                 <%= link_to " Cerrar sesión", destroy_user_session_path, method: :delete, class: "fa fa-sign-out" %>

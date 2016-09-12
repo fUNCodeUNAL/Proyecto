@@ -2,7 +2,10 @@
 	<br>Nombre: <%= @user.full_name %>
 </div>
 <div>
-Email: <%= @user.email %>
+	Username: <%= @user.username %>
+</div>
+<div>
+	Email: <%= @user.email %>
 </div>
 
 <h3> Tiene los siguientes Grupos: </h3>
@@ -27,16 +30,22 @@ Email: <%= @user.email %>
 					<a href="" class="btn btn-success btn-xs">
 						<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
 					</a>
-					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), 'groups/'+group.id.to_s, class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
+
+					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), teacher_groups_delete_path(group), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
 				</div>
 				
 			</td>
-			<!-- <%= button_to 'Delete group', 'groups/'+group.id.to_s, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-default" %> -->
 		</tr>
 	<% end %> 
-
+	<%= form_for :group, url: teacher_groups_create_path do |f| %>
+		<tr>
+		 	<td>
+		    	<%= f.text_field :name %>
+		 	</td>
+		  		<%= f.hidden_field :teacher_id, value: params[:username]%>
+		  	<td>
+		    	<%= f.submit %>
+		  	</td>
+		</tr>
+	<% end %>
 </table>
-
-
-
-<%= button_to "Add group", 'groups/new', params: {teacher_id: @user.email}, class: "btn btn-default"  %>
