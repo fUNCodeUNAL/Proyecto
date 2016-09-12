@@ -4,6 +4,7 @@ class RegistrationsController < Devise::RegistrationsController
   	super
     #By default creates both a student and a teacher with the same email.
     #just for testing
+
   	@student = Student.create( email: params[:user][:email])
     @teacher = Teacher.create( email: params[:user][:email])
   end
