@@ -5,11 +5,11 @@ class RegistrationsController < Devise::RegistrationsController
     #By default creates both a student and a teacher with the same email.
     #just for testing
 
-    
     if User.find_by(username: params[:user][:username]) != nil
       @student = Student.create(username: params[:user][:username])
       @teacher = Teacher.create(username: params[:user][:username])
     end
+
   end
 
   private

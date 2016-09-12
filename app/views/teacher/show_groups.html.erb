@@ -1,53 +1,42 @@
-<h1>Professor's profile</h1>
 <div>
-Name: <%= @user.full_name %>
+	<br>Nombre: <%= @user.full_name %>
 </div>
 <div>
 Email: <%= @user.email %>
 </div>
 
-<h3> Has the following groups: </h3>
+<h3> Tiene los siguientes Grupos: </h3>
+
+<table class = "table table-bordered table-hover">
+
+	<tr>
+		<th class="text-center">Nombre</th>
+		<th class="text-center">Número de estudiantes</th>
+	</tr>
+
+	<% @teacher.groups.each do |group| %>
+		<tr>
+			<td class="text-center">
+				<%= group.name %>
+			</td>
+
+			<td class="text-center">
+				<%= group.students.count %>
+
+				<div class="pull-right">
+					<a href="" class="btn btn-success btn-xs">
+						<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+					</a>
+					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), 'groups/'+group.id.to_s, class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
+				</div>
+				
+			</td>
+			<!-- <%= button_to 'Delete group', 'groups/'+group.id.to_s, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-default" %> -->
+		</tr>
+	<% end %> 
+
+</table>
 
 
-<div class="container">
-    <div class="row clearfix">
-		<div class="col-md-12 column">
-			<table class="table table-bordered table-hover" id="tab_logic">
-				<thead>
-					<tr >
-						<th class="text-center">
-							Name
-						</th>
-						<th class="text-center">
-							Members
-						</th>
-						<th class="text-center">
-							Options
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-				<% @teacher.groups.each do |group| %>
-					<tr id='addr0'>
-						<td>
-						<%= group.name %>
-						</td>
-						<td>
-						<ul>
-						<% group.students.each do |student| %>
-							<li> <%= student.email %></li>
-						<%end%>
-						</ul>
-						</td>
-						<td>
-						<%= button_to 'Delete group', 'groups/'+group.id.to_s, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-default" %>
-						</td>
-					</tr>
-				<% end %> 
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<%= button_to "Add group", 'groups/new', params: {teacher_id: @user.email}, class: "btn btn-default"  %>
 
-</div>
+<%= button_to "Add group", 'groups/new', params: {teacher_id: @user.email}, class: "btn btn-default"  %>
