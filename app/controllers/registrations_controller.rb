@@ -4,17 +4,22 @@ class RegistrationsController < Devise::RegistrationsController
   	super
     #By default creates both a student and a teacher with the same email.
     #just for testing
-  	@student = Student.create( email: params[:user][:email])
-    @teacher = Teacher.create( email: params[:user][:email])
+
+    
+    if User.find_by(username: params[:user][:username]) != nil
+      @student = Student.create(username: params[:user][:username])
+      @teacher = Teacher.create(username: params[:user][:username])
+    end
   end
 
   private
 
   def sign_up_params
-    params.require(:user).permit(:full_name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:full_name, :username, :email, :password, :password_confirmation)
   end
 
   def account_update_params
-    params.require(:user).permit(:full_name, :email, :password, :password_confirmation, :current_password)
+    # it seems weird because email...
+    params.require(:user).permit(:full_name, :username, :email, :password, :password_confirmation, :current_password)
   end
 end
