@@ -1,0 +1,41 @@
+<div>
+	<br>Nombre del grupo: <%= @group.name %>
+</div>
+<h3> Tiene los siguientes Estudiantes: </h3>
+
+<table class = "table table-bordered table-hover">
+
+	<tr>
+		<th class="text-center">Nombre</th>
+		<th class="text-center">Email</th>
+	</tr>
+
+	<% @group.students.each do |student| %>
+		<% user = User.find( student.username ) %>
+		<tr>
+			<td class="text-center">
+				<%= user.full_name %>
+			</td>
+
+			<td class="text-center">
+				<%= user.email %> (<%= user.username %>)
+
+				<div class="pull-right">
+					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), group_student_delete_path(@group.id, user.username), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
+				</div>
+				
+			</td>
+		</tr>
+	<% end %> 
+	<%= form_for :info_student, url: group_add_student_path do |f| %>
+		<tr>
+		 	<td>
+		    	<%= f.text_field :student_email %>
+		 	</td>
+		  		<%= f.hidden_field :id_group, value: @group.id%>
+		  	<td>
+		    	<%= f.submit %>
+		  	</td>
+		</tr>
+	<% end %>
+</table>

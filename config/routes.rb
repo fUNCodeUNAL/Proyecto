@@ -14,6 +14,10 @@ Rails.application.routes.draw do
   post 'teacher/groups', to: 'group#create', as: "teacher_groups_create"
   delete 'teacher/groups/:id', to: 'group#destroy', as: "teacher_groups_delete"
 
+  get 'groups/edit/:id_group', to: 'group#edit', as: "teacher_groups_edit"
+  post 'groups/edit', to: 'group#add_student', as: "group_add_student"
+  delete 'groups/delete/:id_group/:id_student', to: 'group#delete_student', as: "group_student_delete"
+
   #Modificar primary kay, en caso de implementar metodos
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
