@@ -7,13 +7,12 @@ Rails.application.routes.draw do
   get 'pages/ok'
   get 'pages/wrong'
 
-  get 'pages/profile', to: 'pages#profile'
+  get 'profile/:username', to: 'pages#profile', as: "profile"
+  get 'teacher/:username', to: 'teacher#show_groups', as: "teacher_groups"
 
-  #get 'teacher/:email', to: 'teacher#show_groups'
-
-  post 'teacher/groups/new', to: 'group#new'
-  post 'teacher/groups', to: 'group#create'
-  delete 'teacher/groups/:id', to: 'group#destroy'
+  post 'teacher/groups/new', to: 'group#new', as: "teacher_groups_new"
+  post 'teacher/groups', to: 'group#create', as: "teacher_groups_create"
+  delete 'teacher/groups/:id', to: 'group#destroy', as: "teacher_groups_delete"
 
   #Modificar primary kay, en caso de implementar metodos
 

@@ -1,7 +1,24 @@
 <h1>Profile</h1>
 <div>
-Name: <%= current_user.full_name %>
+Name: <%= @user.full_name %>
 </div>
 <div>
-Email: <%= current_user.email %>
+Username: <%= @user.username %>
 </div>
+<div>
+Email: <%= @user.email %>
+</div>
+
+<div>
+University ID number: <%= @student.cod %>
+</div>
+<div>
+Semester: <%= @student.semester %>
+</div>
+
+<h3> Is in the following groups: </h3>
+<% @student.groups.each do |group| %>
+	<%= group.name %> <br>
+<% end %> 
+
+

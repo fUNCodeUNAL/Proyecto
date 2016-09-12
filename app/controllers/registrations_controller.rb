@@ -1,5 +1,15 @@
 class RegistrationsController < Devise::RegistrationsController
 
+  def check_error(param)
+    if @user.errors.include?(param) 
+      @error_class = " has-error"
+      @error = "*" + @user.errors.full_messages_for(param)[0]
+    else 
+      @error = ""
+      @error_class = ""
+    end
+  end
+
   def create
   	super
     #By default creates both a student and a teacher with the same email.
