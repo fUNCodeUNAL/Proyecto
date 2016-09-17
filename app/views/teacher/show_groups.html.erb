@@ -35,15 +35,14 @@
 			</td>
 		</tr>
 	<% end %> 
-	<%= form_for :group, url: teacher_groups_create_path do |f| %>
-		<tr>
-		 	<td>
-		    	<%= f.text_field :name %>
-		 	</td>
-		  		<%= f.hidden_field :teacher_id, value: params[:username]%>
-		  	<td>
-		    	<%= f.submit %>
-		  	</td>
-		</tr>
-	<% end %>
 </table>
+<div>
+<h4>Crear nuevo grupo:</h4>
+<%= form_for :group, url: teacher_groups_create_path do |f| %>
+	<%= f.label 'Nombre' %>
+	<%= f.text_field :name %>
+	<%= f.hidden_field :teacher_id, value: params[:username]%>
+	<br><br>
+	<%= f.submit 'Guardar grupo'%>
+<% end %>
+</div>

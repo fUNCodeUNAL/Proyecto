@@ -21,8 +21,13 @@ class GroupController < ApplicationController
 	end
 	def add_student
 		user = User.find_by(email: has_group_params[:student_email])
-		HasGroup.create(group_id: has_group_params[:id_group], student_id: user.username)
-		redirect_to teacher_groups_edit_path(has_group_params[:id_group])
+		if user == nil
+			redirect_to pages_wrong_path
+		else
+			HasGroup.create(group_id: has_group_params[:id_group], student_id: user.username)
+			redirect_to teacher_groups_edit_path(has_group_params[:id_group])
+		end
+		
 	end
 
 	private
