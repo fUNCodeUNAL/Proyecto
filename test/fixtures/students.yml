@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  email: MyString
+  username: 'student1'
   cod: 1
-  semester: 1
+  semester: 6
 
 two:
-  email: MyString
-  cod: 1
-  semester: 1
+  username: 'student2'
+  cod: 2
+  semester: 7

@@ -1,17 +1,23 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  email: MyString
-  name: MyString
-  password: MyString
-  type: 
-  id_number: 1
-  semester: 1
+  email: 'teacher1@unal.edu.co'
+  full_name: 'teacher 1'
+  username: 'teacher1'
 
 two:
-  email: MyString
-  name: MyString
-  password: MyString
-  type: 
-  id_number: 1
-  semester: 1
+  email: 'teacher2@unal.edu.co'
+  full_name: 'teacher 2'
+  username: 'teacher2'
+
+three:
+  email: 'student1@unal.edu.co'
+  full_name: 'student 1'
+  username: 'student1'
+
+four:
+  email: 'student2@unal.edu.co'
+  full_name: 'student 2'
+  username: 'student2'
+
+
