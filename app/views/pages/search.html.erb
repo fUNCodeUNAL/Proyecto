@@ -1,0 +1,12 @@
+<div>
+	La busqueda por nombre de usuario dio los siguientes resultados:
+	<ol>
+	<%@list.each do |user| %>
+		<li> Nombre: <%= user.full_name %> <br>
+			Usuario: <%= user.username %> <br>
+			Correo: <%= user.email %><br>
+			<%= link_to 'perfil', profile_path(user) %>
+	<% end %>
+	</ol>
+</div>
+
