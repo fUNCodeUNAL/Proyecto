@@ -10,7 +10,6 @@ Rails.application.routes.draw do
   get 'profile/:username', to: 'pages#profile', as: "profile"
   get 'teacher/:username', to: 'teacher#show_groups', as: "teacher_groups"
 
-  post 'teacher/groups/new', to: 'group#new', as: "teacher_groups_new"
   post 'teacher/groups', to: 'group#create', as: "teacher_groups_create"
   delete 'teacher/groups/:id', to: 'group#destroy', as: "teacher_groups_delete"
 

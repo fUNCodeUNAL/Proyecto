@@ -1,7 +1,4 @@
 class GroupController < ApplicationController
-	def new
-		@group = Group.new
-	end
 	def create
 		@group = Group.create(group_params)
 		redirect_to teacher_groups_path(@group.teacher_id)
