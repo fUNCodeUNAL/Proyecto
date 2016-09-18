@@ -1,5 +1,5 @@
 class Teacher < ApplicationRecord
-	self.primary_key = "email"
-	validates :email, uniqueness: { message: "is already taken"}, format: { with: /\A[a-zA-Z]+\z/, message: "only allows letters" }
-  	validates :email, presence: { message: "is required" }
+	has_many :groups, dependent: :destroy
+	self.primary_key = "username"
+	validates :username, uniqueness: true, presence: true
 end

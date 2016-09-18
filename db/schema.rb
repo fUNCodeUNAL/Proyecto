@@ -10,16 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160904074120) do
+ActiveRecord::Schema.define(version: 20160910061301) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "teacher_id"
+    t.index ["teacher_id"], name: "index_groups_on_teacher_id"
+  end
+
+  create_table "has_groups", force: :cascade do |t|
+    t.string  "student_id"
+    t.integer "group_id"
+    t.index ["group_id"], name: "index_has_groups_on_group_id"
+    t.index ["student_id"], name: "index_has_groups_on_student_id"
   end
 
   create_table "students", id: false, force: :cascade do |t|
-    t.string   "email",      null: false
+    t.string   "username",   null: false
     t.integer  "cod"
     t.integer  "semester"
     t.datetime "created_at", null: false
@@ -27,7 +36,7 @@ ActiveRecord::Schema.define(version: 20160904074120) do
   end
 
   create_table "teachers", id: false, force: :cascade do |t|
-    t.string   "email",      null: false
+    t.string   "username",   null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -36,6 +45,7 @@ ActiveRecord::Schema.define(version: 20160904074120) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "full_name"
+    t.string   "username",               default: "", null: false
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -52,6 +62,7 @@ ActiveRecord::Schema.define(version: 20160904074120) do
     t.string   "unconfirmed_email"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
 end

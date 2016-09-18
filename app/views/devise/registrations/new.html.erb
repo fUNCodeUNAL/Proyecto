@@ -1,58 +1,53 @@
-<%
-  @error = ""
-  @error_class = ""
-
-  def check_error(param)
-    if @user.errors.include?(param) 
-      @error_class = " has-error"
-      @error = "*" + @user.errors.full_messages_for(param)[0]
-    else 
-      @error = ""
-      @error_class = ""
-    end
-  end
-%>
-
 <div class="form-horizontal">
   <legend>Sign up</legend>
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-    <%check_error(:full_name)%>
-    <div class="form-group <%= @error_class %>" >
+    <% error = check_error(@user.errors, :full_name) %>
+    <div class="form-group <%= error[:error_class] %>" >
       <label class="col-md-4 control-label">Full Name</label>  
       <div class="col-md-5">
         <div>
           <%= f.text_field :full_name, autofocus: true, class: "form-control input-md", placeholder: "name" %>
         </div>
-        <p class="help-block"> <%= @error %></p> 
+        <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>
-    <%check_error(:email)%>
-    <div class="form-group <%= @error_class %>" >
+    <% error = check_error(@user.errors, :username) %>
+    <div class="form-group <%= error[:error_class] %>" >
+      <label class="col-md-4 control-label">Username</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.text_field :username, class: "form-control input-md", placeholder: "username" %>
+        </div>
+        <p class="help-block"> <%= error[:error_message] %></p> 
+      </div>
+    </div>
+    <% error = check_error(@user.errors, :email) %>
+    <div class="form-group <%= error[:error_class] %>" >
       <label class="col-md-4 control-label">Email</label>  
       <div class="col-md-5">
         <div>
           <%= f.email_field :email, class: "form-control input-md", placeholder: "username@unal.edu.co" %>
         </div>
         <p class="help-block">Insert your university's email</p>
-        <p class="help-block"> <%= @error %></p> 
+        <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>
-    <%check_error(:password)%>
-    <div class="form-group  <%= @error_class %>">
+    <% error = check_error(@user.errors, :password) %>
+    <div class="form-group <%= error[:error_class] %>">
       <label class="col-md-4 control-label">Password</label>
       <div class="col-md-5">
         <%= f.password_field :password, autocomplete: "off", class: "form-control input-md", placeholder: "******" %>
         <span class="help-block">At least 6 characters</span>
-        <p class="help-block"> <%= @error %></p> 
+        <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>
-    <%check_error(:password_confirmation)%>
-    <div class="form-group  <%= @error_class %>">
+    <% error = check_error(@user.errors, :password_confirmation) %>
+    <div class="form-group <%= error[:error_class] %>">
       <label class="col-md-4 control-label">Password confirmation</label>
       <div class="col-md-5">
         <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control input-md", placeholder: "******" %>
         <span class="help-block">Confirm your password</span>
-        <p class="help-block"> <%= @error %></p> 
+        <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>
     <div class="form-group">

@@ -1,30 +1,15 @@
-<%
-  @error = ""
-  @error_class = ""
-
-  def check_error(param)
-    if @user.errors.include?(param) 
-      @error_class = " has-error"
-      @error = "*" + @user.errors.full_messages_for(param)[0]
-    else 
-      @error = ""
-      @error_class = ""
-    end
-  end
-%>
-
 <div class="form-horizontal">
   <legend>Resend unlock instructions</legend>
   <%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
-    <%check_error(:email)%>
-    <div class="form-group <%= @error_class %>" >
+    <% error = check_error(@user.errors, :email) %>
+    <div class="form-group <%= error[:error_class] %>" >
       <label class="col-md-4 control-label">Email</label>  
       <div class="col-md-5">
         <div>
           <%= f.email_field :email, autofocus: true, class: "form-control input-md", placeholder: "username@unal.edu.co" %>
         </div>
         <p class="help-block">Insert your university's email</p>
-        <p class="help-block"> <%= @error %></p> 
+        <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>
     <div class="form-group">

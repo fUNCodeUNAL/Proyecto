@@ -1,0 +1,48 @@
+<div>
+	<br>Nombre: <%= @user.full_name %>
+</div>
+<div>
+	Username: <%= @user.username %>
+</div>
+<div>
+	Email: <%= @user.email %>
+</div>
+
+<h3> Tiene los siguientes Grupos: </h3>
+
+<table class = "table table-bordered table-hover">
+
+	<tr>
+		<th class="text-center">Nombre</th>
+		<th class="text-center">Número de estudiantes</th>
+	</tr>
+
+	<% @teacher.groups.each do |group| %>
+		<tr>
+			<td class="text-center">
+				<%= group.name %>
+			</td>
+
+			<td class="text-center">
+				<%= group.students.count %>
+
+				<div class="pull-right">
+					<%= link_to raw("<span class='glyphicon glyphicon-edit' aria-hidden='true'></span>"), teacher_groups_edit_path(group), class: "btn btn-success btn-xs" %>
+
+					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), teacher_groups_delete_path(group), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
+				</div>
+				
+			</td>
+		</tr>
+	<% end %> 
+</table>
+<div>
+<h4>Crear nuevo grupo:</h4>
+<%= form_for :group, url: teacher_groups_create_path do |f| %>
+	<%= f.label 'Nombre' %>
+	<%= f.text_field :name %>
+	<%= f.hidden_field :teacher_id, value: params[:username]%>
+	<br><br>
+	<%= f.submit 'Guardar grupo'%>
+<% end %>
+</div>
