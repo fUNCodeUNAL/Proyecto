@@ -1,9 +1,7 @@
 class TeacherController < ApplicationController
+  before_action :authenticate_user!
   def show_groups
-  	@teacher = Teacher.find_by(username: params[:username])
-  	@user = User.find_by(username: params[:username])
-  	if @teacher == nil or current_user == nil or current_user.username != params[:username]
-      render pages_wrong_path
-  	end
+    @teacher = Teacher.find_by(username: current_user.username)
+    @user = current_user
   end
 end

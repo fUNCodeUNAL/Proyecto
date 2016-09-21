@@ -62,7 +62,7 @@
                         </li>
                         <% if user_signed_in? %>
                             <li>
-                                <%= link_to " Grupos ", '/teacher/'+current_user.username, class: "fa fa-heart" %>
+                                <%= link_to " Grupos ", teacher_groups_show_path, class: "fa fa-heart" %>
                             </li>
                             <li> 
                                 <%= link_to " Cerrar sesión", destroy_user_session_path, method: :delete, class: "fa fa-sign-out" %>
