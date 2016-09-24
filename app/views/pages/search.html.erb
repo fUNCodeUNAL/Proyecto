@@ -1,12 +1,128 @@
 <div>
-	La busqueda por nombre de usuario dio los siguientes resultados:
-	<ol>
-	<%@list.each do |user| %>
-		<li> Nombre: <%= user.full_name %> <br>
-			Usuario: <%= user.username %> <br>
-			Correo: <%= user.email %><br>
-			<%= link_to 'perfil', profile_path(user) %>
-	<% end %>
-	</ol>
+
+	<%if @users.length == 0%>
+		<p>No se encontraron resultados de usuarios.</p>
+	<%else%>
+		<%@users.sort%>
+		<%maxUsers = 10%>
+		<h1>Usuarios <span class="badge" ><%=@users.length%> </span></h1>
+		<div class="table-responsive">		
+			<!--striped condensed -->
+			<table class="table table-bordered table-hoverm table-condensed" id="userTable">
+				
+				<tr class = "success">
+					<th id="th0" onclick="sortUsers(0);">
+						Usuario
+						<span class='glyphicon glyphicon-sort-by-alphabet-alt pull-right' aria-hidden='true'></span>
+					</th>
+					<th id="th1" onclick="sortUsers(1);">
+						Nombre
+						<span class='glyphicon glyphicon-sort-by-alphabet pull-right' aria-hidden='true'></span>
+					</th>
+					<th id="th2" onclick="sortUsers(2);">
+						Correo
+						<span class='glyphicon glyphicon-sort-by-alphabet pull-right' aria-hidden='true'></span>
+					</th>
+				</tr>
+
+				
+
+			</table>
+
+		</div>
+			
+		<ul class="pager" style="margin-top:0em;">
+			<li class="disabled" id="prevLi" >
+				<a href="JavaScript:void(0)" onclick="updateTable( 'userTable', false );">Anterior</a>
+			</li>
+			<li class="<%='disabled' if @users.length <= maxUsers%>" id="nextLi">
+				<a href="JavaScript:void(0)" onclick="updateTable( 'userTable', true );">Siguiente</a>
+			</li>
+		</ul>
+
+		
+	<%end%>
+
+	<script type="text/javascript">
+
+		var curPage = 0;
+		var maxUsers = <%=maxUsers%>;
+		var users = [];
+		var cntUsers = 0;
+
+		<%@users.each do |user|%>
+			var username = '<%=user.username%>';
+			var fullname = '<%=user.full_name%>';
+			var email = '<%=user.email%>';
+			users[cntUsers++] = [username, fullname, email];
+		<%end%>
+
+		users.sort( function( u1, u2 ){return u1[0].toLowerCase() > u2[0].toLowerCase();} );
+		fillTable( document.getElementById('userTable') );
+
+		function fillTable( table ){
+			for( var i = 0; i < maxUsers; i++ ){
+				if( curPage * maxUsers + i >= cntUsers ) break;
+				var row = table.insertRow(i+1);
+				var user = users[ curPage * maxUsers + i ];
+				row.insertCell();
+				row.insertCell();
+				row.insertCell();
+				row.cells[0].innerHTML = "<a href='/profile/" + user[0] + "'>" + user[0] + "</a>";
+				row.cells[1].innerHTML = user[1];
+				row.cells[2].innerHTML = user[2];
+			}
+		}
+
+		function clearTable( table ){
+			var i = table.rows.length;
+			while( table.rows.length > 1 )
+				table.deleteRow(--i);
+		}
+
+		function updateTable( tableId, forward ){
+			if( forward ){
+				if( document.getElementById( 'nextLi' ).className == 'disabled' ) return;
+				curPage++;
+				document.getElementById( 'prevLi' ).className = '';
+				if( cntUsers <= maxUsers * ( curPage + 1 ) )
+					document.getElementById( 'nextLi' ).className = 'disabled';
+			}
+			else{
+				if( document.getElementById( 'prevLi' ).className == 'disabled' ) return;
+				curPage--;
+				if( curPage == 0 )
+					document.getElementById( 'prevLi' ).className = 'disabled';
+				document.getElementById( 'nextLi' ).className = '';
+			}
+
+			//document.getElementById( 'cout' ).innerHTML = curPage;
+			table = document.getElementById( tableId );
+			clearTable( table );
+			fillTable( table );
+		}
+
+		function sortUsers( id ){
+			curPage = 0;
+			document.getElementById( 'prevLi' ).className = 'disabled';
+			document.getElementById( 'nextLi' ).className = (maxUsers >= cntUsers) ? 'disabled' : '';
+
+			var th = document.getElementById( 'th' + id ).getElementsByTagName( 'span' )[0];
+			if( th.className == 'glyphicon glyphicon-sort-by-alphabet pull-right' ){
+				th.className = 'glyphicon glyphicon-sort-by-alphabet-alt pull-right'
+				users.sort( function( u1, u2 ){return u1[id].toLowerCase() > u2[id].toLowerCase();} );
+			}
+			else{
+				th.className = 'glyphicon glyphicon-sort-by-alphabet pull-right'
+				users.sort( function( u1, u2 ){return u1[id].toLowerCase() < u2[id].toLowerCase();} );
+			}
+
+			var table = document.getElementById( 'userTable' );
+			clearTable( table );
+			fillTable( table );
+		}
+
+	</script>
+
 </div>
 

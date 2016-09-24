@@ -11,7 +11,7 @@ class PagesController < ApplicationController
   end
   
   def search
-  	cant = 20
-  	@list = User.where("username LIKE ?", "%#{params[:search]}%").take(cant)
+  	maxQuery = 100
+  	@users = User.where("username LIKE ?", "%#{params[:search]}%").take(maxQuery)
   end
 end
