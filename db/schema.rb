@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160921191305) do
+ActiveRecord::Schema.define(version: 20160921214139) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
@@ -48,6 +48,15 @@ ActiveRecord::Schema.define(version: 20160921191305) do
     t.string   "username",   null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "test_cases", force: :cascade do |t|
+    t.string   "url_input"
+    t.string   "url_output"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "problem_id"
+    t.index ["problem_id"], name: "index_test_cases_on_problem_id"
   end
 
   create_table "users", id: false, force: :cascade do |t|

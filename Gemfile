@@ -28,6 +28,10 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'fog'
+gem 'carrierwave'
+gem 'rubyzip'
+
 gem 'omniauth-twitter'
 gem 'bootstrap-sass', '~> 3.3.4.1'
 gem 'rails-assets-tether', '>= 1.1.0'
