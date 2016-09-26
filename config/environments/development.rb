@@ -26,13 +26,6 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  config.before_configuration do  
-    env_file = File.join(Rails.root, 'config','application.yml')
-    YAML.load(File.open(env_file)).each do |key, value|
-        ENV[key.to_s] = value
-    end if File.exists?(env_file)
-  end
-
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
@@ -72,4 +65,5 @@ Rails.application.configure do
     authentication:       'plain',
     enable_starttls_auto: true
   }
+
 end

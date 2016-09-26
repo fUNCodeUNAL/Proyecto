@@ -1,39 +1,32 @@
 <div class="form-horizontal">
   <legend>Nuevo problema</legend>
   <%= form_for :problem, url: problem_create_path do |f| %>
-    <% error = check_error(@problem.errors, :name) %>
-    <div class="form-group <%= error[:error_class] %>" >
+    <div class="form-group" >
       <label class="col-md-4 control-label">Nombre</label>  
       <div class="col-md-5">
         <div>
           <%= f.text_field :name, autofocus: true, class: "form-control input-md", placeholder: "nombre" %>
         </div>
-        <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>
-    <% error = check_error(@problem.errors, :url_statement) %>
-    <div class="form-group <%= error[:error_class] %>" >
+    <div class="form-group" >
       <label class="col-md-4 control-label">Archivo comprimido</label>  
       <div class="col-md-5">
         <div>
-          <%= f.file_field :url_statement, class: "form-control input-md", placeholder: "seleccionar archivo..." %>
+          <%= f.file_field :file, class: "form-control input-md", placeholder: "seleccionar archivo..." %>
         </div>
         <p class="help-block"> Este archivo debe contener el enunciado en formato pdf y los casos de prueba debidamente emparejados con .in y .out</p> 
-        <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>
-    <% error = check_error(@problem.errors, :time_limit) %>
-    <div class="form-group <%= error[:error_class] %>" >
+    <div class="form-group" >
       <label class="col-md-4 control-label">Tiempo límite</label>  
       <div class="col-md-5">
         <div>
           <%= f.text_field :time_limit, class: "form-control input-md", placeholder: "tiempo en ms" %>
         </div>
-        <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>
-    <% error = check_error(@problem.errors, :languages) %>
-    <div class="form-group <%= error[:error_class] %>">
+    <div class="form-group">
       <label class="col-md-4 control-label">Lenguajes</label>
       <div class="col-md-5">
         <%= check_box_tag(:cpp) %>
@@ -42,7 +35,6 @@
         <%= label_tag(:java, "Java") %>
         <%= check_box_tag(:python) %>
         <%= label_tag(:python, "Python") %>
-        <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>
     <div class="form-group">
