@@ -1,11 +1,14 @@
 <div class="form-horizontal dropzone">
-  <legend>Nuevo problema</legend>
-  <%= form_for :problem, url: problem_create_path do |f| %>
+  <legend>Editar problema</legend>
+  <%= form_for :problem, :method => :PUT, url: problem_update_path do |f| %>
+    <div class="form-group" >
+      <label class="col-md-4 control-label">ID <%= @problem.id%></label>  
+    </div>
     <div class="form-group" >
       <label class="col-md-4 control-label">Nombre</label>  
       <div class="col-md-5">
         <div>
-          <%= f.text_field :name, autofocus: true, class: "form-control input-md", placeholder: "nombre" %>
+          <%= f.text_field :name, autofocus: true, class: "form-control input-md", placeholder: "name" %>
         </div>
       </div>
     </div>
@@ -29,18 +32,30 @@
     <div class="form-group">
       <label class="col-md-4 control-label">Lenguajes</label>
       <div class="col-md-5">
-        <%= check_box_tag(:cpp) %>
+        <% val = "0" %>
+        <% if ( ( @problem.languages>>0 )&1 ) == 1 %>
+          <% val = "1" %>
+        <% end %>
+        <%= check_box_tag(:cpp, value = val, checked = ( val == "1" )) %>
         <%= label_tag(:cpp, "C++") %>
-        <%= check_box_tag(:java) %>
+        <% val = "0" %>
+        <% if ( ( @problem.languages>>1 )&1 ) == 1 %>
+          <% val = "1" %>
+        <% end %>
+        <%= check_box_tag(:java, value = val, checked = ( val == "1" )) %>
         <%= label_tag(:java, "Java") %>
-        <%= check_box_tag(:python) %>
+        <% val = "0" %>
+        <% if ( ( @problem.languages>>2 )&1 ) == 1 %>
+          <% val = "1" %>
+        <% end %>
+        <%= check_box_tag(:python, value = val, checked = ( val == "1" )) %>
         <%= label_tag(:python, "Python") %>
       </div>
     </div>
     <div class="form-group">
       <label class="col-md-4 control-label"></label>
       <div class="col-md-4">
-        <%= f.submit "Subir problema", class: "btn btn-primary" %>
+        <%= f.submit "Editar problema", class: "btn btn-primary" %>
       </div>
     </div>
   <% end %>

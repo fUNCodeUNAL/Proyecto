@@ -39,6 +39,8 @@ gem "font-awesome-rails"
 gem "devise"
 
 gem 'figaro'
+
+gem 'dropzonejs-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

@@ -18,12 +18,18 @@ class ProblemController < ApplicationController
     else
       create_problem(params)
       add_test_cases(params)
-      redirect_to ok_path
+      redirect_to @problem
     end
   end
 
   def edit
     @problem = Problem.find(params[:id])
+  end
+
+  def update
+    @problem = Problem.find(params[:id])
+    @problem.update( {languages: get_languages( params ) })
+    redirect_to @problem
   end
   
   private
