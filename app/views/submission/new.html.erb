@@ -1,0 +1,43 @@
+<div class="form-horizontal dropzone">
+  <legend>Enviar problema <%= params[:problem_id] + "-" + Problem.find(params[:problem_id]).name %> </legend>
+  <%= form_for :submission, url: submissions_create_path do |f| %>
+  <div class="form-group" >
+      <label class="col-md-4 control-label">Lenguaje</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.select(:language) do %>
+		    <% [['Java', 'Java'], ['C++', 'C++'], ['Python', 'Python']].each do |c| -%>
+    		  <%= content_tag(:option, c.first, value: c.last) %>
+  			<% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <% error = check_error(@submission.errors, :base) %>
+    <div class="form-group" >
+      <label class="col-md-4 control-label">Codigo</label>  
+      <div class="col-md-5">
+      <p class="help-block"> <%= error[:error_message] %></p> 
+        <div>
+          <%= f.text_area :code, autofocus: true, class: "input-md code", placeholder: "Codigo" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" >
+      <label class="col-md-4 control-label">Archivo</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.file_field :file, class: "form-control input-md", placeholder: "Seleccionar archivo..." %>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-4 control-label"></label>
+      <div class="col-md-4">
+        <%= f.submit "Subir problema", class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
