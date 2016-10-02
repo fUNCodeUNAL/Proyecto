@@ -23,5 +23,9 @@ Rails.application.routes.draw do
   get 'problem/edit/:id', to: 'problem#edit', as: "problem_edit"
   put 'problem/update/:id', to: 'problem#update', as: "problem_update"
 
+  get 'search', to: 'pages#search', as: "search"
+
+  #Modificar primary key, en caso de implementar metodos
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
