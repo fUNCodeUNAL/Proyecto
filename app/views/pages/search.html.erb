@@ -59,8 +59,11 @@
 			users[cntUsers++] = [username, fullname, email];
 		<%end%>
 
-		users.sort( function( u1, u2 ){return u1[0].toLowerCase() > u2[0].toLowerCase();} );
-		fillTable( document.getElementById( 'userTable' ), users, maxUsers, 3, 0 );
+		if( cntUsers > 0 ){
+			clearTable( document.getElementById( 'userTable' ) );
+			users.sort( function( u1, u2 ){return u1[0].toLowerCase() > u2[0].toLowerCase();} );
+			fillTable( document.getElementById( 'userTable' ), users, maxUsers, 3, 0 );
+		}
 
 		function fillTable( table, list, maxRows, numCells, page ){
 			for( var i = 0; i < maxRows; i++ ){
