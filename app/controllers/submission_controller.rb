@@ -8,7 +8,8 @@ class SubmissionController < ApplicationController
   def create
 
    	verdict = getVerdict(params)
-   	@submission = Submission.new(problem_id: params[:problem_id], user_username: current_user.username, verdict: verdict[0], execution_time: verdict[1], language: params[:submission][:language], code: params[:submission][:code], url_code: params[:submission][:file])
+
+   	@submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: verdict[0], execution_time: verdict[1], language: params[:submission][:language], code: params[:submission][:code], url_code: params[:submission][:file])
   	
   	if @submission.save
   		redirect_to ok_path
@@ -22,7 +23,8 @@ class SubmissionController < ApplicationController
   end 
 
   def showUser
-  	@submissions = Submission.where(user_username: params[:username]).order(created_at: :desc)
+    user = User.find_by(username: params[:username])
+  	@submissions = Submission.where( user_id: user.id ).order(created_at: :desc)
   end
 
   def showProblem
@@ -30,7 +32,8 @@ class SubmissionController < ApplicationController
   end
 
   def showProblemUser
-  	@submission = Submission.where( problem_id: params[:problem_id], user_username: params[:username] ).order(created_at: :desc)
+    user = User.find_by(username: params[:username])
+  	@submission = Submission.where( user_id: user.id, user_username: params[:username] ).order(created_at: :desc)
   end
 
   private 

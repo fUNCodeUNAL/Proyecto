@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161001014138) do
+ActiveRecord::Schema.define(version: 20161005031915) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20161001014138) do
   end
 
   create_table "has_groups", force: :cascade do |t|
-    t.string  "student_id"
+    t.integer "student_id"
     t.integer "group_id"
     t.index ["group_id"], name: "index_has_groups_on_group_id"
     t.index ["student_id"], name: "index_has_groups_on_student_id"
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20161001014138) do
     t.datetime "updated_at",    null: false
   end
 
-  create_table "students", id: false, force: :cascade do |t|
+  create_table "students", force: :cascade do |t|
     t.string   "username",   null: false
     t.integer  "cod"
     t.integer  "semester"
@@ -53,11 +53,12 @@ ActiveRecord::Schema.define(version: 20161001014138) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "problem_id"
-    t.string   "user_username"
+    t.integer  "user_id"
     t.index ["problem_id"], name: "index_submissions_on_problem_id"
+    t.index ["user_id"], name: "index_submissions_on_user_id"
   end
 
-  create_table "teachers", id: false, force: :cascade do |t|
+  create_table "teachers", force: :cascade do |t|
     t.string   "username",   null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -72,7 +73,7 @@ ActiveRecord::Schema.define(version: 20161001014138) do
     t.index ["problem_id"], name: "index_test_cases_on_problem_id"
   end
 
-  create_table "users", id: false, force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "full_name"

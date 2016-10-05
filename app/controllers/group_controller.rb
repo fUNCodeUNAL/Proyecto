@@ -22,7 +22,7 @@ class GroupController < ApplicationController
     if user == nil
       redirect_to pages_wrong_path
     else
-      HasGroup.create(group_id: has_group_params[:id_group], student_id: user.username)
+      HasGroup.create(group_id: has_group_params[:id_group], student_id: user.id)
       redirect_to teacher_groups_edit_path(has_group_params[:id_group])
     end
     
