@@ -3,25 +3,25 @@
 	<%if @users.length == 0%>
 		<p>No se encontraron resultados de usuarios.</p>
 	<%else%>
-		<%@users.sort%>
-		<%maxUsers = 2%>
+		
+		<%maxUsers = 10%>
 		<h1>Usuarios <span class="badge" ><%=@users.length%> </span></h1>
 		<div class="table-responsive">		
 			<!--striped condensed -->
 			<table id="userTable" class="table table-bordered table-hoverm table-condensed">
 				
 				<tr class = "success">
-					<th id="userTh0" onclick="sortUsers( 'user', users, maxUsers, 0 );">
+					<th id="userTh0" onclick="sortTable( 'user', users, maxUsers, 0 );">
 						Usuario
-						<span class='glyphicon glyphicon-sort-by-alphabet-alt pull-right' aria-hidden='true'></span>
+						<span class='pull-right glyphicon glyphicon-sort-by-alphabet-alt' aria-hidden='true'></span>
 					</th>
-					<th id="userTh1" onclick="sortUsers( 'user', users, maxUsers, 1 );">
+					<th id="userTh1" onclick="sortTable( 'user', users, maxUsers, 1 );">
 						Nombre
-						<span class='glyphicon glyphicon-sort-by-alphabet pull-right' aria-hidden='true'></span>
+						<span class='pull-right glyphicon glyphicon-sort-by-alphabet' aria-hidden='true'></span>
 					</th>
-					<th id="userTh2" onclick="sortUsers( 'user', users, maxUsers, 2 );">
+					<th id="userTh2" onclick="sortTable( 'user', users, maxUsers, 2 );">
 						Correo
-						<span class='glyphicon glyphicon-sort-by-alphabet pull-right' aria-hidden='true'></span>
+						<span class='pull-right glyphicon glyphicon-sort-by-alphabet' aria-hidden='true'></span>
 					</th>
 				</tr>
 
@@ -45,12 +45,64 @@
 		
 	<%end%>
 
+	<br><br>
+
+	<%if @problems.length == 0%>
+		<p>No se encontraron resultados de problemas.</p>
+	<%else%>
+		
+		<%maxProblems = 10%>
+		<h1>Problemas <span class="badge" ><%=@problems.length%> </span></h1>
+		<div class="table-responsive">		
+			<!--striped condensed -->
+			<table id="problemTable" class="table table-bordered table-hoverm table-condensed">
+				
+				<tr class = "success">
+					<th id="problemTh0" onclick="sortTable( 'problem', problems, maxProblems, 0 );">
+						ID
+						<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order-alt' aria-hidden='true'></span>
+					</th>
+					<th id="problemTh1" onclick="sortTable( 'problem', problems, maxProblems, 1 );">
+						Nombre
+						<span class='pull-right glyphicon glyphicon-sort-by-alphabet' aria-hidden='true'></span>
+					</th>
+					<th id="problemTh2" onclick="sortTable( 'problem', problems, maxProblems, 2 );">
+						Fecha de creación
+						<span class='pull-right glyphicon glyphicon glyphicon-sort-by-attributes' aria-hidden='true'></span>
+					</th>
+				</tr>
+
+				
+
+			</table>
+
+		</div>
+			
+		<ul class="pager" style="margin-top:0em;">
+			<li class="disabled" id="problemPrevLi" >
+				<a href="JavaScript:void(0)" onclick="updateTable( 'problem', problems, maxProblems, false );">Anterior</a>
+			</li>
+			<li class="<%='disabled' if @problems.length <= maxUsers%>" id="problemNextLi">
+				<a href="JavaScript:void(0)" onclick="updateTable( 'problem', problems, maxProblems, true );">Siguiente</a>
+			</li>
+		</ul>
+
+		<div id="cout"> </div>
+
+		
+	<%end%>
+
 	<script type="text/javascript">
 
-		var curPage = { 'user' : 0 };
+		var curPage = { 'user' : 0, 'problem' : 0 };
+		
 		var maxUsers = '<%=maxUsers%>';
+		var maxProblems = '<%=maxProblems%>';
 		var users = [];
+		var problems = [];
 		var cntUsers = 0;
+		var cntProblems = 0;
+
 
 		<%@users.each do |user|%>
 			var username = '<%=user.username%>';
@@ -59,10 +111,22 @@
 			users[cntUsers++] = [username, fullname, email];
 		<%end%>
 
-		if( cntUsers > 0 ){
-			clearTable( document.getElementById( 'userTable' ) );
+		<%@problems.each do |problem|%>
+			var id = '<%=problem.id%>';
+			var name = '<%=problem.name%>';
+			var date = '<%=problem.created_at%>';
+			problems[cntProblems++] = [id, name, date];
+		<%end%>
+
+		if(cntUsers > 0){
 			users.sort( function( u1, u2 ){return u1[0].toLowerCase() > u2[0].toLowerCase();} );
+			clearTable( document.getElementById( 'userTable' ) );
 			fillTable( document.getElementById( 'userTable' ), users, maxUsers, 3, 0 );
+		}
+
+		if(cntProblems > 0){
+			clearTable( document.getElementById( 'problemTable' ) );
+			fillTable( document.getElementById( 'problemTable' ), problems, maxProblems, 3, 0 );
 		}
 
 		function fillTable( table, list, maxRows, numCells, page ){
@@ -70,10 +134,15 @@
 				if( page * maxRows + i >= list.length ) break;
 				var row = table.insertRow(i+1);
 				var data = list[ page * maxRows + i ];
-				row.insertCell();
-				row.insertCell();
-				row.insertCell();
-				row.cells[0].innerHTML = "<a href='/profile/" + data[0] + "'>" + data[0] + "</a>";
+				
+				for( var j = 0; j < numCells; j++ )
+					row.insertCell();
+				
+				if( list == users )
+					row.cells[0].innerHTML = "<a href='/profile/" + data[0] + "'>" + data[0] + "</a>";
+				else if( list == problems )
+					row.cells[0].innerHTML = "<a href='/problem/" + data[0] + "'>" + data[0] + "</a>";
+
 				row.cells[1].innerHTML = data[1];
 				row.cells[2].innerHTML = data[2];
 			}
@@ -107,18 +176,18 @@
 			fillTable( table, list, maxRows, list[0].length, curPage[name] );
 		}
 
-		function sortUsers( name, list, maxRows, id ){
+		function sortTable( name, list, maxRows, id ){
 			curPage[ name ] = 0;
 			document.getElementById( name + 'PrevLi' ).className = 'disabled';
 			document.getElementById( name + 'NextLi' ).className = (maxRows >= list.length) ? 'disabled' : '';
 
 			var th = document.getElementById( name + 'Th' + id ).getElementsByTagName( 'span' )[0];
-			if( th.className == 'glyphicon glyphicon-sort-by-alphabet pull-right' ){
-				th.className = 'glyphicon glyphicon-sort-by-alphabet-alt pull-right'
+			if( th.className.substring( th.className.length - 4 ) != '-alt' ){
+				th.className += '-alt';
 				list.sort( function( l1, l2 ){return l1[id].toLowerCase() > l2[id].toLowerCase();} );
 			}
 			else{
-				th.className = 'glyphicon glyphicon-sort-by-alphabet pull-right'
+				th.className = th.className.substring( 0, th.className.length - 4 );
 				list.sort( function( l1, l2 ){return l1[id].toLowerCase() < l2[id].toLowerCase();} );
 			}
 
@@ -130,4 +199,3 @@
 	</script>
 
 </div>
-
