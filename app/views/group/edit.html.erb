@@ -11,7 +11,7 @@
 	</tr>
 
 	<% @group.students.each do |student| %>
-		<% user = User.find( student.username ) %>
+		<% user = User.find_by( username: student.username ) %>
 		<tr>
 			<td class="text-center">
 				<%= user.full_name %>
@@ -21,7 +21,7 @@
 				<%= user.email %> (<%= user.username %>)
 
 				<div class="pull-right">
-					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), group_student_delete_path(@group.id, user.username), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
+					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), group_student_delete_path(@group.id, user.id), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
 				</div>
 			</td>
 		</tr>

@@ -2,6 +2,11 @@ require 'zip'
 
 class ProblemController < ApplicationController
   before_action :authenticate_user!, only: [ :create, :edit, :new ]
+
+  def index
+    @problems = Problem.all
+  end
+
   def show
     @problem = Problem.find(params[:id])
   end

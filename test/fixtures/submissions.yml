@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  verdict: MyString
+  language: MyString
+  execution_time: 1.5
+  url_code: MyString
+  code: MyText
+
+two:
+  verdict: MyString
+  language: MyString
+  execution_time: 1.5
+  url_code: MyString
+  code: MyText

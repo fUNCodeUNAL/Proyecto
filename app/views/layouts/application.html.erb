@@ -56,13 +56,17 @@
                             <li>
                                 <%= link_to (" Perfil " + current_user.full_name), '/profile/'+current_user.username, class: "fa fa-bar-chart-o" %>
                             </li>
+
+                            <li>
+                                <%= link_to " Submissions ", submissions_user_path(current_user.username), class: "fa fa-upload" %>
+                            </li>             
                         <%end%>
                         <li>
                             <%= link_to " Contest ", pages_index_path, class: "fa fa-table" %>
                         </li>
                             <!-- Falta poner la ruta a la lista de problemas -->
                         <li>
-                            <%= link_to " Problemas ", pages_index_path, class: "fa fa-product-hunt" %>
+                            <%= link_to " Problemas ", problem_index_path, class: "fa fa-product-hunt" %>
                         </li>
                         <% if user_signed_in? %>
                             <li>
