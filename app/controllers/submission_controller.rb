@@ -12,7 +12,7 @@ class SubmissionController < ApplicationController
    	@submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: verdict[0], execution_time: verdict[1], language: params[:submission][:language], code: params[:submission][:code], url_code: params[:submission][:file])
   	
   	if @submission.save
-  		redirect_to ok_path
+  		redirect_to submissions_user_path(current_user.username)
   	else
   		render :new
   	end
