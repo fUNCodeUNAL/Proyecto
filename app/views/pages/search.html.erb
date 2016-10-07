@@ -82,7 +82,7 @@
 			<li class="disabled" id="problemPrevLi" >
 				<a href="JavaScript:void(0)" onclick="updateTable( 'problem', problems, maxProblems, false );">Anterior</a>
 			</li>
-			<li class="<%='disabled' if @problems.length <= maxUsers%>" id="problemNextLi">
+			<li class="<%='disabled' if @problems.length <= maxProblems%>" id="problemNextLi">
 				<a href="JavaScript:void(0)" onclick="updateTable( 'problem', problems, maxProblems, true );">Siguiente</a>
 			</li>
 		</ul>
