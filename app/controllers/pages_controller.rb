@@ -14,7 +14,7 @@ class PagesController < ApplicationController
   	maxQuery = 100
   	@users = User.where("username LIKE ?", "%#{params[:search]}%").take(maxQuery)
     if( is_number?( params[:search] ) )
-      @problems = Problem.where("id LIKE ? or name LIKE ?", Integer("#{params[:search]}"), "%#{params[:search]}%").take(maxQuery)
+      @problems = Problem.where("id = ? or name LIKE ?", Integer("#{params[:search]}"), "%#{params[:search]}%").take(maxQuery)
     else
       @problems = Problem.where("name LIKE ?", "%#{params[:search]}%").take(maxQuery)
     end
