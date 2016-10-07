@@ -6,12 +6,9 @@
       <div class="col-md-5">
         <div>
           <%= f.select(:language) do %>
-<!--
-		    <% [['Java', 'Java'], ['C++', 'C++'], ['Python', 'Python']].each do |c| -%>
--->
-        <% [['C', 'C']].each do |c| -%>
-    		  <%= content_tag(:option, c.first, value: c.last) %>
-  			<% end %>
+            <% [['C', 'C']].each do |c| -%>
+    		      <%= content_tag(:option, c.first, value: c.last) %>
+  			   <% end %>
           <% end %>
         </div>
       </div>
