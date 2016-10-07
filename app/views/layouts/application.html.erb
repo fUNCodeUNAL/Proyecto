@@ -60,10 +60,14 @@
                         <li>
                             <%= link_to " Contest ", pages_index_path, class: "fa fa-table" %>
                         </li>
+                            <!-- Falta poner la ruta a la lista de problemas -->
                         <li>
                             <%= link_to " Problemas ", pages_index_path, class: "fa fa-product-hunt" %>
                         </li>
                         <% if user_signed_in? %>
+                            <li>
+                            <%= link_to "Crear Problema ", problem_new_path, class: "fa fa-product-hunt" %>
+                            </li>
                             <li>
                                 <%= link_to " Grupos ", teacher_groups_show_path, class: "fa fa-heart" %>
                             </li>
