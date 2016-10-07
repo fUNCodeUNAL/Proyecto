@@ -25,15 +25,18 @@ class SubmissionController < ApplicationController
   def showUser
     user = User.find_by(username: params[:username])
   	@submissions = Submission.where( user_id: user.id ).order(created_at: :desc)
+    @users = mapUsers( @submissions )
   end
 
   def showProblem
-  	@submission = Submission.where( problem_id: params[:problem_id] ).order(created_at: :desc)
+  	@submissions = Submission.where( problem_id: params[:problem_id] ).order(created_at: :desc)
+    @users = mapUsers( @submissions )
   end
 
   def showProblemUser
     user = User.find_by(username: params[:username])
-  	@submission = Submission.where( user_id: user.id, user_username: params[:username] ).order(created_at: :desc)
+  	@submissions = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).order(created_at: :desc)
+    @users = mapUsers( @submissions )
   end
 
   private 
@@ -46,4 +49,16 @@ class SubmissionController < ApplicationController
   def submission_params
     params.require(:submission).permit(:problem_id, :language)
   end
+
+
+  def mapUsers( submissions )
+    m = {}
+    @submissions.each do |submission|
+      if !m.has_key?( submission.user_id )
+        m[submission.user_id] = User.find( submission.user_id ).username
+      end
+    end
+    return m
+  end
+
 end
