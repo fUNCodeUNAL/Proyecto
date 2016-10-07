@@ -59,7 +59,7 @@ class SubmissionController < ApplicationController
       "http://api.judge0.com/submissions/", 
       :body => {
         :source_code => code,
-        :language_id => 5,
+        :language_id => 1,
         :input => input,
         :expected_output => output
       }.to_json,

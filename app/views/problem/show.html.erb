@@ -4,7 +4,8 @@
     <p class = "problem_info">
       Time Limit: <%= @problem.time_limit %> ms
     </p>
-    <p class = "problem_info">
+    <p class = "problem_info"> C
+<!--
       <% if ( ( @problem.languages>>0 )&1 ) == 1 %>
         C++
       <% end %>
@@ -14,6 +15,7 @@
       <% if ( ( @problem.languages>>2 )&1 ) == 1 %>
         Python
       <% end %>
+-->
     </p>
   </legend>
     <%= link_to '<button class="submit_btn fa fa-upload btn btn-default">   Submit</button>'.html_safe, submissions_new_path(@problem.id) %>
