@@ -13,12 +13,12 @@
       </div>
     </div>
     <div class="form-group" >
-      <label class="col-md-4 control-label">Archivo comprimido</label>  
+      <label class="col-md-4 control-label">Enunciado del problema</label>  
       <div class="col-md-5">
         <div>
-          <%= f.file_field :file, class: "form-control input-md", placeholder: "seleccionar archivo..." %>
+          <%= f.file_field :file, class: "form-control input-md", accept: ".pdf", placeholder: "seleccionar archivo..." %>
         </div>
-        <p class="help-block"> Este archivo debe contener el enunciado en formato pdf y los casos de prueba debidamente emparejados con .in y .out</p> 
+        <p class="help-block"> Este archivo debe ser el enunciado en formato pdf </p> 
       </div>
     </div>
     <div class="form-group" >

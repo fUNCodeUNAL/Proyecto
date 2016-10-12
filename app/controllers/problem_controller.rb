@@ -39,7 +39,12 @@ class ProblemController < ApplicationController
 
   def update
     @problem = Problem.find(params[:id])
+    @problem.update( {name: params[:problem][:name]})
+    @problem.update( {time_limit: params[:problem][:time_limit]})
     @problem.update( {languages: get_languages( params ) })
+    if params[:problem][:file] != nil and params[:problem][:file].headers.include? ".pdf"
+      @problem.update( {url_statement: params[:problem][:file] })
+    end
     redirect_to @problem
   end
   
