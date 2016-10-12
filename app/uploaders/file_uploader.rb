@@ -24,6 +24,10 @@ class FileUploader < CarrierWave::Uploader::Base
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
 
+  def extension_whitelist
+     %w(zip)
+  end
+
   def get_extension( file_extension )
     extension = ""
     file_extension.each_char do |c|

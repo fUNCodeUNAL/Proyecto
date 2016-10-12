@@ -16,14 +16,20 @@ class ProblemController < ApplicationController
   end
   
   def create
-    total_pdf = count_pdf_files(params)
-    total_test_cases = count_test_cases(params)
-    if total_test_cases == 0 or total_pdf != 1
-      render :new
+    @problem = Problem.new
+    if params[:problem][:file] != nil and params[:problem][:file].headers.include? ".zip"
+      total_pdf = count_pdf_files(params)
+      total_test_cases = count_test_cases(params)
+      if total_test_cases == 0 or total_pdf != 1 or not create_problem(params)
+        @problem.save
+        render :new
+      else 
+        add_test_cases(params)
+        redirect_to @problem
+      end
     else
-      create_problem(params)
-      add_test_cases(params)
-      redirect_to @problem
+      @problem.save
+      render :new
     end
   end
 
@@ -84,7 +90,10 @@ class ProblemController < ApplicationController
         end
       end
     end
-    @problem.save
+    unless @problem.save
+      return false
+    end
+    return true
   end
 
   def count_pdf_files(params)
