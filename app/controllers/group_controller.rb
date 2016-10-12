@@ -18,14 +18,21 @@ class GroupController < ApplicationController
     redirect_to teacher_groups_edit_path(params[:id_group])
   end
   def add_student
-    user = User.find_by(email: has_group_params[:student_email])
-    if user == nil
-      redirect_to pages_wrong_path
-    else
-      HasGroup.create(group_id: has_group_params[:id_group], student_id: user.id)
-      redirect_to teacher_groups_edit_path(has_group_params[:id_group])
+    emails = has_group_params[:student_email].split("\r\n")
+
+    notFound = ""
+    emails.each do |email|
+      user = User.find_by(email: email)
+      if user == nil
+        notFound = notFound + email + "\n"
+      else
+        HasGroup.create(group_id: has_group_params[:id_group], student_id: user.id)
+      end
     end
-    
+    if notFound.length > 0
+      flash[:alert] = "Error: No se encontraron los siguientes usuarios: " + notFound
+    end
+    redirect_to teacher_groups_edit_path(has_group_params[:id_group])
   end
 
   private

@@ -1,3 +1,5 @@
+<p class="has_error"> <%= params[:NotFound] %></p> 
+
 <div>
 	<br>Nombre del grupo: <%= @group.name %>
 </div>
@@ -27,10 +29,10 @@
 		</tr>
 	<% end %> 
 </table>
-<h4>Agregar estudiante</h4>
+<h4>Agregar estudiantes</h4>
 <%= form_for :info_student, url: group_add_student_path do |f| %>
-	<%= f.text_field :student_email, placeholder: 'correo del estudiante' %>
+	<%= f.text_area :student_email, placeholder: 'Correo de los estudiantes', size: "50x5" %>
  	<%= f.hidden_field :id_group, value: @group.id%>
  	<br><br>
-  	<%= f.submit 'Agregar estudiante'%>
+  	<%= f.submit 'Agregar estudiantes'%>
 <% end %>
