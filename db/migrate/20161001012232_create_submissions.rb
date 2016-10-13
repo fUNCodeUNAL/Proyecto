@@ -5,7 +5,6 @@ class CreateSubmissions < ActiveRecord::Migration[5.0]
       t.string :language
       t.float :execution_time
       t.text :url_code
-      t.text :code
 
       t.timestamps
     end

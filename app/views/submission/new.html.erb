@@ -6,7 +6,7 @@
       <div class="col-md-5">
         <div>
           <%= f.select(:language) do %>
-            <% [['C', 'C']].each do |c| -%>
+            <% @available_languages.each do |c| -%>
     		      <%= content_tag(:option, c.first, value: c.last) %>
   			   <% end %>
           <% end %>
@@ -19,7 +19,7 @@
       <div class="col-md-5">
       <p class="help-block"> <%= error[:error_message] %></p> 
         <div>
-          <%= f.text_area :code, autofocus: true, class: "input-md code", placeholder: "No está implementado aún." %>
+          <%= f.text_area :code, autofocus: true, class: "input-md code", placeholder: "Escriba su codigo aqui." %>
         </div>
       </div>
     </div>
@@ -32,10 +32,11 @@
         </div>
       </div>
     </div>
+
     <div class="form-group">
       <label class="col-md-4 control-label"></label>
       <div class="col-md-4">
-        <%= f.submit "Subir problema", class: "btn btn-primary" %>
+        <%= f.submit "Subir problema", class: "btn btn-primary", data: {disable_with: "Enviando..."} %>
       </div>
     </div>
   <% end %>

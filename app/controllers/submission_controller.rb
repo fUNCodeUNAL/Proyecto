@@ -1,17 +1,26 @@
 require 'open-uri'
 require 'httparty'
 require 'json'
+require 'tempfile'
 
 class SubmissionController < ApplicationController
   before_action :authenticate_user!, only: [:new]
   def new
   	@submission = Submission.new
-  	
+    @available_languages = get_list_languages( Problem.find_by(params[:problem_id]).languages )
   end
 
   def create
-
-   	@submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: "Pending", execution_time: "-", language: params[:submission][:language], code: params[:submission][:code], url_code: params[:submission][:file])
+    if(params[:submission][:file] != nil)
+   	  @submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: "Pending", execution_time: "-", language: params[:submission][:language], url_code: params[:submission][:file])
+    else
+      filename = get_filename(params[:submission][:language])
+      file = Tempfile.new(filename)
+      #file << "Test data"
+      file.write(params[:submission][:code]) # => 9
+      file.close
+      @submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: "Pending", execution_time: "-", language: params[:submission][:language], url_code: file)
+    end
   	
   	if @submission.save
       @submission.verdict = get_verdict( )
@@ -77,6 +86,8 @@ class SubmissionController < ApplicationController
   end
   
   def get_verdict( )
+    # quitar esto
+    return "Accepted"
     problem = Problem.find_by( id: @submission.problem_id )
     ok = true
     problem.test_cases.each do |test_case|
@@ -111,4 +122,29 @@ class SubmissionController < ApplicationController
     return m
   end
 
+  def get_filename( language )
+    if(language == "Java")
+      return "code.java"
+    end
+    if(language == "C++")
+      return "code.cpp"
+    end
+    if(language == "Python")
+      return "code.py"
+    end
+  end
+
+  def get_list_languages( languages )
+    array = []
+    if ( ( languages>>0 )&1 ) == 1
+      array.push(['C++', 'C++'])
+    end
+    if ( ( languages>>1 )&1 ) == 1 
+      array.push(['Java', 'Java'])
+    end
+    if ( ( languages>>2 )&1 ) == 1 
+      array.push(['Python', 'Python'])
+    end
+    return array
+  end 
 end
