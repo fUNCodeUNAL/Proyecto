@@ -12,11 +12,11 @@ class PagesController < ApplicationController
   
   def search
   	maxQuery = 100
-  	@users = User.where("username LIKE ?", "%#{params[:search]}%").take(maxQuery)
+  	@users = User.where("lower(username) LIKE ?", "%#{params[:search].downcase}%").take(maxQuery)
     if( is_number?( params[:search] ) )
-      @problems = Problem.where("id = ? or name LIKE ?", Integer("#{params[:search]}"), "%#{params[:search]}%").take(maxQuery)
+      @problems = Problem.where("id = ? or lower(name) LIKE ?", Integer("#{params[:search]}"), "%#{params[:search].downcase}%").take(maxQuery)
     else
-      @problems = Problem.where("name LIKE ?", "%#{params[:search]}%").take(maxQuery)
+      @problems = Problem.where("lower(name) LIKE ?", "%#{params[:search].downcase}%").take(maxQuery)
     end
   end
 
