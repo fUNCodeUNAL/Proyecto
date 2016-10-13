@@ -13,13 +13,11 @@
         </div>
       </div>
     </div>
-    <% error = check_error(@submission.errors, :base) %>
     <div class="form-group" >
       <label class="col-md-4 control-label">Codigo</label>  
       <div class="col-md-5">
-      <p class="help-block"> <%= error[:error_message] %></p> 
         <div>
-          <%= f.text_area :code, autofocus: true, class: "input-md code", placeholder: "Escriba su codigo aqui.", onkeyup: "disabled_button()", name: 'code' %>
+          <%= f.text_area :url_code, autofocus: true, class: "input-md code", placeholder: "Escriba su codigo aqui.", onkeyup: "disabled_button()", name: 'code' %>
         </div>
       </div>
     </div>

@@ -145,6 +145,10 @@ class ProblemController < ApplicationController
     unless params[:python].nil?
       languages |= (1<<2)
     end
+    unless params[:c].nil?
+      languages |= (1<<3)
+    end
+    
     return languages
   end
   
