@@ -19,7 +19,7 @@
       <div class="col-md-5">
       <p class="help-block"> <%= error[:error_message] %></p> 
         <div>
-          <%= f.text_area :code, autofocus: true, class: "input-md code", placeholder: "Escriba su codigo aqui." %>
+          <%= f.text_area :code, autofocus: true, class: "input-md code", placeholder: "Escriba su codigo aqui.", onkeyup: "disabled_button()", name: 'code' %>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
       <label class="col-md-4 control-label">Archivo</label>  
       <div class="col-md-5">
         <div>
-          <%= f.file_field :file, class: "form-control input-md", placeholder: "Seleccionar archivo..." %>
+          <%= f.file_field :file, class: "form-control input-md", placeholder: "Seleccionar archivo...", name: 'file', onchange: "disabled_button()" %>
         </div>
       </div>
     </div>
@@ -36,9 +36,21 @@
     <div class="form-group">
       <label class="col-md-4 control-label"></label>
       <div class="col-md-4">
-        <%= f.submit "Subir problema", class: "btn btn-primary", data: {disable_with: "Enviando..."} %>
+        <%= f.submit "Subir problema", class: "btn btn-primary", disabled: "disabled", data: {disable_with: "Enviando..."}, name: "enviar" %>
       </div>
     </div>
   <% end %>
 </div>
 
+<script>
+  function disabled_button() {
+    if(document.getElementsByName('code')[0].value == "" && document.getElementsByName('file')[0].value == "") {
+      document.getElementsByName('enviar')[0].disabled = true;
+
+    }
+    else {
+      document.getElementsByName('enviar')[0].disabled = false;
+    }
+  }
+
+</script>>
