@@ -32,24 +32,14 @@
     <div class="form-group">
       <label class="col-md-4 control-label">Lenguajes</label>
       <div class="col-md-5">
-        <% val = "0" %>
-        <% if ( ( @problem.languages>>0 )&1 ) == 1 %>
-          <% val = "1" %>
+        <% @available_languages.each do |lang| -%>
+          <% val = "0" %>
+          <% if lang[ 2 ] == 1 %>
+            <% val = "1" %>
+          <% end %> 
+          <%= check_box_tag(lang[ 0 ], value = val, checked = ( val == "1" )) %>
+          <%= label_tag(lang[ 0 ], lang[ 1 ]) %>
         <% end %>
-        <%= check_box_tag(:cpp, value = val, checked = ( val == "1" )) %>
-        <%= label_tag(:cpp, "C++") %>
-        <% val = "0" %>
-        <% if ( ( @problem.languages>>1 )&1 ) == 1 %>
-          <% val = "1" %>
-        <% end %>
-        <%= check_box_tag(:java, value = val, checked = ( val == "1" )) %>
-        <%= label_tag(:java, "Java") %>
-        <% val = "0" %>
-        <% if ( ( @problem.languages>>2 )&1 ) == 1 %>
-          <% val = "1" %>
-        <% end %>
-        <%= check_box_tag(:python, value = val, checked = ( val == "1" )) %>
-        <%= label_tag(:python, "Python") %>
       </div>
     </div>
     <div class="form-group">

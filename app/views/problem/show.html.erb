@@ -5,17 +5,11 @@
       Time Limit: <%= @problem.time_limit %> ms
     </p>
     <p class = "problem_info"> 
-
-      <% if ( ( @problem.languages>>0 )&1 ) == 1 %>
-        C++
+      <% @available_languages.each do |lang| -%>
+        <% if lang[ 2 ] == 1 %>
+          <%= lang[ 1 ] %>
+        <% end %>
       <% end %>
-      <% if ( ( @problem.languages>>1 )&1 ) == 1 %>
-        Java
-      <% end %>
-      <% if ( ( @problem.languages>>2 )&1 ) == 1 %>
-        Python
-      <% end %>
-
     </p>
   </legend>
     <%= link_to '<button class="fa fa-upload btn-oldstyle">   Submit</button>'.html_safe, submissions_new_path(@problem.id) %>

@@ -9,6 +9,7 @@ class ProblemController < ApplicationController
 
   def show
     @problem = Problem.find(params[:id])
+    @available_languages = get_list_languages( @problem.languages )
   end
   
   def new
@@ -35,6 +36,7 @@ class ProblemController < ApplicationController
 
   def edit
     @problem = Problem.find(params[:id])
+    @available_languages = get_list_languages( @problem.languages )
   end
 
   def update
@@ -142,15 +144,23 @@ class ProblemController < ApplicationController
     unless params[:java].nil?
       languages |= (1<<1)
     end
-    unless params[:python].nil?
+    unless params[:py].nil?
       languages |= (1<<2)
     end
     unless params[:c].nil?
       languages |= (1<<3)
     end
-    
     return languages
   end
+
+  def get_list_languages( languages )
+    array = []
+    array.push([ 'cpp', 'C++', ( languages>>0 )&1 ])
+    array.push([ 'java', 'Java', ( languages>>1 )&1 ])
+    array.push([ 'py', 'Python', ( languages>>2 )&1 ])
+    array.push([ 'c', 'C', ( languages>>3 )&1 ])
+    return array
+  end 
   
   def problem_params
     params.require(:problem).permit(:name, :time_limit)

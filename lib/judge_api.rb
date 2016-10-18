@@ -5,12 +5,11 @@ class JudgeApi
 
   def sendSubmission(code, language, input, output)
     languageId = getLanguageId(language)
-    response = HTTParty.post(API_URL, body: { source_code: code,
-       language_id: languageId,
-       input: input,
-       expected_output: output})
-
-
+    response = HTTParty.post(API_URL, body: { 
+        source_code: code,
+        language_id: languageId,
+        input: input,
+        expected_output: output } )
     json = JSON.parse(response.body)
     return json['id']
   end

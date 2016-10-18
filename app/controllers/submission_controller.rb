@@ -12,16 +12,16 @@ class SubmissionController < ApplicationController
   end
 
   def create
-    if(params[:submission][:file] != nil)
-   	  @submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: "Pending", execution_time: "-", language: params[:submission][:language], url_code: params[:submission][:file])
+    if(params[:file] != nil)
+   	  @submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: "Pending", execution_time: "-", language: params[:submission][:language], url_code: params[:file])
     else
       filename = get_filename(params[:submission][:language])
       file = Tempfile.new(filename)
-      #file << "Test data"
-      file.write(params[:code]) # => 9
+      file.write(params[:code])
       file.close
-      @submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: "Pending", execution_time: "-", language: params[:submission][:language], url_code: file)
-    end
+      filepath = file.path
+      @submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: "Pending", execution_time: "-", language: params[:submission][:language], url_code: File.open(filepath))
+    end 
   	
   	if @submission.save
       @submission.api_ids = sendSubmission()
@@ -31,10 +31,7 @@ class SubmissionController < ApplicationController
     else
       render :new
     end
-
-
   	#redirect_to current_user.username + '/submission/'
-  	
   end 
 
   def showUser
@@ -84,15 +81,14 @@ class SubmissionController < ApplicationController
   # Uses a @submission class variable that is defined in create
   # Return the Ids for the submissions test case. (See GetVeredictJob)
   def sendSubmission()
+    code = get_data_url( @submission.url_code.url )
     judge = JudgeApi.new
     test_cases = Problem.find_by( id: @submission.problem_id ).test_cases
     api_ids = ""
     test_cases.each do |test_case|
-      code = get_data_url( @submission.url_code.url )
       language = @submission.language
       input = get_data_url(test_case.url_input.url)
       output = get_data_url(test_case.url_output.url)
-
       id = judge.sendSubmission(code, language, input, output)
       api_ids = api_ids + id.to_s + ";"
     end
@@ -123,6 +119,9 @@ class SubmissionController < ApplicationController
     end
     if(language == "Python")
       return "code.py"
+    end
+    if(language == "C")
+      return "code.c"
     end
   end
 
