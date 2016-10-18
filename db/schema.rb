@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20161013015817) do
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "teacher_id"
+    t.string   "teacher_id"
     t.index ["teacher_id"], name: "index_groups_on_teacher_id"
   end
 
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20161013015817) do
     t.string   "language"
     t.float    "execution_time"
     t.text     "url_code"
+    t.text     "code"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "problem_id"

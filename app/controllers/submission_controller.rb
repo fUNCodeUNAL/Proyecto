@@ -3,6 +3,7 @@ require 'httparty'
 require 'json'
 require 'tempfile'
 require 'judge_api'
+require 'file_manager'
 
 class SubmissionController < ApplicationController
   before_action :authenticate_user!, only: [:new]
@@ -67,28 +68,19 @@ class SubmissionController < ApplicationController
     end
   end
 
-  # Return a string with the information of a file from the given url
-  def get_data_url( path )
-    url = URI.parse( path )
-    data = ""
-    open( url ) do |http|
-      data = http.read
-    end
-    return data
-  end
-
   # Function to submit a code to the API
   # Uses a @submission class variable that is defined in create
   # Return the Ids for the submissions test case. (See GetVeredictJob)
   def sendSubmission()
-    code = get_data_url( @submission.url_code.url )
+    fileM = FileManager.new
+    code = fileM.get_data_url( @submission.url_code.url )
     judge = JudgeApi.new
     test_cases = Problem.find_by( id: @submission.problem_id ).test_cases
     api_ids = ""
     test_cases.each do |test_case|
       language = @submission.language
-      input = get_data_url(test_case.url_input.url)
-      output = get_data_url(test_case.url_output.url)
+      input = fileM.get_data_url(test_case.url_input.url)
+      output = fileM.get_data_url(test_case.url_output.url)
       id = judge.sendSubmission(code, language, input, output)
       api_ids = api_ids + id.to_s + ";"
     end
