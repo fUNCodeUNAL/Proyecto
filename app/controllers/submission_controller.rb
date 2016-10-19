@@ -10,8 +10,9 @@ class SubmissionController < ApplicationController
   helper_method :get_code
 
   def get_code( id ) 
+    fileM = FileManager.new
     submission = Submission.find_by( id: id )
-    code = get_data_url( submission.url_code.url )
+    code = fileM.get_data_url( submission.url_code.url )
     return code
   end
 
