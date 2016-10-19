@@ -21,3 +21,6 @@
 //= require morris.min
 //= require morris-data
 //= require sb-admin-2.min
+//= require excanvas
+//= require spinners.min
+//= require lightview

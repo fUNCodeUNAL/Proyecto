@@ -36,6 +36,8 @@ Rails.application.routes.draw do
   get 'problem/:problem_id/submission/', to: 'submission#showProblem', as: "submissions_problem"
   get ':username/submission/', to: 'submission#showUser', as: "submissions_user"
   post 'problem/:problem_id/submission/create', to: 'submission#create', as: "submissions_create"
+
+  get 'submission/:submission_id/', to: 'submission#show_details_submission', as: "submission_show"
    #Para cuando vayamos a recalificar
    #put 'submission/update/:id', to: 'submission#update', as: "submission_update"
 

@@ -6,6 +6,14 @@ require 'judge_api'
 
 class SubmissionController < ApplicationController
   before_action :authenticate_user!, only: [:new]
+  helper_method :get_code
+
+  def get_code( id ) 
+    submission = Submission.find_by( id: id )
+    code = get_data_url( submission.url_code.url )
+    return code
+  end
+
   def new
   	@submission = Submission.new
     @available_languages = get_list_languages( Problem.find(params[:problem_id]).languages )
@@ -33,6 +41,10 @@ class SubmissionController < ApplicationController
     end
   	#redirect_to current_user.username + '/submission/'
   end 
+
+  def show_details_submission
+    render html: ( "<textarea style = \"resize: none\" rows = '50' cols = '80' disabled>" + get_code( params[ :submission_id ] )+ "</textarea>" ).html_safe
+  end
 
   def showUser
     user = User.find_by(username: params[:username])

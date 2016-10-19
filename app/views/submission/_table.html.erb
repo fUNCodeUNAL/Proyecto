@@ -1,9 +1,7 @@
 <div>
-
 	<%if @submissions.length == 0%>
 		<p>No se encontró ningún resultado.</p>
 	<%else%>
-		
 		<%maxSubmissions = 10%>
 		<h1>Submissions <span class="badge" ><%=@submissions.length%> </span></h1>
 		<div class="table-responsive">		
@@ -96,7 +94,7 @@
 					row.insertCell();
 					row.cells[j].innerHTML = data[j];
 				}
-
+				row.cells[0].innerHTML = "<a href=\"/submission/" + data[0] + "\" class=\"lightview\">" + data[0] + "</a>";
 				row.cells[1].innerHTML = "<a href='/problem/" + data[1] + "'>" + data[1] + "</a>";
 				row.cells[2].innerHTML = "<a href='/profile/" + data[2] + "'>" + data[2] + "</a>";
 			}
@@ -153,3 +151,4 @@
 	</script>
 
 </div>
+
