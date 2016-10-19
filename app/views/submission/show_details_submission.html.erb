@@ -1,0 +1,6 @@
+<pre><code class = "nohighlight"><b>Source code:</b></code><pre><code class = "cpp"><%= @code %></code></pre></pre>
+<% cases = 1 %>
+<% @verdicts.each do |verdict| %>
+  <pre><code class = "nohighlight"><b>Case <%= cases %>:</b> <u><%= verdict[ 0 ] %></u> <b>Time:</b> <%= verdict[ 1 ]%> s <b>Memory:</b> <%= verdict[ 2 ] %> KB</code><br><b>Input:</b><pre><code class = "nohighlight"><%=@test_cases[ cases-1 ][ 0 ]%></code></pre><b>Output:</b><pre><code class = "nohighlight"><%=verdict[ 3 ]%></code></pre><b>Expected output:</b><pre><code class = "nohighlight"><%=@test_cases[ cases-1 ][ 1 ]%></code></pre></pre>
+  <% cases = cases+1 %>
+<% end %>

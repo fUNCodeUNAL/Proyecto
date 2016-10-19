@@ -24,3 +24,4 @@
 //= require excanvas
 //= require spinners.min
 //= require lightview
+//= require highlight.pack

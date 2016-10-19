@@ -7,14 +7,6 @@ require 'file_manager'
 
 class SubmissionController < ApplicationController
   before_action :authenticate_user!, only: [:new]
-  helper_method :get_code
-
-  def get_code( id ) 
-    fileM = FileManager.new
-    submission = Submission.find_by( id: id )
-    code = fileM.get_data_url( submission.url_code.url )
-    return code
-  end
 
   def new
   	@submission = Submission.new
@@ -45,7 +37,12 @@ class SubmissionController < ApplicationController
   end 
 
   def show_details_submission
-    render html: ( "<textarea style = \"resize: none\" rows = '50' cols = '80' disabled>" + get_code( params[ :submission_id ] )+ "</textarea>" ).html_safe
+    fileM = FileManager.new
+    submission = Submission.find_by( id: params[ :submission_id ] )
+    @code = fileM.get_data_url( submission.url_code.url )
+    @verdicts = get_verdicts( fileM, submission )
+    @test_cases = parsing_test_cases( fileM, get_test_cases( submission ) )
+    render layout: 'light_view'
   end
 
   def showUser
@@ -73,6 +70,30 @@ class SubmissionController < ApplicationController
 
   private 
 
+  def get_verdicts( file_manager, submission )
+    judge = JudgeApi.new
+    verdicts = [ ]
+    api_ids = submission.api_ids.split(';')
+    count = 0
+    passedTest = 0
+    time = 0
+    api_ids.each do |id|
+      verdict = judge.getStatus(id)
+      status = verdict['status']['description']
+      time = verdict['time']
+      if time.nil?
+        time = "0"
+      end
+      memory = verdict['memory']
+      if memory.nil?
+        memory = "0"
+      end
+      output = verdict['actual_output']
+      verdicts.push( [ status, time, memory, output ] )
+    end
+    return verdicts
+  end
+
   # Uses a @pendingSubmission class variable that is defined in any show method
   def updatePendingSubmissions()
     @pendingSubmissions.each do |submission|
@@ -88,22 +109,34 @@ class SubmissionController < ApplicationController
     fileM = FileManager.new
     code = fileM.get_data_url( @submission.url_code.url )
     judge = JudgeApi.new
-    test_cases = Problem.find_by( id: @submission.problem_id ).test_cases
+    test_cases = parsing_test_cases( fileM, get_test_cases( @submission ) )
     api_ids = ""
     test_cases.each do |test_case|
       language = @submission.language
-      input = fileM.get_data_url(test_case.url_input.url)
-      output = fileM.get_data_url(test_case.url_output.url)
+      input = test_case[ 0 ]
+      output = test_case[ 1 ]
       id = judge.sendSubmission(code, language, input, output)
       api_ids = api_ids + id.to_s + ";"
     end
     return api_ids;
   end 
 
+  def get_test_cases( submission )
+    test_cases = Problem.find_by( id: submission.problem_id ).test_cases
+    return test_cases
+  end
+
   def submission_params
     params.require(:submission).permit(:problem_id, :language)
   end
 
+  def parsing_test_cases( file_manager, tc )
+    test_cases = [ ]
+    tc.each do |test_case|
+      test_cases.push( [ file_manager.get_data_url( test_case.url_input.url ), file_manager.get_data_url(test_case.url_output.url) ] )
+    end
+    return test_cases
+  end
 
   def mapUsers( submissions )
     m = {}
