@@ -52,13 +52,9 @@ class ProblemController < ApplicationController
 
     if params[:problem][:file] != nil and params[:problem][:file].headers.include? ".zip"
       total_test_cases = count_test_cases(params)
-      if total_test_cases == 0
-        render :edit
-      else 
+      if total_test_cases > 0
         add_test_cases(params)
       end
-    else
-      render :edit
     end
 
     redirect_to @problem

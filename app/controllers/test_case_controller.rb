@@ -24,7 +24,7 @@ class TestCaseController < ApplicationController
 		filepath = file.path
 		Problem.find( params[:problem_id] ).test_cases[ params[:test_idx].to_i ].update( url_output: File.open(filepath) )
 		
-		redirect_to Problem.find( params[:problem_id] )
+		redirect_to problem_edit_path( params[:problem_id] )
 	end
 
 end
