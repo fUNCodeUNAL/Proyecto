@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>f(UN)Code</title>
+		<%= csrf_meta_tags %>
+	    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+	    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+	</head>
+
+	<body>
+		<%= form_tag(problem_edit_test_case_path( params[:problem_id], params[:test_idx] ), method: "put") do %>
+
+		<br><br>
+		<div>
+			<div class="row">
+				<div class="col-md-6">
+					<strong>Input</strong>
+					<br>
+					<%= text_area_tag :input, @input ,class: 'testcase'%>
+				</div>
+				<div class="col-md-6">
+					<strong>Output</strong>
+					<br>
+					<%= text_area_tag :output, @output ,class: 'testcase'%>
+				</div>
+			</div>
+		</div>
+
+		<%= button_tag " Guardar", class: "fa fa-floppy-o btn-oldstyle-3 save_btn" %>
+
+		<% end %>
+	</body>
+</html>

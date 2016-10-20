@@ -17,6 +17,7 @@ class ProblemController < ApplicationController
   end
   
   def create
+    #NOTA: Los @problem.save que se llaman cuando hay errores es para que no reinicie el formulario y muestre que errores hubieron
     @problem = Problem.new
     if params[:problem][:file] != nil and params[:problem][:file].headers.include? ".zip"
       total_pdf = count_pdf_files(params)
@@ -44,12 +45,33 @@ class ProblemController < ApplicationController
     @problem.update( {name: params[:problem][:name]})
     @problem.update( {time_limit: params[:problem][:time_limit]})
     @problem.update( {languages: get_languages( params ) })
-    if params[:problem][:file] != nil and params[:problem][:file].headers.include? ".pdf"
-      @problem.update( {url_statement: params[:problem][:file] })
+
+    if params[:problem][:pdf] != nil and params[:problem][:pdf].headers.include? ".pdf"
+      @problem.update( {url_statement: params[:problem][:pdf] })
     end
+
+    if params[:problem][:file] != nil and params[:problem][:file].headers.include? ".zip"
+      total_test_cases = count_test_cases(params)
+      if total_test_cases == 0
+        render :edit
+      else 
+        add_test_cases(params)
+      end
+    else
+      render :edit
+    end
+
     redirect_to @problem
   end
-  
+
+  def delete_test_case
+    @record = Problem.find( params[:problem_id] ).test_cases[ params[:test_idx].to_i ]
+    @record.destroy
+    redirect_to problem_edit_path(params[:problem_id])
+  end
+
+
+
   private
 
   def create_temporary_file(file)

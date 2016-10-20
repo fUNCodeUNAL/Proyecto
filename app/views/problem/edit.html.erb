@@ -16,9 +16,18 @@
       <label class="col-md-4 control-label">Enunciado del problema</label>  
       <div class="col-md-5">
         <div>
-          <%= f.file_field :file, class: "form-control input-md", accept: ".pdf", placeholder: "seleccionar archivo..." %>
+          <%= f.file_field :pdf, class: "form-control input-md", accept: ".pdf", placeholder: "seleccionar archivo..." %>
         </div>
         <p class="help-block"> Este archivo debe ser el enunciado en formato pdf </p> 
+      </div>
+    </div>
+    <div class="form-group" >
+      <label class="col-md-4 control-label">Archivo comprimido</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.file_field :file, class: "form-control input-md", accept: ".zip", placeholder: "seleccionar archivo..." %>
+        </div>
+        <p class="help-block"> Este archivo debe contener casos de prueba debidamente emparejados con .in y .out</p> 
       </div>
     </div>
     <div class="form-group" >
@@ -45,8 +54,40 @@
     <div class="form-group">
       <label class="col-md-4 control-label"></label>
       <div class="col-md-4">
-        <%= f.submit "Editar problema", class: "btn btn-primary" %>
+        <%= f.submit "Editar problema", class: "btn btn-primary", data: {disable_with: "Editando..."} %>
       </div>
     </div>
   <% end %>
+</div>
+
+<br>
+<legend>Casos de prueba</legend>
+<div class="table-responsive">
+  
+  <table class="table table-bordered table-hover">
+    
+    <%caseCnt = 0%>
+    <%@problem.test_cases.each do |tCase|%>
+
+      <tr>
+
+        <td class="text-center">
+          Test Case <%=(caseCnt + 1)%>
+
+          <div class="pull-right">
+            <%= link_to raw("<span class='glyphicon glyphicon-edit' aria-hidden='true'></span>"), problem_show_test_case_path( @problem.id, caseCnt ), class: "btn btn-success btn-xs" %>
+
+            <%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), problem_delete_test_case_path( @problem.id, caseCnt ), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
+          </div>
+
+        </td>
+
+        <%caseCnt += 1%>
+
+      </tr>
+
+    <%end%>
+
+  </table>
+
 </div>
