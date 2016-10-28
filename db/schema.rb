@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161022184132) do
+ActiveRecord::Schema.define(version: 20161028211214) do
 
   create_table "contests", force: :cascade do |t|
     t.datetime "start_date"
@@ -20,6 +20,11 @@ ActiveRecord::Schema.define(version: 20161022184132) do
     t.datetime "updated_at", null: false
     t.integer  "teacher_id"
     t.index ["teacher_id"], name: "index_contests_on_teacher_id"
+  end
+
+  create_table "create_problem_contest_relationships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "groups", force: :cascade do |t|
@@ -37,12 +42,12 @@ ActiveRecord::Schema.define(version: 20161022184132) do
     t.index ["student_id"], name: "index_has_groups_on_student_id"
   end
 
-  create_table "problem_contest_relations", force: :cascade do |t|
+  create_table "problem_contest_relationships", force: :cascade do |t|
     t.integer "problem_id"
     t.integer "contest_id"
     t.integer "score"
-    t.index ["contest_id"], name: "index_problem_contest_relations_on_contest_id"
-    t.index ["problem_id"], name: "index_problem_contest_relations_on_problem_id"
+    t.index ["contest_id"], name: "index_problem_contest_relationships_on_contest_id"
+    t.index ["problem_id"], name: "index_problem_contest_relationships_on_problem_id"
   end
 
   create_table "problems", force: :cascade do |t|
@@ -52,13 +57,6 @@ ActiveRecord::Schema.define(version: 20161022184132) do
     t.integer  "languages"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-  end
-
-  create_table "student_contest_relations", force: :cascade do |t|
-    t.integer "student_id"
-    t.integer "contest_id"
-    t.index ["contest_id"], name: "index_student_contest_relations_on_contest_id"
-    t.index ["student_id"], name: "index_student_contest_relations_on_student_id"
   end
 
   create_table "students", force: :cascade do |t|
@@ -97,6 +95,13 @@ ActiveRecord::Schema.define(version: 20161022184132) do
     t.datetime "updated_at", null: false
     t.integer  "problem_id"
     t.index ["problem_id"], name: "index_test_cases_on_problem_id"
+  end
+
+  create_table "user_contest_relationships", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "contest_id"
+    t.index ["contest_id"], name: "index_user_contest_relationships_on_contest_id"
+    t.index ["user_id"], name: "index_user_contest_relationships_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

@@ -6,4 +6,7 @@ class Problem < ApplicationRecord
 	validates :languages, numericality: { greater_than: 0, message: "debe estar disponible en al menos un lenguaje" }
 	has_many :test_cases
     has_many :submissions
+    
+    has_many :problem_contest_relationships, dependent: :destroy
+	has_many :contests, through: :problem_contest_relationships
 end
