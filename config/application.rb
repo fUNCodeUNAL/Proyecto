@@ -21,6 +21,7 @@ module FUNCode
 		:enable_starttls_auto	=> true
 	}
 
+	config.time_zone = 'Bogota'
 
   end
 end

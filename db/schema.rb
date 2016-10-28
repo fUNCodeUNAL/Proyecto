@@ -10,13 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013015817) do
+ActiveRecord::Schema.define(version: 20161022184132) do
+
+  create_table "contests", force: :cascade do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "teacher_id"
+    t.index ["teacher_id"], name: "index_contests_on_teacher_id"
+  end
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "teacher_id"
+    t.integer  "teacher_id"
     t.index ["teacher_id"], name: "index_groups_on_teacher_id"
   end
 
@@ -27,6 +37,14 @@ ActiveRecord::Schema.define(version: 20161013015817) do
     t.index ["student_id"], name: "index_has_groups_on_student_id"
   end
 
+  create_table "problem_contest_relations", force: :cascade do |t|
+    t.integer "problem_id"
+    t.integer "contest_id"
+    t.integer "score"
+    t.index ["contest_id"], name: "index_problem_contest_relations_on_contest_id"
+    t.index ["problem_id"], name: "index_problem_contest_relations_on_problem_id"
+  end
+
   create_table "problems", force: :cascade do |t|
     t.string   "name"
     t.string   "url_statement"
@@ -34,6 +52,13 @@ ActiveRecord::Schema.define(version: 20161013015817) do
     t.integer  "languages"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+  end
+
+  create_table "student_contest_relations", force: :cascade do |t|
+    t.integer "student_id"
+    t.integer "contest_id"
+    t.index ["contest_id"], name: "index_student_contest_relations_on_contest_id"
+    t.index ["student_id"], name: "index_student_contest_relations_on_student_id"
   end
 
   create_table "students", force: :cascade do |t|
@@ -49,7 +74,6 @@ ActiveRecord::Schema.define(version: 20161013015817) do
     t.string   "language"
     t.float    "execution_time"
     t.text     "url_code"
-    t.text     "code"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "problem_id"

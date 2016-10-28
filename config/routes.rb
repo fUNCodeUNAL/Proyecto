@@ -44,5 +44,11 @@ Rails.application.routes.draw do
   get 'problem/:problem_id/testcase/:test_idx', to: 'test_case#show_test_case', as: "problem_show_test_case"
   put 'problem/:problem_id/testcase/update/:test_idx', to: 'test_case#edit', as: "problem_edit_test_case"
 
+
+  get 'contest/index', to: 'contest#index', as: "contest_index"
+  get 'contest/new', to: 'contest#new', as: "contest_new"
+  get 'contest/:id', to:'contest#show', as: "contest"
+  post 'contest/create', to: 'contest#create', as:'contest_create'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
