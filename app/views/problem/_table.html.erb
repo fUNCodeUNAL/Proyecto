@@ -1,0 +1,46 @@
+<%if @problems.length == 0%>
+	<p>No se encontraron resultados de problemas.</p>
+<%else%>
+	<h1>Problemas <span class="badge" ><%=@problemTotal%> </span></h1>
+	<div class="table-responsive">
+		<!--striped condensed -->
+		<table id="problemTable" class="table table-bordered table-hoverm table-condensed">
+			
+			<tr class = "success">
+				
+				<th id="problemTh0" >
+					ID
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order[:id] + "' aria-hidden='true'></span>"), problem_search_path(search: params[:search], pageId: params[:pageId].to_i, order:'id ' + @send_order[:id]), method: 'get',remote: true %>
+				</th>
+				
+				<th id="problemTh1">
+					Nombre
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order[:name] +"' aria-hidden='true'></span>"), problem_search_path(search: params[:search], pageId: params[:pageId].to_i, order:'name ' + @send_order[:name]), method: 'get',remote: true %>
+				</th>
+				<th id="problemTh2">
+					Fecha de creación
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order[:created_at] + "' aria-hidden='true'></span>"), problem_search_path(search: params[:search], pageId: params[:pageId].to_i, order:'created_at ' + @send_order[:created_at]), method: 'get',remote: true %>
+				</th>
+				<th id="problemTh3">Puntuación</th>
+				<th id="problemTh4">Agregar</th>
+			</tr>
+			<% @problems.each do |problem| %>
+			<tr>
+				<td> <%= link_to problem.id, problem_path(problem.id) %> </td>
+				<td> <%= problem.name %> </td>
+				<td> <%= problem.created_at %></td>
+				<td></td>
+				<td></td>
+			</tr>
+
+			<% end %>
+		</table>
+	</div>
+
+	<div class="text-center">
+		<%= button_to 'Anterior', problem_search_path, method: 'get', params: {search: params[:search], pageId: params[:pageId].to_i-1}, remote: true, class: ("btn btn-default btn-round" + @disablePrevButton) %>
+		<%= button_to 'Siguiente', problem_search_path, method: 'get', params: {search: params[:search], pageId: params[:pageId].to_i+1}, remote: true, class: ("btn btn-default btn-round" + @disableNextButton) %>
+	</div>
+
+<%end%>
+

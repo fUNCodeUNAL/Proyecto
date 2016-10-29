@@ -1,5 +1,5 @@
 class ContestController < ApplicationController
-	before_action :authenticate_user!, only: [ :create, :edit, :new ]
+	before_action :authenticate_user!, except: [ :show, :index ]
 	def index
 		@contests = Contest.all
 	end
@@ -21,11 +21,18 @@ class ContestController < ApplicationController
     		render :new
     	end
 	end
+	
+	def edit
+		@contest = Contest.find(params[:id])
+		@pageId = 0
+	end
+
+	def update
+		
+	end
 
 	private
  	def contest_params
     	params.require(:contest).permit(:name, :teacher_id, :start_date, :end_date)
-
   	end
-
 end

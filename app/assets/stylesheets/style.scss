@@ -143,3 +143,18 @@
   border-color: #092277 #092277 #040e30;
   border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
 }
+
+.btn-round {
+  border-radius: 17px;
+  width: 90px;
+}
+
+.button_to,
+.button_to div {
+  display: inline;
+}
+
+a, a:visited{
+  color: inherit !important;
+  text-decoration: none;
+}

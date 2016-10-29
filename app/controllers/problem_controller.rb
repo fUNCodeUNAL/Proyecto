@@ -70,7 +70,49 @@ class ProblemController < ApplicationController
     redirect_to problem_edit_path(params[:problem_id])
   end
 
+  def search
+    maxQuery = 2
+    @disablePrevButton = ""
+    @disableNextButton = ""
+    problemStartId = params[:pageId].to_i*maxQuery
+    @send_order ={
+      id: "DESC",
+      name: "DESC",
+      created_at: "DESC"
+    }
+    @icon_order ={
+      id: "",
+      name: "",
+      created_at: ""
+    }
+    
+    if( is_number?( params[:search] ) )
+      @problems = Problem.where("id = ? or lower(name) LIKE ?", Integer("#{params[:search]}"), "%#{params[:search].downcase}%").offset(problemStartId).limit(maxQuery).order(params[:order])
+      @problemTotal = Problem.where("id = ? or lower(name) LIKE ?", Integer("#{params[:search]}"), "%#{params[:search].downcase}%").count
+    else
+      @problems = Problem.where("lower(name) LIKE ?", "%#{params[:search].downcase}%").offset(problemStartId).limit(maxQuery).order(params[:order])
+      @problemTotal = Problem.where("lower(name) LIKE ?", "%#{params[:search].downcase}%").count
+    end
 
+    if problemStartId+maxQuery >= @problemTotal
+      @disableNextButton = " disabled"
+    end
+    if problemStartId == 0
+      @disablePrevButton = " disabled"
+    end
+    
+    case params[:order]
+    when "id DESC"
+      @send_order[:id] = "ASC"
+      @icon_order[:id] = "-alt"
+    when "name DESC"
+      @send_order[:name] = "ASC"
+      @icon_order[:name] = "-alt"
+    when "created_at DESC"
+      @send_order[:created_at] = "ASC"
+      @icon_order[:created_at] = "-alt"
+    end
+  end
 
   private
 
@@ -186,5 +228,9 @@ class ProblemController < ApplicationController
   
   def problem_params
     params.require(:problem).permit(:name, :time_limit)
+  end
+
+  def is_number? string
+    true if Integer(string) rescue false
   end
 end

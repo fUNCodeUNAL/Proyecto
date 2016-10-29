@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   post 'groups/edit', to: 'group#add_student', as: "group_add_student"
   delete 'groups/delete/:id_group/:id_student', to: 'group#delete_student', as: "group_student_delete"
 
+  get 'problem/search', to: 'problem#search', as: "problem_search"
   get 'problem/index', to: 'problem#index', as: "problem_index"
   get 'problem/new', to: 'problem#new', as: "problem_new"
   get 'problem/:id', to: 'problem#show', as: "problem"
@@ -43,12 +44,14 @@ Rails.application.routes.draw do
 
   get 'problem/:problem_id/testcase/:test_idx', to: 'test_case#show_test_case', as: "problem_show_test_case"
   put 'problem/:problem_id/testcase/update/:test_idx', to: 'test_case#edit', as: "problem_edit_test_case"
-
+  
 
   get 'contest/index', to: 'contest#index', as: "contest_index"
   get 'contest/new', to: 'contest#new', as: "contest_new"
   get 'contest/:id', to:'contest#show', as: "contest"
   post 'contest/create', to: 'contest#create', as:'contest_create'
+  get 'contest/edit/:id', to: 'contest#edit', as: "contest_edit"
+  put 'contest/update/:id', to: 'contest#update', as: "contest_update"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
