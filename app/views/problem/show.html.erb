@@ -13,8 +13,10 @@
     </p>
   </legend>
     <%= link_to '<button class="fa fa-upload btn-oldstyle">   Submit</button>'.html_safe, submissions_new_path(@problem.id) %>
-    <%= link_to '<button class="fa fa-bar-chart btn-oldstyle-2">   Submissions Problem</button>'.html_safe, submissions_problem_user_path(@problem.id, current_user.username) %>
-    <%= link_to '<button class="fa fa-bar-chart btn-oldstyle-2">   My Submissions</button>'.html_safe, submissions_problem_path(@problem.id) %>
+    <%= link_to '<button class="fa fa-bar-chart btn-oldstyle-2">   Submissions Problem</button>'.html_safe, submissions_problem_path(@problem.id) %>
+    <%if current_user != nil%>
+      <%= link_to '<button class="fa fa-bar-chart btn-oldstyle-2">   My Submissions</button>'.html_safe, submissions_problem_user_path(@problem.id, current_user.username) %>
+    <%end%>
     <%= link_to '<button class="fa fa-pencil-square-o btn-oldstyle-3 pull-right">   Edit Problem</button>'.html_safe, problem_edit_path(@problem.id) %>
   <iframe src="http://docs.google.com/viewer?url=<%= u @problem.url_statement.url %>&embedded=true" class = "problem_statement responsive" style="border: none;"></iframe>
 </div>
