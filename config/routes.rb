@@ -49,9 +49,11 @@ Rails.application.routes.draw do
   get 'contest/index', to: 'contest#index', as: "contest_index"
   get 'contest/new', to: 'contest#new', as: "contest_new"
   get 'contest/:id', to:'contest#show', as: "contest"
-  post 'contest/create', to: 'contest#create', as:'contest_create'
+  post 'contest', to: 'contest#create', as:'contests'
   get 'contest/edit/:id', to: 'contest#edit', as: "contest_edit"
-  put 'contest/update/:id', to: 'contest#update', as: "contest_update"
-
+  patch 'contest/:id', to: 'contest#update', as: "contest_update"
+  post 'contest/:contest_id/problem/:problem_id', to: 'contest#add_problem', as: 'contest_add_problem'
+  delete 'contest/:contest_id/problem/:problem_index', to: 'contest#delete_problem', as: 'contest_delete_problem'
+  put 'contest/:contest_id/problem/:problem_index', to: 'contest#update_problem', as: 'contest_update_problem'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -12,7 +12,7 @@
 
 <div class="form-horizontal dropzone">
   <legend><%= title %> Competencia</legend>
-  <%= form_for :contest, url: contest_create_path do |f| %>
+  <%= form_for (@contest) do |f| %>
     <% error = check_error(@contest.errors, :name) %>
     <div class="form-group <%= error[:error_class] %>" >
       <label class="col-md-4 control-label">Nombre</label>  

@@ -1,0 +1,47 @@
+<%if @problemsIn.length == 0%>
+	<p>No hay problemas agregados al contest.</p>
+<%else%>
+	<h1>Problemas actuales <span class="badge" ><%=@problemsIn.length%> </span></h1>
+	<div class="table-responsive">
+		<!--striped condensed -->
+		<table id="problemsInContestTable" class="table table-bordered table-hoverm table-condensed">
+			<tr class = "success">
+				<th>
+					ID
+				</th>
+				
+				<th>
+					Nombre
+					
+				</th>
+				<th id="problemTh3">Puntuación</th>
+				<th id="problemTh4">Eliminar</th>
+			</tr>
+			<% @problemsIn.each do |r| %>
+			<tr>
+				<td> <%= link_to r.problem.id, problem_path(r.problem.id) %> </td>
+				<td> <%= r.problem.name %> </td>
+				<td>
+					<%= text_field_tag 'score'+r.id.to_s , r.score %>
+					<% call_function = "update_link_problem_score('#{r.id}')" %>
+					<%= link_to 'Actualizar', contest_update_problem_path({contest_id: @contest.id, problem_index: r.id, score: 2}), method: 'put', remote: true, onclick: call_function, id: 'link_update' + r.id.to_s %>
+				</td>
+				<td> <%= link_to 'Eliminar', contest_delete_problem_path({contest_id: @contest.id, problem_index: r.id }), method: 'delete', remote: true %></td>
+			</tr>
+
+			<% end %>
+		</table>
+	</div>
+
+<%end%>
+
+<script type="text/javascript">
+	function update_link_problem_score(id){
+		var link = document.getElementById('link_update' + id);
+		var newScore = document.getElementById('score'+id).value;
+		var newLink = link.href.substr(0, link.href.indexOf('=')+1);
+		link.href = newLink.concat(newScore);
+		link.innerHTML = "actualizando";
+	}
+</script>
+

@@ -24,11 +24,38 @@ class ContestController < ApplicationController
 	
 	def edit
 		@contest = Contest.find(params[:id])
-		@pageId = 0
+		@teacher_id = current_user.id
+		@problemsIn = @contest.problem_contest_relationships
 	end
 
 	def update
-		
+		@contest = Contest.find(params[:id])
+	    if @contest.update(contest_params)
+	    	redirect_to contest_path(@contest.id)	
+	    else
+	    	render :edit
+	    end
+	end
+
+	def add_problem
+		@contest = Contest.find(params[:contest_id])
+		@problemsIn = @contest.problem_contest_relationships
+		ProblemContestRelationship.create(contest_id: params[:contest_id], problem_id: params[:problem_id], score: 1)
+	end
+
+	def delete_problem
+		@contest = Contest.find(params[:contest_id])
+		@problemsIn = @contest.problem_contest_relationships
+		ProblemContestRelationship.delete(params[:problem_index])
+	end
+
+	def update_problem
+		@contest = Contest.find(params[:contest_id])
+		@problemsIn = @contest.problem_contest_relationships
+		record = ProblemContestRelationship.find(params[:problem_index])
+		if !record.update(score: params[:score])
+			render :edit
+		end
 	end
 
 	private
