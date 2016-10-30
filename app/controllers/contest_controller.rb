@@ -11,6 +11,8 @@ class ContestController < ApplicationController
 	def new
 		@teacher_id = current_user.id
 		@contest = Contest.new
+		@contest.start_date = Time.new + 6*60
+		@contest.end_date = Time.new + 6*60
 	end
 
 	def create
@@ -18,6 +20,7 @@ class ContestController < ApplicationController
 		if @contest.save
     		redirect_to contest_index_path
     	else
+    		@contest.start_date = Time.new + 6*60
     		render :new
     	end
 	end
