@@ -1,4 +1,5 @@
-<%if @problemsIn.length == 0%>
+<!--Antes estaba length  == 0 -->
+<%if @problemsIn == nil%>
 	<p>No hay problemas agregados al contest.</p>
 <%else%>
 	<h1>Problemas actuales <span class="badge" ><%=@problemsIn.length%> </span></h1>

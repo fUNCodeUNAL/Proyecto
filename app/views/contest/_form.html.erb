@@ -28,7 +28,14 @@
       <label class="col-md-4 control-label">Fecha de inicio</label>  
       <div class="col-md-5">
         <div>
-          <%= f.datetime_select :start_date, class: "form-control input-md"%>
+          <% 
+            cur_time = Time.new;
+            if @contest.start_date != nil and @contest.start_date < cur_time
+          %>
+              <%= f.datetime_select :start_date, :disabled => true, class: "form-control input-md"%>
+          <%else%>
+              <%= f.datetime_select :start_date, class: "form-control input-md"%>
+          <%end%>
 
         </div>
         <p class="help-block"> <%= error[:error_message] %></p> 

@@ -30,9 +30,19 @@ class ContestController < ApplicationController
 
 	def update
 		@contest = Contest.find(params[:id])
-	    if @contest.update(contest_params)
-	    	redirect_to contest_path(@contest.id)	
+		# Si se pudo modificar la fecha, es porque no estaba bloqueada, y por ende, hay que ejecutar
+		# la validacion, se asume que ya la fecha que estaba es valida porque estamos en un update
+		# esta variable se salta la validacion de la fecha inicial cuando el contest 
+		# haya empezado
+		@contest.contest_running = params[:contest][:"start_date(1i)"] == nil
+
+		tmp_date = @contest.start_date
+		@contest.attributes = contest_params		
+
+	    if @contest.save
+    		redirect_to contest_path(@contest.id)	
 	    else
+	    	@contest.start_date = tmp_date
 	    	render :edit
 	    end
 	end
