@@ -1,7 +1,20 @@
 class ContestController < ApplicationController
 	before_action :authenticate_user!, except: [ :show, :index ]
 	def index
-		@contests = Contest.all
+		@all_contest = Contest.all
+		@past_contest = []
+		@comming_contest = []
+		@running_contest = []
+		cur_date = Time.new
+		@all_contest.each do |t| 
+			if t.start_date > cur_date 
+				@comming_contest.push(t)
+			elsif t.end_date < cur_date
+				@past_contest.push(t)
+			else
+				@running_contest.push(t)
+			end
+		end
 	end
 
 	def show

@@ -32,4 +32,5 @@ class Contest < ApplicationRecord
 	    end
 
   	end
+
 end

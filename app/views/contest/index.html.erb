@@ -1,5 +1,6 @@
-<%@contests.each do |c| %>
-<%= c.name %> <br>
-<%= c.start_date %> <br>
-<%= c.end_date %> <br>
-<% end %>
+<%= render "table_contest_index", contests: @running_contest, name: "Running Contests" %>
+<br>
+<%= render "table_contest_index", contests: @comming_contest, name: "Comming Contests" %>
+<br>
+<%= render "table_contest_index", contests: @past_contest, name: "Past Contests" %>
+<br>
