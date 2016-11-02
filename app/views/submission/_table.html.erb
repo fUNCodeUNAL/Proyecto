@@ -1,154 +1,81 @@
-<div>
-	<%if @submissions.length == 0%>
-		<p>No se encontró ningún resultado.</p>
-	<%else%>
-		<%maxSubmissions = 10%>
-		<h1>Submissions <span class="badge" ><%=@submissions.length%> </span></h1>
-		<div class="table-responsive">		
-			<!--striped condensed -->
-			<table id="submissionTable" class="table table-bordered table-hoverm table-condensed">
-				
-				<tr class = "success">
-					<th id="submissionTh0" onclick="sortTable( 'submission', submissions, maxSubmissions, 0 );">
-						ID
-						<span class='pull-right glyphicon glyphicon-sort-by-order-alt' aria-hidden='true'></span>
-					</th>
-					<th id="submissionTh1" onclick="sortTable( 'submission', submissions, maxSubmissions, 1 );">
-						Problema
-						<span class='pull-right glyphicon glyphicon-sort-by-order' aria-hidden='true'></span>
-					</th>
-					<th id="submissionTh2" onclick="sortTable( 'submission', submissions, maxSubmissions, 2 );">
-						Usuario
-						<span class='pull-right glyphicon glyphicon-sort-by-alphabet' aria-hidden='true'></span>
-					</th>
-					<th id="submissionTh3" onclick="sortTable( 'submission', submissions, maxSubmissions, 3 );">
-						Veredicto
-						<span class='pull-right glyphicon glyphicon-sort-by-alphabet' aria-hidden='true'></span>
-					</th>
-					<th id="submissionTh4" onclick="sortTable( 'submission', submissions, maxSubmissions, 4 );">
-						Lenguaje
-						<span class='pull-right glyphicon glyphicon-sort-by-alphabet' aria-hidden='true'></span>
-					</th>
-					<th id="submissionTh5" onclick="sortTable( 'submission', submissions, maxSubmissions, 5 );">
-						Tiempo
-						<span class='pull-right glyphicon glyphicon-sort-by-attributes' aria-hidden='true'></span>
-					</th>
-					<th id="submissionTh6" onclick="sortTable( 'submission', submissions, maxSubmissions, 6 );">
-						Hora
-						<span class='pull-right glyphicon glyphicon-sort-by-attributes' aria-hidden='true'></span>
-					</th>
-				</tr>
-
-			</table>
-
-		</div>
+<%if @submissions.length == 0%>
+	<p>No se encontraron resultados de problemas.</p>
+<%else%>
+	<h1>Submissions <span class="badge" ><%=@submissionsTotal%> </span></h1>
+	<div class="table-responsive">
+		<!--striped condensed -->
+		<table class="table table-bordered table-hoverm table-condensed">
 			
-		<%if @submissions.length > maxSubmissions%>
+			<tr class = "success">
+				
+				<th>
+					ID
+					<%new_params = params.merge( {action: "paginate", table: table_type, pageId: params[:pageId].to_i, order:'id ' + @send_order['id'] } ).permit!%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order['id'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+				
+				<th>
+					Problema
+					<%new_params[:order] = 'problem_id ' + @send_order['problem_id']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order['problem_id'] +"' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
 
-		<ul class="pager" style="margin-top:0em;">
-			<li class="disabled" id="submissionPrevLi" >
-				<a href="JavaScript:void(0)" onclick="updateTable( 'submission', submissions, maxSubmissions, false );">Anterior</a>
-			</li>
-			<li class="<%='disabled' if @submissions.length <= maxSubmissions%>" id="submissionNextLi">
-				<a href="JavaScript:void(0)" onclick="updateTable( 'submission', submissions, maxSubmissions, true );">Siguiente</a>
-			</li>
-		</ul>
+				<th>
+					Usuario
+					<%new_params[:order] = 'user_id ' + @send_order['user_id']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order['user_id'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
 
-		<%end%>
+				<th>
+					Veredicto
+					<%new_params[:order] = 'verdict ' + @send_order['verdict']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order['verdict'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+
+				<th>
+					Lenguaje
+					<%new_params[:order] = 'language ' + @send_order['language']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order['language'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+
+				<th>
+					Tiempo
+					<%new_params[:order] = 'execution_time ' + @send_order['execution_time']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-attributes" + @icon_order['execution_time'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+
+				<th>
+					Hora
+					<%new_params[:order] = 'created_at ' + @send_order['created_at']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-attributes" + @icon_order['created_at'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+
+
+
+			</tr>
+
+			<% @submissions.each do |submission| %>
+			<tr>
+				<td> <%= link_to submission.id, submission_show_path(submission.id) %> </td>
+				<td> <%= link_to submission.problem_id, problem_path(submission.problem_id) %> </td>
+				<%username = User.find(submission.user_id).username%>
+				<td> <%= link_to username, profile_path(username) %> </td>
+				<td> <%= submission.verdict %> </td>
+				<td> <%=submission.language%> </td>
+				<td> <%=submission.execution_time%> </td>
+				<td> <%=submission.created_at%> </td>
+			</tr>
+			<% end %>
+
+		</table>
+	</div>
+
+	<div class="text-center">
+		<%new_params = params.merge( {action: "paginate", table: table_type, pageId: params[:pageId].to_i-1} ).permit!%>
+		<%= button_to 'Anterior', new_params, method: 'get', remote: true, class: ("btn btn-default btn-round" + @disablePrevButton) %>
 		
-	<%end%>
+		<%new_params[:pageId] = params[:pageId].to_i+1%>
+		<%= button_to 'Siguiente', new_params , method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableNextButton) %>
+	</div>
 
-
-	<script type="text/javascript">
-
-		var curPage = { 'submission' : 0 };
-		
-		var maxSubmissions = '<%=maxSubmissions%>';
-		var submissions = [];
-		var cntSubmissions = 0;
-
-
-		<%@submissions.each do |submission|%>
-			var id = '<%=submission.id%>';
-			var problem_id = '<%=submission.problem_id%>';
-			var user = '<%=@users[ submission.user_id ]%>';
-			var verdict = '<%=submission.verdict%>';
-			var language = '<%=submission.language%>';
-			var exec_time = '<%=submission.execution_time%>';
-			var time = '<%=submission.created_at%>';
-			submissions[cntSubmissions++] = [ id, problem_id, user, verdict, language, exec_time, time ];
-		<%end%>
-
-		if(cntSubmissions > 0){
-			clearTable( document.getElementById( 'submissionTable' ) );
-			fillTable( document.getElementById( 'submissionTable' ), submissions, maxSubmissions, 7, 0 );
-		}
-
-		function fillTable( table, list, maxRows, numColums, page ){
-			for( var i = 0; i < maxRows; i++ ){
-				if( page * maxRows + i >= list.length ) break;
-				var row = table.insertRow(i+1);
-				var data = list[ page * maxRows + i ];
-
-				for( var j = 0; j < numColums; j++ ){
-					row.insertCell();
-					row.cells[j].innerHTML = data[j];
-				}
-				row.cells[0].innerHTML = "<a href=\"/submission/" + data[0] + "\" class=\"lightview\">" + data[0] + "</a>";
-				row.cells[1].innerHTML = "<a href='/problem/" + data[1] + "'>" + data[1] + "</a>";
-				row.cells[2].innerHTML = "<a href='/profile/" + data[2] + "'>" + data[2] + "</a>";
-			}
-		}
-
-		function clearTable( table ){
-			var i = table.rows.length;
-			while( table.rows.length > 1 )
-				table.deleteRow(--i);
-		}
-
-		function updateTable( name, list, maxRows, forward ){
-			if( forward ){
-				if( document.getElementById( name + 'NextLi' ).className == 'disabled' ) return;
-				curPage[ name ]++;
-				document.getElementById( name + 'PrevLi' ).className = '';
-				if( list.length <= maxRows * ( curPage[ name ] + 1 ) )
-					document.getElementById( name + 'NextLi' ).className = 'disabled';
-			}
-			else{
-				if( document.getElementById( name + 'PrevLi' ).className == 'disabled' ) return;
-				curPage[ name ]--;
-				if( curPage[ name ] == 0 )
-					document.getElementById( name + 'PrevLi' ).className = 'disabled';
-				document.getElementById( name + 'NextLi' ).className = '';
-			}
-
-			//document.getElementById( 'cout' ).innerHTML = curPage;
-			table = document.getElementById( name + "Table" );
-			clearTable( table );
-			fillTable( table, list, maxRows, list[0].length, curPage[name] );
-		}
-
-		function sortTable( name, list, maxRows, id ){
-			curPage[ name ] = 0;
-			document.getElementById( name + 'PrevLi' ).className = 'disabled';
-			document.getElementById( name + 'NextLi' ).className = (maxRows >= list.length) ? 'disabled' : '';
-
-			var th = document.getElementById( name + 'Th' + id ).getElementsByTagName( 'span' )[0];
-			if( th.className.substring( th.className.length - 4 ) != '-alt' ){
-				th.className += '-alt';
-				list.sort( function( l1, l2 ){return l1[id].toLowerCase() > l2[id].toLowerCase();} );
-			}
-			else{
-				th.className = th.className.substring( 0, th.className.length - 4 );
-				list.sort( function( l1, l2 ){return l1[id].toLowerCase() < l2[id].toLowerCase();} );
-			}
-
-			var table = document.getElementById( name + 'Table' );
-			clearTable( table );
-			fillTable( table, list, maxRows, list[0].length, curPage[name] );
-		}
-
-	</script>
-
-</div>
-
+<%end%>

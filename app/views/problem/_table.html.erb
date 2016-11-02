@@ -1,50 +1,72 @@
 <%if @problems.length == 0%>
 	<p>No se encontraron resultados de problemas.</p>
 <%else%>
-	<% if params[:contestId][0] == '{' %>
+	<% isContestTable = params.has_key?(:contestId) %>
+	<% if isContestTable and params[:contestId][0] == '{' %>
 		<% params[:contestId] = eval(params[:contestId])[:value] %>
 	<% end %>
 	<h1>Problemas <span class="badge" ><%=@problemTotal%> </span></h1>
 	<div class="table-responsive">
 		<!--striped condensed -->
-		<table id="problemTable" class="table table-bordered table-hoverm table-condensed">
+		<table class="table table-bordered table-hoverm table-condensed">
 			
 			<tr class = "success">
 				
-				<th id="problemTh0" >
+				<th>
 					ID
-					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order[:id] + "' aria-hidden='true'></span>"), problem_search_path(search: params[:search], pageId: params[:pageId].to_i, order:'id ' + @send_order[:id], contestId: params[:contestId]), method: 'get',remote: true, class: "no-link" %>
+					<%new_params = {action: "search", pageId: params[:pageId].to_i, order:'id ' + @send_order['id'] }%>
+					<%if isContestTable%>r
+						<%new_params[:contestId] = params[:contestId]%>
+						<%new_params[:search] = params[:search]%>
+					<%end%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order['id'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
 				</th>
 				
-				<th id="problemTh1">
+				<th>
 					Nombre
-					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order[:name] +"' aria-hidden='true'></span>"), problem_search_path(search: params[:search], pageId: params[:pageId].to_i, order:'name ' + @send_order[:name], contestId: params[:contestId]), method: 'get',remote: true, class: "no-link" %>
+					<%new_params[:order] = 'name ' + @send_order['name']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order['name'] +"' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
 				</th>
-				<th id="problemTh2">
+
+				<th>
 					Fecha de creación
-					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order[:created_at] + "' aria-hidden='true'></span>"), problem_search_path(search: params[:search], pageId: params[:pageId].to_i, order:'created_at ' + @send_order[:created_at], contestId: params[:contestId]), method: 'get',remote: true, class: "no-link" %>
+					<%new_params[:order] = 'created_at ' + @send_order['created_at']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order['created_at'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
 				</th>
-				<th id="problemTh4">Agregar</th>
+
+				<%if isContestTable%>
+				<th>Agregar</th>
+				<%end%>
+
 			</tr>
-			<% problemNumber = 0 %>
+
 			<% @problems.each do |problem| %>
-			<% problemNumber = problemNumber + 1 %>
 			<tr>
 				<td> <%= link_to problem.id, problem_path(problem.id) %> </td>
 				<td> <%= problem.name %> </td>
 				<td> <%= problem.created_at %></td>
+				<%if isContestTable%>
 				<td>
 					<% contest = Contest.find(params[:contestId]) %>
 					<%= link_to 'Agregar', contest_add_problem_path({contest_id: contest.id, problem_id: problem.id }), method: 'post', remote: true %>
 				</td>
+				<%end%>
 			</tr>
 			<% end %>
+
 		</table>
 	</div>
 
 	<div class="text-center">
-		<%= button_to 'Anterior', problem_search_path, method: 'get', params: {search: params[:search], pageId: params[:pageId].to_i-1, contestId: params[:contestId]}, remote: true, class: ("btn btn-default btn-round" + @disablePrevButton) %>
-		<%= button_to 'Siguiente', problem_search_path, method: 'get', params: {search: params[:search], pageId: params[:pageId].to_i+1, contestId: params[:contestId]}, remote: true, class: ("btn btn-default btn-round" + @disableNextButton) %>
+		<%new_params = {action: "search", pageId: params[:pageId].to_i-1}%>
+		<%if isContestTable%>
+			<%new_params[:contestId] = params[:contestId]%>
+			<%new_params[:search] = params[:search]%>
+		<%end%>
+		<%= button_to 'Anterior', new_params, method: 'get', remote: true, class: ("btn btn-default btn-round" + @disablePrevButton) %>
+		
+		<%new_params[:pageId] = params[:pageId].to_i+1%>
+		<%= button_to 'Siguiente', new_params , method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableNextButton) %>
 	</div>
 
 <%end%>
