@@ -10,7 +10,7 @@
 				
 				<th>
 					ID
-					<%new_params = params.merge( {action: "paginate", table: table_type, pageId: params[:pageId].to_i, order:'id ' + @send_order['id'] } ).permit!%>
+					<%new_params = params.merge( {action: "paginate", table: table_type, order:'id ' + @send_order['id'] } ).permit!%>
 					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order['id'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
 				</th>
 				
@@ -71,11 +71,11 @@
 	</div>
 
 	<div class="text-center">
-		<%new_params = params.merge( {action: "paginate", table: table_type, pageId: params[:pageId].to_i-1} ).permit!%>
-		<%= button_to 'Anterior', new_params, method: 'get', remote: true, class: ("btn btn-default btn-round" + @disablePrevButton) %>
+		<%new_params = params.merge( {action: "paginate", table: table_type, pageIdSubm: params[:pageIdSubm].to_i-1} ).permit!%>
+		<%= button_to 'Anterior', new_params, method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableSubmPrevButton) %>
 		
-		<%new_params[:pageId] = params[:pageId].to_i+1%>
-		<%= button_to 'Siguiente', new_params , method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableNextButton) %>
+		<%new_params[:pageIdSubm] = params[:pageIdSubm].to_i+1%>
+		<%= button_to 'Siguiente', new_params , method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableSubmNextButton) %>
 	</div>
 
 <%end%>

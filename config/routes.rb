@@ -40,6 +40,7 @@ Rails.application.routes.draw do
    #Para cuando vayamos a recalificar
    #put 'submission/update/:id', to: 'submission#update', as: "submission_update"
 
+  get 'user/paginate', to: 'user#paginate', as: "user_paginate"
   get 'submission/paginate', to: 'submission#paginate', as: "submission_paginate"
   get 'submission/:submission_id/', to: 'submission#show_details_submission', as: "submission_show"
 

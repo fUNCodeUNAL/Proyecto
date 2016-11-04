@@ -7,16 +7,16 @@ class ProblemController < ApplicationController
   def index
 
     maxQuery = 2
-    problemStartId = params[:pageId].to_i*maxQuery
+    problemStartId = params[:pageIdProblem].to_i*maxQuery
 
     @problems = Problem.all.offset(problemStartId).limit(maxQuery)
     @problemTotal = Problem.all.count
 
     if problemStartId+maxQuery >= @problemTotal
-      @disableNextButton = " disabled"
+      @disableProblemNextButton = " disabled"
     end
     if problemStartId == 0
-      @disablePrevButton = " disabled"
+      @disableProblemPrevButton = " disabled"
     end
 
   end
@@ -84,10 +84,9 @@ class ProblemController < ApplicationController
     redirect_to problem_edit_path(params[:problem_id])
   end
 
-  def search
-    
+  def search  
     maxQuery = 2
-    problemStartId = params[:pageId].to_i*maxQuery
+    problemStartId = params[:pageIdProblem].to_i*maxQuery
 
     if( not params.has_key?(:search) )
       @problems = Problem.all.offset(problemStartId).limit(maxQuery).order(params[:order])
@@ -101,19 +100,18 @@ class ProblemController < ApplicationController
     end
 
     if problemStartId+maxQuery >= @problemTotal
-      @disableNextButton = " disabled"
+      @disableProblemNextButton = " disabled"
     end
     if problemStartId == 0
-      @disablePrevButton = " disabled"
+      @disableProblemPrevButton = " disabled"
     end
-
   end
 
   private
 
   def init_pagination
-    @disablePrevButton = ""
-    @disableNextButton = ""
+    @disableProblemPrevButton = ""
+    @disableProblemNextButton = ""
 
     @send_order ={
       'id' => "DESC",
@@ -131,7 +129,6 @@ class ProblemController < ApplicationController
       @send_order[ field ] = "ASC"
       @icon_order[ field ] = "-alt"
     end
-
   end
 
   def create_temporary_file(file)

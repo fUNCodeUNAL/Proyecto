@@ -51,17 +51,17 @@ class SubmissionController < ApplicationController
   
   def showUser
     maxQuery = 2
-    submissionStartId = params[:pageId].to_i*maxQuery
+    submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
     user = User.find_by(username: params[:username])
     @submissions = Submission.where( user_id: user.id ).offset(submissionStartId).limit(maxQuery)
     @submissionsTotal = Submission.where( user_id: user.id ).count
 
     if submissionStartId+maxQuery >= @submissionsTotal
-      @disableNextButton = " disabled"
+      @disableSubmNextButton = " disabled"
     end
     if submissionStartId == 0
-      @disablePrevButton = " disabled"
+      @disableSubmPrevButton = " disabled"
     end
 
     @pendingSubmissions = Submission.where( user_id: user.id, verdict: "Pending", in_queue: false)
@@ -71,16 +71,16 @@ class SubmissionController < ApplicationController
 
   def showProblem
     maxQuery = 2
-    submissionStartId = params[:pageId].to_i*maxQuery
+    submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
     @submissions = Submission.where( problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery)
     @submissionsTotal = Submission.where( problem_id: params[:problem_id] ).count
 
     if submissionStartId+maxQuery >= @submissionsTotal
-      @disableNextButton = " disabled"
+      @disableSubmNextButton = " disabled"
     end
     if submissionStartId == 0
-      @disablePrevButton = " disabled"
+      @disableSubmPrevButton = " disabled"
     end
 
     @pendingSubmissions = Submission.where( problem_id: params[:problem_id], verdict: "Pending", in_queue: false)
@@ -90,16 +90,17 @@ class SubmissionController < ApplicationController
   
   def showProblemUser
     maxQuery = 2
-    submissionStartId = params[:pageId].to_i*maxQuery
+    submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
+    user = User.find_by(username: params[:username])
     @submissions = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery)
     @submissionsTotal = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).count
 
     if submissionStartId+maxQuery >= @submissionsTotal
-      @disableNextButton = " disabled"
+      @disableSubmNextButton = " disabled"
     end
     if submissionStartId == 0
-      @disablePrevButton = " disabled"
+      @disableSubmPrevButton = " disabled"
     end
 
     @pendingSubmissions = Submission.where( user_id: user.id, problem_id: params[:problem_id], verdict: "Pending", in_queue: false)
@@ -110,7 +111,7 @@ class SubmissionController < ApplicationController
   def paginate
 
     maxQuery = 2
-    submissionStartId = params[:pageId].to_i*maxQuery
+    submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
     if( params[:table].eql?"user" )
       user = User.find_by(username: params[:username])
@@ -120,15 +121,16 @@ class SubmissionController < ApplicationController
       @submissions = Submission.where( problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery).order(params[:order])
       @submissionsTotal = Submission.where( problem_id: params[:problem_id] ).count
     else
+      user = User.find_by(username: params[:username])
       @submissions = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery).order(params[:order])
       @submissionsTotal = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).count
     end
 
     if submissionStartId+maxQuery >= @submissionsTotal
-      @disableNextButton = " disabled"
+      @disableSubmNextButton = " disabled"
     end
     if submissionStartId == 0
-      @disablePrevButton = " disabled"
+      @disableSubmPrevButton = " disabled"
     end
 
   end
@@ -137,8 +139,8 @@ class SubmissionController < ApplicationController
   private 
 
   def init_pagination
-    @disablePrevButton = ""
-    @disableNextButton = ""
+    @disableSubmPrevButton = ""
+    @disableSubmNextButton = ""
 
     @send_order ={
       'id' => "DESC",

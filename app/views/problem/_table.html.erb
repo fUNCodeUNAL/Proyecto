@@ -14,11 +14,7 @@
 				
 				<th>
 					ID
-					<%new_params = {action: "search", pageId: params[:pageId].to_i, order:'id ' + @send_order['id'] }%>
-					<%if isContestTable%>r
-						<%new_params[:contestId] = params[:contestId]%>
-						<%new_params[:search] = params[:search]%>
-					<%end%>
+					<%new_params = params.merge({controller: "problem", action: "search", order:'id ' + @send_order['id']}).permit!%>
 					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order['id'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
 				</th>
 				
@@ -58,15 +54,11 @@
 	</div>
 
 	<div class="text-center">
-		<%new_params = {action: "search", pageId: params[:pageId].to_i-1}%>
-		<%if isContestTable%>
-			<%new_params[:contestId] = params[:contestId]%>
-			<%new_params[:search] = params[:search]%>
-		<%end%>
-		<%= button_to 'Anterior', new_params, method: 'get', remote: true, class: ("btn btn-default btn-round" + @disablePrevButton) %>
+		<%new_params = params.merge({controller: "problem", action: "search", pageIdProblem: params[:pageIdProblem].to_i-1}).permit!%>
+		<%= button_to 'Anterior', new_params, method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableProblemPrevButton) %>
 		
-		<%new_params[:pageId] = params[:pageId].to_i+1%>
-		<%= button_to 'Siguiente', new_params , method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableNextButton) %>
+		<%new_params[:pageIdProblem] = params[:pageIdProblem].to_i+1%>
+		<%= button_to 'Siguiente', new_params , method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableProblemNextButton) %>
 	</div>
 
 <%end%>
