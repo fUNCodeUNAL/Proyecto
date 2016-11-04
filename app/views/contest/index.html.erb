@@ -1,6 +1,13 @@
-<%= render "table_contest_index", contests: @running_contest, name: "Running Contests" %>
+<div id="RunningTable">
+	<%= render "table_contest_index", contests: @running_contest, total_contests: @running_contest_total, type: "Running" %>
+</div>
 <br>
-<%= render "table_contest_index", contests: @comming_contest, name: "Comming Contests" %>
+
+<div id="CommingTable">
+	<%= render "table_contest_index", contests: @comming_contest, total_contests: @comming_contest_total, type: "Comming" %>
+</div>
 <br>
-<%= render "table_contest_index", contests: @past_contest, name: "Past Contests" %>
-<br>
+
+<div id="PastTable">
+	<%= render "table_contest_index", contests: @past_contest, total_contests: @past_contest_total, type: "Past" %>
+</div>

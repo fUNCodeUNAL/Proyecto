@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
   get 'user/paginate', to: 'user#paginate', as: "user_paginate"
   get 'submission/paginate', to: 'submission#paginate', as: "submission_paginate"
+  get 'contest/paginate', to: 'contest#paginate', as: "contest_paginate"
   get 'submission/:submission_id/', to: 'submission#show_details_submission', as: "submission_show"
 
 

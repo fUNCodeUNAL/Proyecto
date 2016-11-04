@@ -1,19 +1,56 @@
 class ContestController < ApplicationController
 	before_action :authenticate_user!, except: [ :show, :index ]
+	before_action :init_pagination, only: [ :index, :paginate ]
+	
+	
 	def index
-		@all_contest = Contest.all
-		@past_contest = []
-		@comming_contest = []
-		@running_contest = []
+
+		maxQuery = 2
 		cur_date = Time.new
-		@all_contest.each do |t| 
-			if t.start_date > cur_date 
-				@comming_contest.push(t)
-			elsif t.end_date < cur_date
-				@past_contest.push(t)
-			else
-				@running_contest.push(t)
-			end
+		@past_contest = Contest.where("end_date < ? ", cur_date).limit(maxQuery)
+		@past_contest_total = Contest.where("end_date < ? ", cur_date).count
+		@comming_contest = Contest.where("start_date > ? ", cur_date).limit(maxQuery)
+		@comming_contest_total = Contest.where("start_date > ? ", cur_date).count
+		@running_contest = Contest.where("start_date <= ? AND end_date >= ? ", cur_date, cur_date).limit(maxQuery)
+		@running_contest_total = Contest.where("start_date <= ? AND end_date >= ? ", cur_date, cur_date).count
+
+		@disablePrevButton = { 'Past' => ' disabled',
+								'Comming' => ' disabled',
+								'Running' => ' disabled' }
+
+		if @past_contest_total <= maxQuery
+			@disableNextButton['Past'] = " disabled"
+		end
+		if @comming_contest_total <= maxQuery
+			@disableNextButton['Comming'] = " disabled"
+		end
+		if @running_contest_total <= maxQuery
+			@disableNextButton['Running'] = " disabled"
+		end
+
+	end
+
+	def paginate
+		maxQuery = 2
+		contestStartId = params['pageId' + params[:type]].to_i*maxQuery
+
+		cur_date = Time.new
+		if( params[:type].eql?('Past') )
+			@contests = Contest.where("end_date < ? ", cur_date).offset(contestStartId).limit(maxQuery).order(params[:order])
+			@contests_total = Contest.where("end_date < ? ", cur_date).count
+		elsif( params[:type].eql?('Comming') )
+			@contests = Contest.where("start_date > ? ", cur_date).offset(contestStartId).limit(maxQuery).order(params[:order])
+			@contests_total = Contest.where("start_date > ? ", cur_date).count
+		else
+			@contests = Contest.where("start_date <= ? AND end_date >= ? ", cur_date, cur_date).offset(contestStartId).limit(maxQuery).order(params[:order])
+			@contests_total = Contest.where("start_date <= ? AND end_date >= ? ", cur_date, cur_date).count
+		end
+
+		if contestStartId+maxQuery >= @contests_total
+			@disableNextButton[ params[:type] ] = " disabled"
+		end
+		if contestStartId == 0
+			@disablePrevButton[ params[:type] ] = " disabled"
 		end
 	end
 
@@ -85,6 +122,38 @@ class ContestController < ApplicationController
 	end
 
 	private
+
+	def init_pagination
+		types = ['Past', 'Running', 'Comming']
+
+		@disablePrevButton ||= {}
+		@disableNextButton ||= {}
+		@send_order ||= {}
+		@icon_order ||= {}
+		types.each do |type|
+			@disablePrevButton[ type ] = ''
+			@disableNextButton[ type ] = ''
+			@send_order[ type ] = {
+				'id' => 'DESC',
+				'name' => 'DESC',
+				'start_date' => 'DESC',
+				'end_date' => 'DESC'
+			}
+			@icon_order[ type ] = {
+				'id' => '',
+				'name' => '',
+				'start_date' => '',
+				'end_date' => ''
+			}
+		end
+
+		if params.has_key?( :order ) and params[:order].split[1].eql?"DESC"
+			field = params[:order].split[0]
+			@send_order[params[:type]][ field ] = "ASC"
+			@icon_order[params[:type]][ field ] = "-alt"
+		end
+	end
+
  	def contest_params
     	params.require(:contest).permit(:name, :teacher_id, :start_date, :end_date)
   	end
