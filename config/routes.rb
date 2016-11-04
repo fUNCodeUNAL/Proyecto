@@ -36,10 +36,13 @@ Rails.application.routes.draw do
   get 'problem/:problem_id/submission/', to: 'submission#showProblem', as: "submissions_problem"
   get ':username/submission/', to: 'submission#showUser', as: "submissions_user"
   post 'problem/:problem_id/submission/create', to: 'submission#create', as: "submissions_create"
-  get 'submission/:submission_id/', to: 'submission#show_details_submission', as: "submission_show"
   delete 'problem/:problem_id/testcase/delete/:test_idx', to: 'problem#delete_test_case', as: "problem_delete_test_case"
    #Para cuando vayamos a recalificar
    #put 'submission/update/:id', to: 'submission#update', as: "submission_update"
+
+  get 'user/paginate', to: 'user#paginate', as: "user_paginate"
+  get 'submission/paginate', to: 'submission#paginate', as: "submission_paginate"
+  get 'submission/:submission_id/', to: 'submission#show_details_submission', as: "submission_show"
 
 
   get 'problem/:problem_id/testcase/:test_idx', to: 'test_case#show_test_case', as: "problem_show_test_case"

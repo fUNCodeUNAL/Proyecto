@@ -1,0 +1,51 @@
+<%if @users.length == 0%>
+	<p>No se encontraron resultados de usuarios.</p>
+<%else%>
+	<h1>Usuarios <span class="badge" ><%=@usersTotal%> </span></h1>
+	<div class="table-responsive">
+		<!--striped condensed -->
+		<table class="table table-bordered table-hoverm table-condensed">
+			
+			<tr class = "success">
+				
+				<th>
+					Usuario
+					<%new_params = params.merge({controller: "user", action: "paginate", order:'username ' + @send_order['username']}).permit!%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order['username'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+				
+				<th>
+					Nombre
+					<%new_params[:order] = 'full_name ' + @send_order['full_name']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order['full_name'] +"' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+
+				<th>
+					Correo
+					<%new_params[:order] = 'email ' + @send_order['email']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order['email'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+
+			</tr>
+
+			<% @users.each do |user| %>
+			<tr>
+				<td> <%= link_to user.username, profile_path(user.username) %> </td>
+				<td> <%= user.full_name %> </td>
+				<td> <%= user.email %></td>
+			</tr>
+			<% end %>
+
+		</table>
+	</div>
+
+	<div class="text-center">
+		<%new_params = params.merge({controller: "user", action: "paginate", pageIdUser: params[:pageIdUser].to_i-1}).permit!%>
+		<%= button_to 'Anterior', new_params, method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableUserPrevButton) %>
+		
+		<%new_params[:pageIdUser] = params[:pageIdUser].to_i+1%>
+		<%= button_to 'Siguiente', new_params , method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableUserNextButton) %>
+	</div>
+
+<%end%>
+

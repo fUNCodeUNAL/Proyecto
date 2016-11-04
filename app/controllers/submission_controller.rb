@@ -7,12 +7,14 @@ require 'file_manager'
 
 class SubmissionController < ApplicationController
   before_action :authenticate_user!, only: [:new]
+  before_action :init_pagination, only: [ :showUser, :showProblem, :showProblemUser, :paginate ]
 
   def new
   	@submission = Submission.new
     @available_languages = get_list_languages( Problem.find(params[:problem_id]).languages )
   end
 
+  
   def create
     if(params[:file] != nil)
    	  @submission = Submission.new(problem_id: params[:problem_id], user_id: current_user.id, verdict: "Pending", execution_time: "-", language: params[:submission][:language], url_code: params[:file])
@@ -36,6 +38,7 @@ class SubmissionController < ApplicationController
   	#redirect_to current_user.username + '/submission/'
   end 
 
+  
   def show_details_submission
     fileM = FileManager.new
     submission = Submission.find_by( id: params[ :submission_id ] )
@@ -45,30 +48,126 @@ class SubmissionController < ApplicationController
     render layout: 'light_view'
   end
 
+  
   def showUser
+    maxQuery = 2
+    submissionStartId = params[:pageIdSubm].to_i*maxQuery
+
     user = User.find_by(username: params[:username])
-    @submissions = Submission.where( user_id: user.id ).order(created_at: :desc)
+    @submissions = Submission.where( user_id: user.id ).offset(submissionStartId).limit(maxQuery)
+    @submissionsTotal = Submission.where( user_id: user.id ).count
+
+    if submissionStartId+maxQuery >= @submissionsTotal
+      @disableSubmNextButton = " disabled"
+    end
+    if submissionStartId == 0
+      @disableSubmPrevButton = " disabled"
+    end
+
     @pendingSubmissions = Submission.where( user_id: user.id, verdict: "Pending", in_queue: false)
-    @users = mapUsers( @submissions )
     updatePendingSubmissions()
+
   end
 
   def showProblem
-    @submissions = Submission.where( problem_id: params[:problem_id] ).order(created_at: :desc)
+    maxQuery = 2
+    submissionStartId = params[:pageIdSubm].to_i*maxQuery
+
+    @submissions = Submission.where( problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery)
+    @submissionsTotal = Submission.where( problem_id: params[:problem_id] ).count
+
+    if submissionStartId+maxQuery >= @submissionsTotal
+      @disableSubmNextButton = " disabled"
+    end
+    if submissionStartId == 0
+      @disableSubmPrevButton = " disabled"
+    end
+
     @pendingSubmissions = Submission.where( problem_id: params[:problem_id], verdict: "Pending", in_queue: false)
-    @users = mapUsers( @submissions )
     updatePendingSubmissions()
   end
 
+  
   def showProblemUser
+    maxQuery = 2
+    submissionStartId = params[:pageIdSubm].to_i*maxQuery
+
     user = User.find_by(username: params[:username])
-    @submissions = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).order(created_at: :desc)
+    @submissions = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery)
+    @submissionsTotal = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).count
+
+    if submissionStartId+maxQuery >= @submissionsTotal
+      @disableSubmNextButton = " disabled"
+    end
+    if submissionStartId == 0
+      @disableSubmPrevButton = " disabled"
+    end
+
     @pendingSubmissions = Submission.where( user_id: user.id, problem_id: params[:problem_id], verdict: "Pending", in_queue: false)
-    @users = mapUsers( @submissions )
     updatePendingSubmissions()
   end
 
+  
+  def paginate
+
+    maxQuery = 2
+    submissionStartId = params[:pageIdSubm].to_i*maxQuery
+
+    if( params[:table].eql?"user" )
+      user = User.find_by(username: params[:username])
+      @submissions = Submission.where( user_id: user.id ).offset(submissionStartId).limit(maxQuery).order(params[:order])
+      @submissionsTotal = Submission.where( user_id: user.id ).count
+    elsif( params[:table].eql?"problem" )
+      @submissions = Submission.where( problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery).order(params[:order])
+      @submissionsTotal = Submission.where( problem_id: params[:problem_id] ).count
+    else
+      user = User.find_by(username: params[:username])
+      @submissions = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery).order(params[:order])
+      @submissionsTotal = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).count
+    end
+
+    if submissionStartId+maxQuery >= @submissionsTotal
+      @disableSubmNextButton = " disabled"
+    end
+    if submissionStartId == 0
+      @disableSubmPrevButton = " disabled"
+    end
+
+  end
+
+  
   private 
+
+  def init_pagination
+    @disableSubmPrevButton = ""
+    @disableSubmNextButton = ""
+
+    @send_order ={
+      'id' => "DESC",
+      'problem_id' => "DESC",
+      'user_id' => "DESC",
+      'verdict' => "DESC",
+      'language' => "DESC",
+      'execution_time' => "DESC",
+      'created_at' => "DESC"
+    }
+    @icon_order ={
+      'id' => "",
+      'problem_id' => "",
+      'user_id' => "",
+      'verdict' => "",
+      'language' => "",
+      'execution_time' => "",
+      'created_at' => ""
+    }
+
+    if params.has_key?( :order ) and params[:order].split[1].eql?"DESC"
+      field = params[:order].split[0]
+      @send_order[ field ] = "ASC"
+      @icon_order[ field ] = "-alt"
+    end
+
+  end
 
   def get_verdicts( file_manager, submission )
     judge = JudgeApi.new
@@ -136,16 +235,6 @@ class SubmissionController < ApplicationController
       test_cases.push( [ file_manager.get_data_url( test_case.url_input.url ), file_manager.get_data_url(test_case.url_output.url) ] )
     end
     return test_cases
-  end
-
-  def mapUsers( submissions )
-    m = {}
-    @submissions.each do |submission|
-      if !m.has_key?( submission.user_id )
-        m[submission.user_id] = User.find( submission.user_id ).username
-      end
-    end
-    return m
   end
 
   def get_filename( language )

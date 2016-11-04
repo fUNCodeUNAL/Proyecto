@@ -2,9 +2,23 @@ require 'zip'
 
 class ProblemController < ApplicationController
   before_action :authenticate_user!, only: [ :create, :edit, :new ]
+  before_action :init_pagination, only: [ :index, :search ]
 
   def index
-    @problems = Problem.all
+
+    maxQuery = 2
+    problemStartId = params[:pageIdProblem].to_i*maxQuery
+
+    @problems = Problem.all.offset(problemStartId).limit(maxQuery)
+    @problemTotal = Problem.all.count
+
+    if problemStartId+maxQuery >= @problemTotal
+      @disableProblemNextButton = " disabled"
+    end
+    if problemStartId == 0
+      @disableProblemPrevButton = " disabled"
+    end
+
   end
 
   def show
@@ -70,23 +84,14 @@ class ProblemController < ApplicationController
     redirect_to problem_edit_path(params[:problem_id])
   end
 
-  def search
+  def search  
     maxQuery = 2
-    @disablePrevButton = ""
-    @disableNextButton = ""
-    problemStartId = params[:pageId].to_i*maxQuery
-    @send_order ={
-      id: "DESC",
-      name: "DESC",
-      created_at: "DESC"
-    }
-    @icon_order ={
-      id: "",
-      name: "",
-      created_at: ""
-    }
-    
-    if( is_number?( params[:search] ) )
+    problemStartId = params[:pageIdProblem].to_i*maxQuery
+
+    if( not params.has_key?(:search) )
+      @problems = Problem.all.offset(problemStartId).limit(maxQuery).order(params[:order])
+      @problemTotal = Problem.all.count
+    elsif( is_number?( params[:search] ) )
       @problems = Problem.where("id = ? or lower(name) LIKE ?", Integer("#{params[:search]}"), "%#{params[:search].downcase}%").offset(problemStartId).limit(maxQuery).order(params[:order])
       @problemTotal = Problem.where("id = ? or lower(name) LIKE ?", Integer("#{params[:search]}"), "%#{params[:search].downcase}%").count
     else
@@ -95,26 +100,36 @@ class ProblemController < ApplicationController
     end
 
     if problemStartId+maxQuery >= @problemTotal
-      @disableNextButton = " disabled"
+      @disableProblemNextButton = " disabled"
     end
     if problemStartId == 0
-      @disablePrevButton = " disabled"
-    end
-    
-    case params[:order]
-    when "id DESC"
-      @send_order[:id] = "ASC"
-      @icon_order[:id] = "-alt"
-    when "name DESC"
-      @send_order[:name] = "ASC"
-      @icon_order[:name] = "-alt"
-    when "created_at DESC"
-      @send_order[:created_at] = "ASC"
-      @icon_order[:created_at] = "-alt"
+      @disableProblemPrevButton = " disabled"
     end
   end
 
   private
+
+  def init_pagination
+    @disableProblemPrevButton = ""
+    @disableProblemNextButton = ""
+
+    @send_order ={
+      'id' => "DESC",
+      'name' => "DESC",
+      'created_at' => "DESC"
+    }
+    @icon_order ={
+      'id' => "",
+      'name' => "",
+      'created_at' => ""
+    }
+
+    if params.has_key?( :order ) and params[:order].split[1].eql?"DESC"
+      field = params[:order].split[0]
+      @send_order[ field ] = "ASC"
+      @icon_order[ field ] = "-alt"
+    end
+  end
 
   def create_temporary_file(file)
     filename = file.name
