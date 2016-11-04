@@ -1,7 +1,7 @@
 require 'httparty'
 
 class JudgeApi
-  API_URL = 'http://api.judge0.com/submissions'
+  API_URL = 'https://api.judge0.com/submissions'
 
   def sendSubmission(code, language, input, output)
     languageId = getLanguageId(language)

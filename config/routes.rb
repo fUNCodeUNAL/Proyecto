@@ -55,5 +55,6 @@ Rails.application.routes.draw do
   post 'contest/:contest_id/problem/:problem_id', to: 'contest#add_problem', as: 'contest_add_problem'
   delete 'contest/:contest_id/problem/:problem_index', to: 'contest#delete_problem', as: 'contest_delete_problem'
   put 'contest/:contest_id/problem/:problem_index', to: 'contest#update_problem', as: 'contest_update_problem'
+  post 'contest/:contest_id/register/:user_id', to: 'contest#register', as: 'contest_register'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -1,3 +1,39 @@
-<%= @contest.name %>
-<%= @contest.start_date %>
-<%= @contest.end_date %>
+<div id="contestInfo">
+	<center>
+		<h1> <%= @contest.name %> </h1>
+	</center>
+	Fecha de inicio: <%= @contest.start_date %>
+	<br>
+	Fecha de finalización: <%= @contest.end_date %>
+
+	<% if user_signed_in? %>
+		<%= button_to 'Registrar', contest_register_path(contest_id: @contest.id, user_id: current_user.id), method: 'post', class: "btn btn-default btn-round" %>
+	<% end %>
+
+	<br>
+	<br>
+</div>
+
+<div class="table-responsive">
+	<!--striped condensed -->
+	<table id="scoreboard" class="table table-bordered table-hoverm table-condensed">
+		<tr class = "success">
+			<th>#</th>
+			<th>Correo</th>
+			<th>Puntuación</th>
+			<% @problemsIn.each do |r| %>
+				<th> <%= link_to r.problem.id, problem_path(r.problem.id) %> </th>
+			<% end %>
+		</tr>
+		<% number = 0 %>
+		<% @registeredUsers.each do |user| %>
+			<tr>
+				<td> <%= number = number + 1 %> </td>
+				<td> <%= user.email %> </td>
+				<td> <%= calculate_score(user.id) %></td>
+				<% @problemsIn.each do |r| %>
+					<td> <%= count_accepted(user.id, r.problem.id) * r.score %> / <%= r.problem.test_cases.count * r.score %></td>
+			<% end %>
+		<% end %>
+	</table>
+</div>
