@@ -14,7 +14,7 @@ class PagesController < ApplicationController
   end
   
   def search
-    maxQuery = 2
+    maxQuery = 10
     problemStartId = params[:pageIdProblem].to_i*maxQuery
     userStartId = params[:pageIdUser].to_i*maxQuery
 

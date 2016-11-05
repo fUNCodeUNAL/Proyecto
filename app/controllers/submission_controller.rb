@@ -50,7 +50,7 @@ class SubmissionController < ApplicationController
 
   
   def showUser
-    maxQuery = 2
+    maxQuery = 10
     submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
     user = User.find_by(username: params[:username])
@@ -70,7 +70,7 @@ class SubmissionController < ApplicationController
   end
 
   def showProblem
-    maxQuery = 2
+    maxQuery = 10
     submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
     @submissions = Submission.where( problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery)
@@ -89,7 +89,7 @@ class SubmissionController < ApplicationController
 
   
   def showProblemUser
-    maxQuery = 2
+    maxQuery = 10
     submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
     user = User.find_by(username: params[:username])
@@ -110,7 +110,7 @@ class SubmissionController < ApplicationController
   
   def paginate
 
-    maxQuery = 2
+    maxQuery = 10
     submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
     if( params[:table].eql?"user" )

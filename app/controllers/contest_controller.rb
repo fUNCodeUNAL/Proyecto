@@ -5,7 +5,7 @@ class ContestController < ApplicationController
 	
 	def index
 
-		maxQuery = 2
+		maxQuery = 10
 		@cur_date = Time.new
 		@past_contest = Contest.where("end_date < ? ", @cur_date).limit(maxQuery)
 		@past_contest_total = Contest.where("end_date < ? ", @cur_date).count
@@ -31,7 +31,7 @@ class ContestController < ApplicationController
 	end
 
 	def paginate
-		maxQuery = 2
+		maxQuery = 10
 		contestStartId = params['pageId' + params[:type]].to_i*maxQuery
 
 		cur_date = params[:cur_date].to_datetime

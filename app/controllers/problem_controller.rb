@@ -6,7 +6,7 @@ class ProblemController < ApplicationController
 
   def index
 
-    maxQuery = 2
+    maxQuery = 10
     problemStartId = params[:pageIdProblem].to_i*maxQuery
 
     @problems = Problem.all.offset(problemStartId).limit(maxQuery)
@@ -85,7 +85,7 @@ class ProblemController < ApplicationController
   end
 
   def search  
-    maxQuery = 2
+    maxQuery = 10
     problemStartId = params[:pageIdProblem].to_i*maxQuery
 
     if( not params.has_key?(:search) )
