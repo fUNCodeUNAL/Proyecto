@@ -1,4 +1,5 @@
 <% type ||= params[:type] %>
+<% params[:cur_date] ||= @cur_date%>
 <h1><%=type + " Contests"%> <span class="badge" ><%=total_contests%> </span></h1>
 <div class="table-responsive">
 	<!--striped condensed -->

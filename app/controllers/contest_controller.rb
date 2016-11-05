@@ -6,13 +6,13 @@ class ContestController < ApplicationController
 	def index
 
 		maxQuery = 2
-		cur_date = Time.new
-		@past_contest = Contest.where("end_date < ? ", cur_date).limit(maxQuery)
-		@past_contest_total = Contest.where("end_date < ? ", cur_date).count
-		@comming_contest = Contest.where("start_date > ? ", cur_date).limit(maxQuery)
-		@comming_contest_total = Contest.where("start_date > ? ", cur_date).count
-		@running_contest = Contest.where("start_date <= ? AND end_date >= ? ", cur_date, cur_date).limit(maxQuery)
-		@running_contest_total = Contest.where("start_date <= ? AND end_date >= ? ", cur_date, cur_date).count
+		@cur_date = Time.new
+		@past_contest = Contest.where("end_date < ? ", @cur_date).limit(maxQuery)
+		@past_contest_total = Contest.where("end_date < ? ", @cur_date).count
+		@comming_contest = Contest.where("start_date > ? ", @cur_date).limit(maxQuery)
+		@comming_contest_total = Contest.where("start_date > ? ", @cur_date).count
+		@running_contest = Contest.where("start_date <= ? AND end_date >= ? ", @cur_date, @cur_date).limit(maxQuery)
+		@running_contest_total = Contest.where("start_date <= ? AND end_date >= ? ", @cur_date, @cur_date).count
 
 		@disablePrevButton = { 'Past' => ' disabled',
 								'Comming' => ' disabled',
@@ -34,7 +34,7 @@ class ContestController < ApplicationController
 		maxQuery = 2
 		contestStartId = params['pageId' + params[:type]].to_i*maxQuery
 
-		cur_date = Time.new
+		cur_date = params[:cur_date].to_datetime
 		if( params[:type].eql?('Past') )
 			@contests = Contest.where("end_date < ? ", cur_date).offset(contestStartId).limit(maxQuery).order(params[:order])
 			@contests_total = Contest.where("end_date < ? ", cur_date).count
