@@ -1,9 +1,30 @@
 require 'httparty'
+require 'file_manager'
+require 'test_case_manager'
 
 class JudgeApi
   API_URL = 'https://api.judge0.com/submissions'
 
-  def sendSubmission(code, language, input, output)
+  # Function to submit a code to the API
+  # Uses a @submission class variable that is defined in create
+  # Return the Ids for the submissions test case. (See GetVeredictJob)
+  def sendSubmission(submission)
+    fileM = FileManager.new
+    code = fileM.get_data_url( submission.url_code.url )
+    tcm = TestCaseManager.new
+    test_cases = tcm.parsing_test_cases( fileM, tcm.get_test_cases( submission ) )
+    api_ids = ""
+    test_cases.each do |test_case|
+      language = submission.language
+      input = test_case[ 0 ]
+      output = test_case[ 1 ]
+      id = connectAPI(code, language, input, output)
+      api_ids = api_ids + id.to_s + ";"
+    end
+    return api_ids;
+  end 
+
+  def connectAPI(code, language, input, output)
     languageId = getLanguageId(language)
     response = HTTParty.post(API_URL, body: { 
         source_code: code,

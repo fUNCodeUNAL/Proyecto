@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 
   get 'problem/:problem_id/testcase/:test_idx', to: 'test_case#show_test_case', as: "problem_show_test_case"
   put 'problem/:problem_id/testcase/update/:test_idx', to: 'test_case#edit', as: "problem_edit_test_case"
+  post 'problem/rejudge/:id', to:'problem#rejudge', as: 'problem_rejudge'
   
 
   get 'contest/index', to: 'contest#index', as: "contest_index"
