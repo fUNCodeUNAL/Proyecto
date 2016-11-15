@@ -4,6 +4,7 @@ require 'json'
 require 'tempfile'
 require 'judge_api'
 require 'file_manager'
+require 'test_case_manager'
 
 class SubmissionController < ApplicationController
   before_action :authenticate_user!, only: [:new]
@@ -28,7 +29,7 @@ class SubmissionController < ApplicationController
     end 
   	
   	if @submission.save
-      @submission.api_ids = sendSubmission()
+      @submission.api_ids = JudgeApi.new.sendSubmission(@submission)
       @submission.in_queue = false
       @submission.save
       redirect_to submissions_user_path(current_user.username)
@@ -41,10 +42,11 @@ class SubmissionController < ApplicationController
   
   def show_details_submission
     fileM = FileManager.new
+    tcm = TestCaseManager.new
     submission = Submission.find_by( id: params[ :submission_id ] )
     @code = fileM.get_data_url( submission.url_code.url )
     @verdicts = get_verdicts( fileM, submission )
-    @test_cases = parsing_test_cases( fileM, get_test_cases( submission ) )
+    @test_cases = tcm.parsing_test_cases( fileM, tcm.get_test_cases( submission ) )
     render layout: 'light_view'
   end
 
@@ -201,40 +203,18 @@ class SubmissionController < ApplicationController
     end
   end
 
-  # Function to submit a code to the API
-  # Uses a @submission class variable that is defined in create
-  # Return the Ids for the submissions test case. (See GetVeredictJob)
-  def sendSubmission()
-    fileM = FileManager.new
-    code = fileM.get_data_url( @submission.url_code.url )
-    judge = JudgeApi.new
-    test_cases = parsing_test_cases( fileM, get_test_cases( @submission ) )
-    api_ids = ""
-    test_cases.each do |test_case|
-      language = @submission.language
-      input = test_case[ 0 ]
-      output = test_case[ 1 ]
-      id = judge.sendSubmission(code, language, input, output)
-      api_ids = api_ids + id.to_s + ";"
-    end
-    return api_ids;
-  end 
-
-  def get_test_cases( submission )
-    test_cases = Problem.find_by( id: submission.problem_id ).test_cases
-    return test_cases
-  end
-
   def submission_params
     params.require(:submission).permit(:problem_id, :language)
   end
 
-  def parsing_test_cases( file_manager, tc )
-    test_cases = [ ]
-    tc.each do |test_case|
-      test_cases.push( [ file_manager.get_data_url( test_case.url_input.url ), file_manager.get_data_url(test_case.url_output.url) ] )
+  def mapUsers( submissions )
+    m = {}
+    @submissions.each do |submission|
+      if !m.has_key?( submission.user_id )
+        m[submission.user_id] = User.find( submission.user_id ).username
+      end
     end
-    return test_cases
+    return m
   end
 
   def get_filename( language )

@@ -107,6 +107,19 @@ class ProblemController < ApplicationController
     end
   end
 
+  def rejudge
+    problem = Problem.find(params[:id])
+    judge = JudgeApi.new
+    problem.submissions.each do |submission|
+      submission.verdict = 'Pending'
+      submission.execution_time = '-'
+      submission.api_ids = judge.sendSubmission(submission)
+      submission.in_queue = false
+      submission.save
+    end
+    redirect_to submissions_problem_path(params[:id])
+  end
+
   private
 
   def init_pagination

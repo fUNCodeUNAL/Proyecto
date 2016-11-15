@@ -48,6 +48,7 @@ Rails.application.routes.draw do
 
   get 'problem/:problem_id/testcase/:test_idx', to: 'test_case#show_test_case', as: "problem_show_test_case"
   put 'problem/:problem_id/testcase/update/:test_idx', to: 'test_case#edit', as: "problem_edit_test_case"
+  post 'problem/rejudge/:id', to:'problem#rejudge', as: 'problem_rejudge'
   
 
   get 'contest/index', to: 'contest#index', as: "contest_index"
@@ -59,5 +60,6 @@ Rails.application.routes.draw do
   post 'contest/:contest_id/problem/:problem_id', to: 'contest#add_problem', as: 'contest_add_problem'
   delete 'contest/:contest_id/problem/:problem_index', to: 'contest#delete_problem', as: 'contest_delete_problem'
   put 'contest/:contest_id/problem/:problem_index', to: 'contest#update_problem', as: 'contest_update_problem'
+  post 'contest/:contest_id/register/:user_id', to: 'contest#register', as: 'contest_register'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

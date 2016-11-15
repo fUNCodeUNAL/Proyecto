@@ -1,8 +1,8 @@
 class ContestController < ApplicationController
 	before_action :authenticate_user!, except: [ :show, :index ]
 	before_action :init_pagination, only: [ :index, :paginate ]
-	
-	
+	helper_method :calculate_score, :count_submissions, :count_accepted
+
 	def index
 
 		maxQuery = 10
@@ -56,6 +56,13 @@ class ContestController < ApplicationController
 
 	def show
 		@contest = Contest.find(params[:id])
+		@problemsIn = @contest.problem_contest_relationships
+		@registeredUsers = @contest.users
+	end
+
+	def register 
+		UserContestRelationship.create(register_params)
+		redirect_to contest_path(params[:contest_id])
 	end
 
 	def new
@@ -156,5 +163,34 @@ class ContestController < ApplicationController
 
  	def contest_params
     	params.require(:contest).permit(:name, :teacher_id, :start_date, :end_date)
+  	end
+  	def register_params
+    	params.permit(:contest_id, :user_id)
+  	end
+
+  	# Return the maximum number of test cases passed by a submission made in a contest by an user
+  	def count_accepted(user_id, problem_id)
+  		submissionsInContest = Submission.where("user_id = ? AND problem_id = ? AND created_at > ? AND created_at < ?", user_id, problem_id, @contest.start_date, @contest.end_date)
+  		count = 0
+  		# The method to_i in ruby parse to integer every number from the start of the string
+  		# If there isn't any, return 0
+  		submissionsInContest.each do |s|
+  			count = [count, s.verdict.to_i ].max
+  		end
+  		return count
+  	end
+
+  	def calculate_score(user_id)
+  		count = 0
+  		@problemsIn.each do |r|
+  			tmp = count_accepted(user_id, r.problem.id)
+  			count = count + r.score * tmp
+  		end
+  		return count
+  	end
+
+  	# Return the number of submissions made for a user in a contest
+  	def count_submissions(user_id, problem_id)
+  		Submission.where("user_id = ? AND problem_id = ? AND created_at > ? AND created_at < ? ", user_id, problem_id, @contest.start_date, @contest.end_date).count
   	end
 end

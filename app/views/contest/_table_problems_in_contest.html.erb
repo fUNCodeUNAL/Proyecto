@@ -17,6 +17,7 @@
 				</th>
 				<th id="problemTh3">Puntuación</th>
 				<th id="problemTh4">Eliminar</th>
+				<th id="problemTh4">Rejuzgar</th>
 			</tr>
 			<% @problemsIn.each do |r| %>
 			<tr>
@@ -28,6 +29,7 @@
 					<%= link_to 'Actualizar', contest_update_problem_path({contest_id: @contest.id, problem_index: r.id, score: 2}), method: 'put', remote: true, onclick: call_function, id: 'link_update' + r.id.to_s %>
 				</td>
 				<td> <%= link_to 'Eliminar', contest_delete_problem_path({contest_id: @contest.id, problem_index: r.id }), method: 'delete', remote: true %></td>
+				<td> <%= link_to 'Rejuzgar', problem_rejudge_path(r.problem.id), method: 'post' %> </td>
 			</tr>
 
 			<% end %>
