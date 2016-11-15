@@ -53,6 +53,7 @@ Rails.application.routes.draw do
 
   get 'contest/index', to: 'contest#index', as: "contest_index"
   get 'contest/new', to: 'contest#new', as: "contest_new"
+  get 'contest/my_contests', to: 'contest#my_contests', as: "my_contests"
   get 'contest/:id', to:'contest#show', as: "contest"
   post 'contest', to: 'contest#create', as:'contests'
   get 'contest/edit/:id', to: 'contest#edit', as: "contest_edit"

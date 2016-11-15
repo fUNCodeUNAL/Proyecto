@@ -1,6 +1,6 @@
 class ContestController < ApplicationController
 	before_action :authenticate_user!, except: [ :show, :index ]
-	before_action :init_pagination, only: [ :index, :paginate ]
+	before_action :init_pagination, only: [ :index, :paginate, :my_contests ]
 	helper_method :calculate_score, :count_submissions, :count_accepted
 
 	def index
@@ -126,6 +126,33 @@ class ContestController < ApplicationController
 		if !record.update(score: params[:score])
 			render :edit
 		end
+	end
+
+	def my_contests
+
+		maxQuery = 10
+		@cur_date = Time.new
+		@past_contest = Contest.where("end_date < ? AND teacher_id = ?", @cur_date, current_user.id).limit(maxQuery)
+		@past_contest_total = Contest.where("end_date < ? AND teacher_id = ?", @cur_date, current_user.id).count
+		@comming_contest = Contest.where("start_date > ? AND teacher_id = ?", @cur_date, current_user.id).limit(maxQuery)
+		@comming_contest_total = Contest.where("start_date > ? AND teacher_id = ?", @cur_date, current_user.id).count
+		@running_contest = Contest.where("start_date <= ? AND end_date >= ? AND teacher_id = ?", @cur_date, @cur_date, current_user.id).limit(maxQuery)
+		@running_contest_total = Contest.where("start_date <= ? AND end_date >= ? AND teacher_id = ?", @cur_date, @cur_date, current_user.id).count
+
+		@disablePrevButton = { 'Past' => ' disabled',
+								'Comming' => ' disabled',
+								'Running' => ' disabled' }
+
+		if @past_contest_total <= maxQuery
+			@disableNextButton['Past'] = " disabled"
+		end
+		if @comming_contest_total <= maxQuery
+			@disableNextButton['Comming'] = " disabled"
+		end
+		if @running_contest_total <= maxQuery
+			@disableNextButton['Running'] = " disabled"
+		end
+
 	end
 
 	private
