@@ -1,4 +1,6 @@
 class ContestController < ApplicationController
+	load_and_authorize_resource
+
 	before_action :authenticate_user!, except: [ :show, :index ]
 	before_action :init_pagination, only: [ :index, :paginate, :my_contests ]
 	helper_method :calculate_score, :count_submissions, :count_accepted
@@ -66,7 +68,7 @@ class ContestController < ApplicationController
 	end
 
 	def new
-		@teacher_id = current_user.id
+		@teacher_id = Teacher.find_by(username: current_user.username).id
 		@contest = Contest.new
 		@contest.start_date = Time.new + 6*60
 		@contest.end_date = Time.new + 6*60
@@ -84,7 +86,7 @@ class ContestController < ApplicationController
 	
 	def edit
 		@contest = Contest.find(params[:id])
-		@teacher_id = current_user.id
+		@teacher_id = Teacher.find_by(username: current_user.username).id
 		@problemsIn = @contest.problem_contest_relationships
 	end
 
@@ -132,12 +134,15 @@ class ContestController < ApplicationController
 
 		maxQuery = 10
 		@cur_date = Time.new
-		@past_contest = Contest.where("end_date < ? AND teacher_id = ?", @cur_date, current_user.id).limit(maxQuery)
-		@past_contest_total = Contest.where("end_date < ? AND teacher_id = ?", @cur_date, current_user.id).count
-		@comming_contest = Contest.where("start_date > ? AND teacher_id = ?", @cur_date, current_user.id).limit(maxQuery)
-		@comming_contest_total = Contest.where("start_date > ? AND teacher_id = ?", @cur_date, current_user.id).count
-		@running_contest = Contest.where("start_date <= ? AND end_date >= ? AND teacher_id = ?", @cur_date, @cur_date, current_user.id).limit(maxQuery)
-		@running_contest_total = Contest.where("start_date <= ? AND end_date >= ? AND teacher_id = ?", @cur_date, @cur_date, current_user.id).count
+
+		teacher_id = Teacher.find_by(username: current_user.username).id
+
+		@past_contest = Contest.where("end_date < ? AND teacher_id = ?", @cur_date, teacher_id).limit(maxQuery)
+		@past_contest_total = Contest.where("end_date < ? AND teacher_id = ?", @cur_date, teacher_id).count
+		@comming_contest = Contest.where("start_date > ? AND teacher_id = ?", @cur_date, teacher_id).limit(maxQuery)
+		@comming_contest_total = Contest.where("start_date > ? AND teacher_id = ?", @cur_date, teacher_id).count
+		@running_contest = Contest.where("start_date <= ? AND end_date >= ? AND teacher_id = ?", @cur_date, @cur_date, teacher_id).limit(maxQuery)
+		@running_contest_total = Contest.where("start_date <= ? AND end_date >= ? AND teacher_id = ?", @cur_date, @cur_date, teacher_id).count
 
 		@disablePrevButton = { 'Past' => ' disabled',
 								'Comming' => ' disabled',

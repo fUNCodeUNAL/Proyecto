@@ -9,16 +9,17 @@ Username: <%= @user.username %>
 Correo: <%= @user.email %>
 </div>
 
-<div>
-Codigo universitario: <%= @student.cod %>
-</div>
-<div>
-Semestre: <%= @student.semester %>
-</div>
-
-<h3> El estudiante se encuentra en <%= @student.groups.count %> grupos </h3>
-<% @student.groups.each do |group| %>
-	<%= group.name %> <br>
-<% end %> 
+<% if @student != nil %>
+	<div>
+	Codigo universitario: <%= @student.cod %>
+	</div>
+	<div>
+	Semestre: <%= @student.semester %>
+	</div>
+	<h3> El estudiante se encuentra en <%= @student.groups.count %> grupos </h3>
+	<% @student.groups.each do |group| %>
+		<%= group.name %> <br>
+	<% end %> 
+<% end %>
 
 

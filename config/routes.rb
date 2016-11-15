@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 
   get 'pages/ok', as: "ok"
   get 'pages/wrong'
+  get 'new_teacher', to: 'pages#new_teacher'
+  post 'create_teacher', to: 'pages#create_teacher', as: 'create_teacher'
 
   get 'profile/:username', to: 'pages#profile', as: "profile"
   

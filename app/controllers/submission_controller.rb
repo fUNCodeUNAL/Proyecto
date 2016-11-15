@@ -7,6 +7,9 @@ require 'file_manager'
 require 'test_case_manager'
 
 class SubmissionController < ApplicationController
+
+  load_and_authorize_resource
+  
   before_action :authenticate_user!, only: [:new]
   before_action :init_pagination, only: [ :showUser, :showProblem, :showProblemUser, :paginate ]
 

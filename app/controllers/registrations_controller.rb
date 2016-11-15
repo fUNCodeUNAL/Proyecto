@@ -6,7 +6,11 @@ class RegistrationsController < Devise::RegistrationsController
     #just for testing
     if User.find_by(username: params[:user][:username]) != nil
       @student = Student.create(username: params[:user][:username])
-      @teacher = Teacher.create(username: params[:user][:username])
+      # If you want to add a Teacher:
+      # In your browser go to '/new_teacher' and write the username of an existent student
+      # It must be done with and existent teacher account.
+      # If not, make sure you only create either a teacher or a student
+      # @teacher = Teacher.create(username: params[:user][:username])
     end
 
   end

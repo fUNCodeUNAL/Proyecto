@@ -41,7 +41,8 @@
 <%= form_for :group, url: teacher_groups_create_path do |f| %>
 	<%= f.label 'Nombre' %>
 	<%= f.text_field :name %>
-	<%= f.hidden_field :teacher_id, value: current_user.id%>
+	<% teacher_id = Teacher.find_by(username: current_user.username).id %>
+	<%= f.hidden_field :teacher_id, value: teacher_id %>
 	<br><br>
 	<%= f.submit 'Guardar grupo'%>
 <% end %>

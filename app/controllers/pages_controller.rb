@@ -8,7 +8,7 @@ class PagesController < ApplicationController
   def profile
     @user = User.find_by(username: params[:username])
   	@student = Student.find_by(username: params[:username])
-  	if @user == nil or @student == nil
+  	if @user == nil
   		render pages_wrong_path
     end
   end
@@ -43,6 +43,21 @@ class PagesController < ApplicationController
     end
   end
 
+  def new_teacher
+    if !user_signed_in? or Teacher.where(username: current_user.username).count == 0
+      redirect_to pages_wrong_path
+    end
+  end
+
+  def create_teacher
+    teacher = Teacher.new(username: params[:username])
+    if teacher.save
+      Student.find_by(username: params[:username]).destroy
+      redirect_to pages_index_path
+    else
+      redirect_to pages_wrong_path
+    end
+  end
   
   private
 

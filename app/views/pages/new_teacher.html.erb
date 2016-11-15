@@ -1,0 +1,5 @@
+<%= form_tag create_teacher_path, method: 'post' do %>
+	<%= label_tag 'Usuario' %>
+	<%= text_field_tag :username %>
+	<%= submit_tag 'Agregar profesor'%>
+<% end %>

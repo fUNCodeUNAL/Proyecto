@@ -66,21 +66,28 @@
                         <li>
                             <%= link_to " Contest ", contest_index_path, class: "fa fa-table" %>
                         </li>
-                        <% if user_signed_in? %>
+                        <% if user_signed_in? and can? :create, @contest %>
                             <li>
                             <%= link_to " Mis Contest ", my_contests_path, class: "fa fa-table" %>
+                            </li>
+                            <li>
+                            <%= link_to " Crear Contest ", contest_new_path, class: "fa fa-table" %>
                             </li>
                         <% end %>
                         <li>
                             <%= link_to " Problemas ", problem_index_path, class: "fa fa-product-hunt" %>
                         </li>
                         <% if user_signed_in? %>
-                            <li>
-                            <%= link_to "Crear Problema ", problem_new_path, class: "fa fa-product-hunt" %>
-                            </li>
-                            <li>
-                                <%= link_to " Grupos ", teacher_groups_show_path, class: "fa fa-heart" %>
-                            </li>
+                            <% if can? :create, @problem %>
+                                <li>
+                                <%= link_to " Crear Problema ", problem_new_path, class: "fa fa-product-hunt" %>
+                                </li>
+                            <% end %>
+                            <% if can? :create, @group %>
+                                <li>
+                                    <%= link_to " Grupos ", teacher_groups_show_path, class: "fa fa-heart" %>
+                                </li>
+                            <% end %>
                             <li> 
                                 <%= link_to " Cerrar sesión", destroy_user_session_path, method: :delete, class: "fa fa-sign-out" %>
                             </li>

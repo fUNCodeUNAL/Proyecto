@@ -7,8 +7,11 @@
 	Fecha de finalización: <%= @contest.end_date %>
 
 	<% if user_signed_in? %>
-		<%= button_to 'Registrar', contest_register_path(contest_id: @contest.id, user_id: current_user.id), method: 'post', class: "btn btn-default btn-round" %>
-		<% if current_user.id == @contest.teacher_id %>
+		<% if Time.new < @contest.end_date and @registeredUsers.include? current_user == false %>
+			<%= button_to 'Registrar', contest_register_path(contest_id: @contest.id, user_id: current_user.id), method: 'post', class: "btn btn-default btn-round" %>
+		<% end %>
+		<% tmp_teacher = Teacher.find_by(username: current_user.username) %>
+		<% if tmp_teacher != nil and tmp_teacher.id == @contest.teacher_id %>
 			<%= button_to 'Editar', contest_edit_path(@contest.id), method: 'get', class: "btn btn-default btn-round" %>
 		<% end %>
 	<% end %>

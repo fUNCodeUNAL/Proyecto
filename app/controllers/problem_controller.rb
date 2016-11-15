@@ -1,6 +1,8 @@
 require 'zip'
 
 class ProblemController < ApplicationController
+  load_and_authorize_resource
+
   before_action :authenticate_user!, only: [ :create, :edit, :new ]
   before_action :init_pagination, only: [ :index, :search ]
 
