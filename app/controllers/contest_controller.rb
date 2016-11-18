@@ -1,5 +1,5 @@
 class ContestController < ApplicationController
-	load_and_authorize_resource
+	load_and_authorize_resource except: [:create, :register, :update, :add_problem, :delete_problem, :update_problem]
 
 	before_action :authenticate_user!, except: [ :show, :index ]
 	before_action :init_pagination, only: [ :index, :paginate, :my_contests ]

@@ -5,9 +5,8 @@
 	Fecha de inicio: <%= @contest.start_date %>
 	<br>
 	Fecha de finalización: <%= @contest.end_date %>
-
 	<% if user_signed_in? %>
-		<% if Time.new < @contest.end_date and @registeredUsers.include? current_user == false %>
+		<% if Time.new < @contest.end_date and @registeredUsers.include?(current_user) == false %>
 			<%= button_to 'Registrar', contest_register_path(contest_id: @contest.id, user_id: current_user.id), method: 'post', class: "btn btn-default btn-round" %>
 		<% end %>
 		<% tmp_teacher = Teacher.find_by(username: current_user.username) %>
