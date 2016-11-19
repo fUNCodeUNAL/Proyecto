@@ -60,6 +60,10 @@ class ContestController < ApplicationController
 		@contest = Contest.find(params[:id])
 		@problemsIn = @contest.problem_contest_relationships
 		@registeredUsers = @contest.users
+		# esto ordena en orden ascendente primero por el score total, y luego por la cantidad de problemas
+		# entre mas score mejor, entre menos problemas mejor y luego por la cantidad de envios.
+		@registeredUsers = @registeredUsers.sort_by{ |p| [-calculate_score(p.id), count_ac_problems(p.id), count_total_submissions(p.id)] }
+		
 	end
 
 	def register 
@@ -208,6 +212,24 @@ class ContestController < ApplicationController
   		# If there isn't any, return 0
   		submissionsInContest.each do |s|
   			count = [count, s.verdict.to_i ].max
+  		end
+  		return count
+  	end
+
+  	def count_ac_problems(user_id)
+  		count = 0
+  		@problemsIn.each do |r|
+  			if count_accepted(user_id, r.problem.id) == r.problem.test_cases.count
+  				count = count + 1
+  			end
+  		end
+  		return count
+  	end
+
+  	def count_total_submissions(user_id)
+  		count = 0
+  		@problemsIn.each do |r|
+  			count = count + count_submissions(user_id, r.problem.id)
   		end
   		return count
   	end
