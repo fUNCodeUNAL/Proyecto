@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20161028211214) do
 
   create_table "submissions", force: :cascade do |t|
     t.string   "verdict"
+    t.string   "final_verdict"
     t.string   "language"
     t.float    "execution_time"
     t.text     "url_code"
