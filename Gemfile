@@ -43,6 +43,8 @@ gem "cancan"
 
 gem 'figaro'
 
+#gem 'acts_as_xlsx'
+
 gem 'dropzonejs-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

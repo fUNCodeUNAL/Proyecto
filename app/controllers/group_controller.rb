@@ -36,6 +36,16 @@ class GroupController < ApplicationController
     redirect_to teacher_groups_edit_path(has_group_params[:id_group])
   end
 
+  def statistics
+    @contests = GroupAndContest.find_by( group_id: params[:id_group] )
+    @name = Group.find(params[:id_group]).name
+    render :xlsx => "statistics", :filename => name + ".xlsx"
+    puts "##########################################"
+    puts @contests.inspect
+
+    redirect_to teacher_groups_show_path  
+  end
+
   private
   def group_params
     params.require(:group).permit(:name, :teacher_id)

@@ -27,6 +27,8 @@
 				<%= group.students.count %>
 
 				<div class="pull-right">
+					<%= link_to raw("<span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span>"), group_statistics_path(group), class: "btn btn-primary btn-xs", method: :post %>
+
 					<%= link_to raw("<span class='glyphicon glyphicon-edit' aria-hidden='true'></span>"), teacher_groups_edit_path(group), class: "btn btn-success btn-xs" %>
 
 					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), teacher_groups_delete_path(group), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>

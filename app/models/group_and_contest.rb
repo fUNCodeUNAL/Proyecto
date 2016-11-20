@@ -1,0 +1,2 @@
+class GroupAndContest < ApplicationRecord
+end

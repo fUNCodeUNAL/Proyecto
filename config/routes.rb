@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   get 'groups/edit/:id_group', to: 'group#edit', as: "teacher_groups_edit"
   post 'groups/edit', to: 'group#add_student', as: "group_add_student"
+  post 'groups/statistics/:id_group', to: 'group#statistics', as: "group_statistics"
   delete 'groups/delete/:id_group/:id_student', to: 'group#delete_student', as: "group_student_delete"
 
   get 'problem/search', to: 'problem#search', as: "problem_search"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161028211214) do
+ActiveRecord::Schema.define(version: 20161120181214) do
 
   create_table "contests", force: :cascade do |t|
     t.datetime "start_date"
@@ -23,6 +23,13 @@ ActiveRecord::Schema.define(version: 20161028211214) do
   end
 
   create_table "create_problem_contest_relationships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "group_and_contests", force: :cascade do |t|
+    t.integer  "group_id"
+    t.integer  "contest_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
