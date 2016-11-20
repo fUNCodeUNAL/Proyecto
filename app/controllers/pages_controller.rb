@@ -12,16 +12,12 @@ class PagesController < ApplicationController
       render pages_wrong_path
     end
 
-    @submission = Submission.where('user_id LIKE ? AND final_verdict NOT IN ("Pending", "Internal Error")', @user.id).select('final_verdict, COUNT(final_verdict) as total').group(:final_verdict)
+    submission_query = Submission.where('user_id LIKE ? AND final_verdict NOT IN ("Pending", "Internal Error")', @user.id).select('final_verdict, COUNT(final_verdict) as total').group(:final_verdict)
 
     @submission_data = [ ['Verdict', 'Count'] ]
-    @submission.each do |sub|
+    submission_query.each do |sub|
       @submission_data.push( [ sub.final_verdict, sub.total ] )
     end
-
-    #Problems table
-    maxQuery = 10
-    problemStartId = params[:pageIdProblem].to_i*maxQuery
 
     @problems = Submission.where('user_id LIKE ? AND final_verdict IS "Accepted"', @user.id).joins('LEFT JOIN problems ON problems.id = submissions.problem_id').select('problem_id AS id, problems.name').group(:problem_id)
 
