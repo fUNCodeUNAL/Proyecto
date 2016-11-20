@@ -158,3 +158,10 @@
   color: inherit !important;
   text-decoration: none;
 }
+.fixed-panel{
+  padding-top: 0;
+  padding-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
