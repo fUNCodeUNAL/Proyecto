@@ -13,27 +13,28 @@
 		<% if tmp_teacher != nil and tmp_teacher.id == @contest.teacher_id %>
 			<%= button_to 'Editar', contest_edit_path(@contest.id), method: 'get', class: "btn btn-default btn-round" %>
 		<% end %>
+
+		<% if @teacher_groups != nil and @teacher_groups.count != 0%>
+			<%= form_tag contest_register_group_path(@contest.id), method: 'post', remote: true do %>
+			  <div class="" >
+			      <label class=" control-label">Registrar Grupo</label>  
+			      <div class="">
+			        <div>
+			          <%= select_tag 'group_id', options_for_select(@teacher_groups.collect{ |u| [u.name, u.id] }) %>
+			          <%= button_tag(type: "submit", class: "btn btn-default") do %>
+			            <i class="fa fa-sign-in"> Registrar</i>
+			        <% end %>
+			        </div>
+			      </div>
+			    </div>
+
+			    
+			<% end %>
+		<% end %>
+
 	<% end %>
 
-	<% if @teacher_groups != nil %>
-		<%= form_tag contest_register_group_path(@contest.id), method: 'post', remote: true do %>
-		  <div class="form-group" >
-		      <label class="col-md-2 control-label">Registrar Grupo</label>  
-		      <div class="col-md-2">
-		        <div>
-		          <%= select_tag 'group_id', options_for_select(@teacher_groups.collect{ |u| [u.name, u.id] }) %>
-		        </div>
-		      </div>
-		      <div class="input-group-btn">
-		        <%= button_tag(type: "submit", class: "btn btn-default") do %>
-		            <i class="fa fa-sign-in"> Registrar</i>
-		        <% end %>
-		      </div>
-		    </div>
-
-		    
-		<% end %>
-	 <% end %>
+	
 	<br>
 	<br>
 </div>
