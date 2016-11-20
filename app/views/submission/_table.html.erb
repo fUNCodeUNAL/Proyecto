@@ -56,7 +56,7 @@
 
 			<% @submissions.each do |submission| %>
 			<tr>
-				<td> <%= link_to submission.id, submission_show_path(submission.id) %> </td>
+				<td> <%= link_to submission.id, submission_show_path(submission.id), class: "lightview" %> </td>
 				<td> <%= link_to submission.problem_id, problem_path(submission.problem_id) %> </td>
 				<%username = User.find(submission.user_id).username%>
 				<td> <%= link_to username, profile_path(username) %> </td>

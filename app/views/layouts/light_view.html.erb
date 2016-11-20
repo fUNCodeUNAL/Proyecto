@@ -4,12 +4,10 @@
     <title>f(UN)Code</title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'http://code.jquery.com/jquery-3.1.0.min.js' %>
-    <%= javascript_include_tag 'http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js' %>
-    <script>hljs.initHighlightingOnLoad();</script>
   </head>
   <body>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script>hljs.initHighlightingOnLoad();</script>
     <%= yield %>
   </body>
 </html>
