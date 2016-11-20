@@ -1,0 +1,13 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Notas") do |sheet|
+    sheet.add_row ['Profesor', @name_teacher]
+    sheet.add_row ['Grupo', @name_group]
+    sheet.add_row []
+    sheet.add_row [''] + @name_contests + ["Total"] + ["Nota"]
+    @info_student.each do |s|
+    	sheet.add_row s
+    end
+    sheet.add_row ["Puntaje Maximo"] + @total_contests
+    
+end
+
