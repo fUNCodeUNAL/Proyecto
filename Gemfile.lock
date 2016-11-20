@@ -212,8 +212,8 @@ GEM
     fog-xml (0.1.2)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
-    font-awesome-rails (4.6.3.1)
-      railties (>= 3.2, < 5.1)
+    font-awesome-sass (4.7.0)
+      sass (>= 3.2)
     formatador (0.2.5)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -358,7 +358,7 @@ DEPENDENCIES
   dropzonejs-rails
   figaro
   fog
-  font-awesome-rails
+  font-awesome-sass
   httparty
   jbuilder (~> 2.5)
   jquery-rails
@@ -375,4 +375,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.13.2
+   1.13.6
