@@ -9,6 +9,5 @@ class ApplicationController < ActionController::Base
     # Snapnish error:
     redirect_to root_url, :alert => "Usted no esta autorizado para acceder a esta pagina"
   end
-
  
 end

@@ -1,4 +1,5 @@
 class GroupController < ApplicationController
+
   before_action :authenticate_user!
   def create
     @group = Group.create(group_params)
@@ -26,7 +27,7 @@ class GroupController < ApplicationController
       if user == nil
         notFound = notFound + email + "\n"
       else
-        HasGroup.create(group_id: has_group_params[:id_group], student_id: user.id)
+        HasGroup.create(group_id: has_group_params[:id_group], student_id: Student.find_by(username: user.username).id)
       end
     end
     if notFound.length > 0

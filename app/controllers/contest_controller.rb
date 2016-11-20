@@ -63,11 +63,21 @@ class ContestController < ApplicationController
 		# esto ordena en orden ascendente primero por el score total, y luego por la cantidad de problemas
 		# entre mas score mejor, entre menos problemas mejor y luego por la cantidad de envios.
 		@registeredUsers = @registeredUsers.sort_by{ |p| [-calculate_score(p.id), count_ac_problems(p.id), count_total_submissions(p.id)] }
-		
+		if current_user != nil and @contest.teacher_id == current_user.id
+			@teacher_groups = Teacher.find(current_user.id).groups
+		end
 	end
 
 	def register 
 		UserContestRelationship.create(register_params)
+		redirect_to contest_path(params[:contest_id])
+	end
+
+	def register_group
+		@group = Group.find(params[:group_id])
+		@group.each do |g|
+		    UserContestRelationship.create(params[:contest_id], g.user_id)	
+		end
 		redirect_to contest_path(params[:contest_id])
 	end
 
