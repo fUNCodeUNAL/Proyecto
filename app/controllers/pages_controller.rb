@@ -19,6 +19,12 @@ class PagesController < ApplicationController
       @submission_data.push( [ sub.final_verdict, sub.total ] )
     end
 
+    #Problems table
+    maxQuery = 10
+    problemStartId = params[:pageIdProblem].to_i*maxQuery
+
+    @problems = Submission.where('user_id LIKE ? AND final_verdict IS "Accepted"', 1).joins('LEFT JOIN problems ON problems.id = submissions.problem_id').select('problem_id AS id, problems.name').group(:problem_id)
+
   end
   
   def search

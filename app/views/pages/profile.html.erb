@@ -89,3 +89,27 @@
 		</div>
 	</div>
 </div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default small">
+			<div class="panel-heading">
+				<i class="fa fa-check fa-lg" aria-hidden="true"></i> Problemas aceptados
+			</div>
+			<div class="panel-body">
+				<%@problems.each do |problem|%>
+				<div class="col-lg-2">
+					<div class="panel panel-success">
+						<div class="panel-heading text-center" style="height: 10;">
+							<%= link_to problem.id, problem_path(problem.id) %>
+						</div>
+						<div class="panel-body small text-center fixed-panel">
+							<em><%=problem.name%></em>
+						</div>
+					</div>
+				</div>
+				<%end%>
+			</div>
+		</div>
+	</div>
+</div>
