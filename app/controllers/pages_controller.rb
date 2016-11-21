@@ -7,10 +7,20 @@ class PagesController < ApplicationController
 
   def profile
     @user = User.find_by(username: params[:username])
-  	@student = Student.find_by(username: params[:username])
-  	if @user == nil
-  		render pages_wrong_path
+    @student = Student.find_by(username: params[:username])
+    if @user == nil
+      render pages_wrong_path
     end
+
+    submission_query = Submission.where('user_id LIKE ? AND final_verdict NOT IN ("Pending", "Internal Error")', @user.id).select('final_verdict, COUNT(final_verdict) as total').group(:final_verdict)
+
+    @submission_data = [ ['Verdict', 'Count'] ]
+    submission_query.each do |sub|
+      @submission_data.push( [ sub.final_verdict, sub.total ] )
+    end
+
+    @problems = Submission.where('user_id LIKE ? AND final_verdict IS "Accepted"', @user.id).joins('LEFT JOIN problems ON problems.id = submissions.problem_id').select('problem_id AS id, problems.name').group(:problem_id)
+
   end
   
   def search

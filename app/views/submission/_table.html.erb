@@ -1,5 +1,8 @@
 <%if @submissions.length == 0%>
-	<p>No se encontraron resultados de problemas.</p>
+	<span class="text-muted">
+		<br>
+		<em>No se encontraron resultados de envíos.</em>
+	</span>
 <%else%>
 	<h1>Submissions <span class="badge" ><%=@submissionsTotal%> </span></h1>
 	<div class="table-responsive">

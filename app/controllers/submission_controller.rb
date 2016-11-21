@@ -54,11 +54,14 @@ class SubmissionController < ApplicationController
 
   
   def showUser
+
+    params[:order] = 'id DESC'
+    @icon_order['id'] = "-alt"
     maxQuery = 10
     submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
     user = User.find_by(username: params[:username])
-    @submissions = Submission.where( user_id: user.id ).offset(submissionStartId).limit(maxQuery)
+    @submissions = Submission.where( user_id: user.id ).offset(submissionStartId).limit(maxQuery).order('id DESC')
     @submissionsTotal = Submission.where( user_id: user.id ).count
 
     if submissionStartId+maxQuery >= @submissionsTotal
@@ -74,10 +77,13 @@ class SubmissionController < ApplicationController
   end
 
   def showProblem
+
+    params[:order] = 'id DESC'
+    @icon_order['id'] = "-alt"
     maxQuery = 10
     submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
-    @submissions = Submission.where( problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery)
+    @submissions = Submission.where( problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery).order('id DESC')
     @submissionsTotal = Submission.where( problem_id: params[:problem_id] ).count
 
     if submissionStartId+maxQuery >= @submissionsTotal
@@ -89,15 +95,25 @@ class SubmissionController < ApplicationController
 
     @pendingSubmissions = Submission.where( problem_id: params[:problem_id], verdict: "Pending", in_queue: false)
     updatePendingSubmissions()
+
+    submission_query = Submission.where('problem_id IS ? AND final_verdict NOT IN ("Pending", "Internal Error")', params[:problem_id].to_i).select('final_verdict, COUNT(final_verdict) as total').group(:final_verdict)
+
+    @submission_data = [ ['Verdict', 'Count'] ]
+    submission_query.each do |sub|
+      @submission_data.push( [ sub.final_verdict, sub.total ] )
+    end
   end
 
   
   def showProblemUser
+
+    params[:order] = 'id DESC'
+    @icon_order['id'] = "-alt"
     maxQuery = 10
     submissionStartId = params[:pageIdSubm].to_i*maxQuery
 
     user = User.find_by(username: params[:username])
-    @submissions = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery)
+    @submissions = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).offset(submissionStartId).limit(maxQuery).order('id DESC')
     @submissionsTotal = Submission.where( user_id: user.id, problem_id: params[:problem_id] ).count
 
     if submissionStartId+maxQuery >= @submissionsTotal
