@@ -27,7 +27,12 @@ class GroupController < ApplicationController
       if user == nil
         notFound = notFound + email + "\n"
       else
-        HasGroup.create(group_id: has_group_params[:id_group], student_id: Student.find_by(username: user.username).id)
+        student = Student.find_by( username: user.username )
+        if student == nil
+          notFound = notFound + email + "\n"
+        else
+          HasGroup.create(group_id: has_group_params[:id_group], student_id: student.id)
+        end
       end
     end
     if notFound.length > 0
@@ -52,21 +57,21 @@ class GroupController < ApplicationController
         tmp.push( cur )
         sum = sum + cur
       end
-      tmp.push(sum)
+      tmp.insert(1, sum)
       @info_student.push(tmp)
     end
 
-    @total_contests = []
+    @total_contests = [5.0]
     sum = 0
     @contests.each do |c|
       tmp = calculate_max_contest_score(c.contest_id)
       @total_contests.push(tmp)
       sum = sum + tmp
     end
-    @total_contests.push(sum)
+    @total_contests.insert(1, sum)
 
     @info_student.each do |s| 
-      s.push( (s.last*5.0)/sum )
+      s.insert( 1, (s.last*5.0)/sum )
     end
 
     render xlsx: "statistics", filename: @name_group + ".xlsx"
