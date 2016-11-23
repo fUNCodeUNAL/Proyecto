@@ -75,9 +75,11 @@ class ContestController < ApplicationController
 
 	def register_group
 		@group_students = Group.find(params[:group_id]).students
-		GroupAndContest.create(contest_id: params[:contest_id], group_id: params[:group_id])
+		if GroupAndContest.find_by(contest_id: params[:contest_id], group_id: params[:group_id]) == nil
+			GroupAndContest.create(contest_id: params[:contest_id], group_id: params[:group_id])
+		end
 		@group_students.each do |g|
-		    UserContestRelationship.create(contest_id: params[:contest_id], user_id: Student.find_by(username: g.username).id)
+		    UserContestRelationship.create(contest_id: params[:contest_id], user_id: User.find_by(username: g.username).id)
 		end
 		redirect_to contest_path(params[:contest_id])
 	end

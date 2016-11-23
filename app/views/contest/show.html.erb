@@ -15,7 +15,7 @@
 		<% end %>
 
 		<% if @teacher_groups != nil and @teacher_groups.count != 0%>
-			<%= form_tag contest_register_group_path(@contest.id), method: 'post', remote: true do %>
+			<%= form_tag contest_register_group_path(@contest.id), method: 'post' do %>
 			  <div class="" >
 			      <label class=" control-label">Registrar Grupo</label>  
 			      <div class="">
