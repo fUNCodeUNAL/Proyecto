@@ -10,7 +10,7 @@ class RegistrationsController < Devise::RegistrationsController
       # In your browser go to '/new_teacher' and write the username of an existent student
       # It must be done with and existent teacher account.
       # If not, make sure you only create either a teacher or a student
-      # @teacher = Teacher.create(username: params[:user][:username])
+      #@teacher = Teacher.create(username: params[:user][:username])
     end
 
   end

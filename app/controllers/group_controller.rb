@@ -53,7 +53,7 @@ class GroupController < ApplicationController
       tmp = [x.username]
       sum = 0
       @contests.each do |c| 
-        cur = calculate_score(x.id, c.contest_id)
+        cur = calculate_score(User.find_by(username: x.username).id, c.contest_id)
         tmp.push( cur )
         sum = sum + cur
       end
