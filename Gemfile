@@ -28,6 +28,8 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'bootstrap_sb_admin_base_v2'
+
 gem 'httparty'
 
 gem 'fog'
