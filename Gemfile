@@ -28,19 +28,29 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'bootstrap_sb_admin_base_v2'
+
 gem 'httparty'
 
 gem 'fog'
 gem 'carrierwave'
-gem 'rubyzip'
+#gem 'rubyzip'
 
 gem 'omniauth-twitter'
 gem 'bootstrap-sass', '~> 3.3.4.1'
 gem 'rails-assets-tether', '>= 1.1.0'
-gem "font-awesome-rails"
+gem "font-awesome-sass"
 gem "devise"
+gem "cancan"
 
 gem 'figaro'
+
+gem 'rubyzip', '= 1.0.0'
+gem 'axlsx', '= 2.0.1'
+gem 'axlsx_rails'
+
+#correr esta linea por aparte
+#gem install 'acts_as_xlsx'
 
 gem 'dropzonejs-rails'
 # Use Capistrano for deployment
@@ -59,8 +69,8 @@ group :development do
 end
 
 group :production do
-  gem 'pg'
-  gem 'rails_12factor'
+  #gem 'pg'
+  #gem 'rails_12factor'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -1,13 +1,3 @@
-<div>
-	<br>Nombre: <%= @user.full_name %>
-</div>
-<div>
-	Username: <%= @user.username %>
-</div>
-<div>
-	Email: <%= @user.email %>
-</div>
-
 <h3> Tiene los siguientes Grupos: </h3>
 
 <table class = "table table-bordered table-hover">
@@ -27,6 +17,8 @@
 				<%= group.students.count %>
 
 				<div class="pull-right">
+					<%= link_to raw("<span class='glyphicon glyphicon-list-alt' aria-hidden='true'></span>"), group_statistics_path(group), class: "btn btn-primary btn-xs", method: :post %>
+
 					<%= link_to raw("<span class='glyphicon glyphicon-edit' aria-hidden='true'></span>"), teacher_groups_edit_path(group), class: "btn btn-success btn-xs" %>
 
 					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), teacher_groups_delete_path(group), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
@@ -41,7 +33,8 @@
 <%= form_for :group, url: teacher_groups_create_path do |f| %>
 	<%= f.label 'Nombre' %>
 	<%= f.text_field :name %>
-	<%= f.hidden_field :teacher_id, value: current_user.id%>
+	<% teacher_id = Teacher.find_by(username: current_user.username).id %>
+	<%= f.hidden_field :teacher_id, value: teacher_id %>
 	<br><br>
 	<%= f.submit 'Guardar grupo'%>
 <% end %>

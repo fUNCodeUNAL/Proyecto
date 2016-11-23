@@ -1,0 +1,58 @@
+<% type ||= params[:type] %>
+<% params[:cur_date] ||= @cur_date%>
+<h1><%=type + " Contests"%> <span class="badge" ><%=total_contests%> </span></h1>
+<div class="table-responsive">
+	<!--striped condensed -->
+	<table class="table table-bordered table-hoverm table-condensed">
+		
+		<%if total_contests > 0 %>
+		<tr class = "success">
+			
+			<th>
+				ID
+				<%new_params = params.merge({action: "paginate", type: type, order:'id ' + @send_order[type]['id']}).permit!%>
+				<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order[type]['id'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+			</th>
+			
+			<th>
+				Nombre
+				<%new_params[:order] = 'name ' + @send_order[type]['name']%>
+				<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order[type]['name'] +"' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+			</th>
+
+			<th>
+				Fecha de Inicio
+				<%new_params[:order] = 'start_date ' + @send_order[type]['start_date']%>
+				<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-attributes" + @icon_order[type]['start_date'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+			</th>
+
+			<th>
+				Fecha de Terminación
+				<%new_params[:order] = 'end_date ' + @send_order[type]['end_date']%>
+				<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-attributes" + @icon_order[type]['end_date'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+			</th>
+
+		</tr>
+		<%end%>
+
+		<% contests.each do |contest| %>
+		<tr>
+			<td> <%= link_to contest.id, contest_path(contest.id) %> </td>
+			<td> <%= contest.name %> </td>
+			<td> <%= contest.start_date %></td>
+			<td> <%= contest.end_date %></td>
+		</tr>
+		<% end %>
+
+	</table>
+</div>
+
+<%if total_contests > 0 %>
+<div class="text-center">
+	<%new_params = params.merge({action: "paginate", type: type, 'pageId' + type => params['pageId' + type].to_i-1}).permit!%>
+	<%= button_to 'Anterior', new_params, method: 'get', remote: true, class: ("btn btn-default btn-round"  + @disablePrevButton[type])%>
+	
+	<%new_params['pageId' + type] = params['pageId' + type].to_i+1%>
+	<%= button_to 'Siguiente', new_params , method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableNextButton[type]) %>
+</div>
+<%end%>

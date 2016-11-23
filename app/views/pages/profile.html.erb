@@ -1,24 +1,124 @@
-<h1>Perfil</h1>
-<div>
-Nombre: <%= @user.full_name %>
-</div>
-<div>
-Username: <%= @user.username %>
-</div>
-<div>
-Correo: <%= @user.email %>
+<%= javascript_include_tag('submission-pie.js') %>
+<script type="text/javascript">
+	
+	google.charts.load("current", {packages:["corechart"]});
+	if( <%=@submission_data.size()%> > 1 )
+		google.charts.setOnLoadCallback(drawChart);
+	function drawChart() {
+		var data = google.visualization.arrayToDataTable( <%= @submission_data.inspect.html_safe %> );
+		var colors = { 'Accepted': '#54CA36',
+					   'Wrong Answer': '#D1361B',
+					   'Time Limit Exceeded': '#DED020',
+					   'Runtime Error': '#F0A626',
+					   'Compilation Error': '#5B5BE7' };
+			var slices_colors = {};
+			var i = 0;
+			<%@submission_data.from(1).each do |ver,cnt|%> 
+				slices_colors[i++] = { color: colors[ '<%=ver%>' ] };
+			<%end%>
+
+		var options = {
+			is3D: true,
+			slices: slices_colors,
+			chartArea:{ width:'100%', height:'100%'}
+	};
+
+	var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+		chart.draw(data, options);
+	}
+
+	$(window).resize(function(){
+		if( <%=@submission_data.size()%> > 1 ) drawChart();
+	});
+
+</script>
+
+<h1>Perfil de <%= @user.full_name %></h1>
+<br>
+
+<div class="row">
+	<div class="col-lg-5">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="fa fa-address-book fa-lg" aria-hidden="true"></i> Datos de usuario
+			</div>
+			<div class="panel-body">
+				<ul>
+	                <li>Nombre: <%= @user.full_name %></li>
+					<li>Username: <%= @user.username %></li>
+					<li>Correo: <%= @user.email %></li>
+				</ul>
+			</div>
+		</div>
+
+		<% if @student != nil %>
+			<% groups_cnt = @student.groups.count %>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fa fa-users fa-lg" aria-hidden="true"></i> Grupos
+					<div class="pull-right">
+						<span class="badge"><%=groups_cnt%></span>
+					</div>
+				</div>
+				<div class="panel-body">
+					<%if groups_cnt == 0%>
+						<span class="text-muted small">
+							<em>El usuario no se encuentra inscrito en ningún grupo.</em>
+                        </span>
+					<%else%>
+						<ul>
+						<% @student.groups.each do |group| %>
+							<li><%= group.name %></li>
+						<% end %> 
+						</ul>
+					<%end%>
+				</div>
+			</div>
+		<% end %>
+	</div>
+	<div class="col-lg-7">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="fa fa-pie-chart fa-lg" aria-hidden="true"></i> Porcentajes de veredictos
+			</div>
+			<div class="panel-body">
+				<% if @submission_data.size() == 1 %>
+					<span class="text-muted small">
+							<em>El usuario no tiene ningún envío calificado.</em>
+                    </span>
+				<% end %>
+				<div id="piechart_3d" ></div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<div>
-Codigo universitario: <%= @student.cod %>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="fa fa-check fa-lg" aria-hidden="true"></i> Problemas aceptados
+			</div>
+			<div class="panel-body">
+				<%if @problems.length == 0%>
+					<span class="text-muted small">
+							<em>El usuario no tiene ningún problema aceptado.</em>
+                    </span>
+				<%else%>
+					<%@problems.each do |problem|%>
+					<div class="col-lg-2">
+						<div class="panel panel-success small" style="width: 100px;">
+							<div class="panel-heading text-center fixed-panel">
+								<%= link_to problem.id, problem_path(problem.id) %>
+							</div>
+							<div class="panel-body small text-center fixed-panel">
+								<%= problem.name %>
+							</div>
+						</div>
+					</div>
+					<%end%>
+				<%end%>
+			</div>
+		</div>
+	</div>
 </div>
-<div>
-Semestre: <%= @student.semester %>
-</div>
-
-<h3> El estudiante se encuentra en <%= @student.groups.count %> grupos </h3>
-<% @student.groups.each do |group| %>
-	<%= group.name %> <br>
-<% end %> 
-
-

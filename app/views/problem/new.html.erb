@@ -2,7 +2,7 @@
   <legend>Nuevo problema</legend>
   <%= form_for :problem, url: problem_create_path do |f| %>
     <% error = check_error(@problem.errors, :name) %>
-    <div class="form-group" >
+    <div class="form-group <%= error[:error_class] %>" >
       <label class="col-md-4 control-label">Nombre</label>  
       <div class="col-md-5">
         <div>
@@ -12,7 +12,7 @@
       </div>
     </div>
     <% error = check_error(@problem.errors, :file) %>
-    <div class="form-group" >
+    <div class="form-group <%= error[:error_class] %>" >
       <label class="col-md-4 control-label">Archivo comprimido</label>  
       <div class="col-md-5">
         <div>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <% error = check_error(@problem.errors, :time_limit) %>
-    <div class="form-group" >
+    <div class="form-group <%= error[:error_class] %>" >
       <label class="col-md-4 control-label">Tiempo límite</label>  
       <div class="col-md-5">
         <div>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <% error = check_error(@problem.errors, :languages) %>
-    <div class="form-group">
+    <div class="form-group <%= error[:error_class] %>">
       <label class="col-md-4 control-label">Lenguajes</label>
       <div class="col-md-5">
         <%= check_box_tag(:c) %>
@@ -41,8 +41,8 @@
         <%= label_tag(:cpp, "C++") %>
         <%= check_box_tag(:java) %>
         <%= label_tag(:java, "Java") %>
-        <%= check_box_tag(:python) %>
-        <%= label_tag(:python, "Python") %>
+        <%= check_box_tag(:py) %>
+        <%= label_tag(:py, "Python") %>
         <p class="help-block"> <%= error[:error_message] %></p> 
       </div>
     </div>

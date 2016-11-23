@@ -1,7 +1,7 @@
 <p class="has_error"> <%= params[:NotFound] %></p> 
 
 <div>
-	<br>Nombre del grupo: <%= @group.name %>
+	<br><h1><%= @group.name %></h1>
 </div>
 <h3> Tiene los siguientes Estudiantes: </h3>
 
@@ -23,7 +23,7 @@
 				<%= user.email %> (<%= user.username %>)
 
 				<div class="pull-right">
-					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), group_student_delete_path(@group.id, user.id), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
+					<%= link_to raw("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>"), group_student_delete_path(@group.id, student.id), class: "btn btn-danger btn-xs", method: :delete, data: { confirm: 'Are you sure?' } %>
 				</div>
 			</td>
 		</tr>

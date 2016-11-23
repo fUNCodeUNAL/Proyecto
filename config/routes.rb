@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 
   get 'pages/ok', as: "ok"
   get 'pages/wrong'
+  get 'new_teacher', to: 'pages#new_teacher'
+  post 'create_teacher', to: 'pages#create_teacher', as: 'create_teacher'
 
   get 'profile/:username', to: 'pages#profile', as: "profile"
   
@@ -17,8 +19,10 @@ Rails.application.routes.draw do
 
   get 'groups/edit/:id_group', to: 'group#edit', as: "teacher_groups_edit"
   post 'groups/edit', to: 'group#add_student', as: "group_add_student"
+  post 'groups/statistics/:id_group', to: 'group#statistics', as: "group_statistics"
   delete 'groups/delete/:id_group/:id_student', to: 'group#delete_student', as: "group_student_delete"
 
+  get 'problem/search', to: 'problem#search', as: "problem_search"
   get 'problem/index', to: 'problem#index', as: "problem_index"
   get 'problem/new', to: 'problem#new', as: "problem_new"
   get 'problem/:id', to: 'problem#show', as: "problem"
@@ -35,14 +39,32 @@ Rails.application.routes.draw do
   get 'problem/:problem_id/submission/', to: 'submission#showProblem', as: "submissions_problem"
   get ':username/submission/', to: 'submission#showUser', as: "submissions_user"
   post 'problem/:problem_id/submission/create', to: 'submission#create', as: "submissions_create"
-  get 'submission/:submission_id/', to: 'submission#show_details_submission', as: "submission_show"
   delete 'problem/:problem_id/testcase/delete/:test_idx', to: 'problem#delete_test_case', as: "problem_delete_test_case"
    #Para cuando vayamos a recalificar
    #put 'submission/update/:id', to: 'submission#update', as: "submission_update"
 
+  get 'user/paginate', to: 'user#paginate', as: "user_paginate"
+  get 'submission/paginate', to: 'submission#paginate', as: "submission_paginate"
+  get 'contest/paginate', to: 'contest#paginate', as: "contest_paginate"
+  get 'submission/:submission_id/', to: 'submission#show_details_submission', as: "submission_show"
+
 
   get 'problem/:problem_id/testcase/:test_idx', to: 'test_case#show_test_case', as: "problem_show_test_case"
   put 'problem/:problem_id/testcase/update/:test_idx', to: 'test_case#edit', as: "problem_edit_test_case"
+  post 'problem/rejudge/:id', to:'problem#rejudge', as: 'problem_rejudge'
+  
 
+  get 'contest/index', to: 'contest#index', as: "contest_index"
+  get 'contest/new', to: 'contest#new', as: "contest_new"
+  get 'contest/my_contests', to: 'contest#my_contests', as: "my_contests"
+  get 'contest/:id', to:'contest#show', as: "contest"
+  post 'contest', to: 'contest#create', as:'contests'
+  get 'contest/edit/:id', to: 'contest#edit', as: "contest_edit"
+  patch 'contest/:id', to: 'contest#update', as: "contest_update"
+  post 'contest/:contest_id/problem/:problem_id', to: 'contest#add_problem', as: 'contest_add_problem'
+  delete 'contest/:contest_id/problem/:problem_index', to: 'contest#delete_problem', as: 'contest_delete_problem'
+  put 'contest/:contest_id/problem/:problem_index', to: 'contest#update_problem', as: 'contest_update_problem'
+  post 'contest/:contest_id/register/:user_id', to: 'contest#register', as: 'contest_register'
+  post 'contest/:contest_id/register/', to: 'contest#register_group', as: 'contest_register_group'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

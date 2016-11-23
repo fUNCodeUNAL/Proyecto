@@ -1,10 +1,26 @@
 require 'zip'
 
 class ProblemController < ApplicationController
+  load_and_authorize_resource except: [:create, :update, :delete_test_case, :rejudge]
+
   before_action :authenticate_user!, only: [ :create, :edit, :new ]
+  before_action :init_pagination, only: [ :index, :search ]
 
   def index
-    @problems = Problem.all
+
+    maxQuery = 10
+    problemStartId = params[:pageIdProblem].to_i*maxQuery
+
+    @problems = Problem.all.offset(problemStartId).limit(maxQuery)
+    @problemTotal = Problem.all.count
+
+    if problemStartId+maxQuery >= @problemTotal
+      @disableProblemNextButton = " disabled"
+    end
+    if problemStartId == 0
+      @disableProblemPrevButton = " disabled"
+    end
+
   end
 
   def show
@@ -66,9 +82,65 @@ class ProblemController < ApplicationController
     redirect_to problem_edit_path(params[:problem_id])
   end
 
+  def search  
+    maxQuery = 10
+    problemStartId = params[:pageIdProblem].to_i*maxQuery
 
+    if( not params.has_key?(:search) )
+      @problems = Problem.all.offset(problemStartId).limit(maxQuery).order(params[:order])
+      @problemTotal = Problem.all.count
+    elsif( is_number?( params[:search] ) )
+      @problems = Problem.where("id = ? or lower(name) LIKE ?", Integer("#{params[:search]}"), "%#{params[:search].downcase}%").offset(problemStartId).limit(maxQuery).order(params[:order])
+      @problemTotal = Problem.where("id = ? or lower(name) LIKE ?", Integer("#{params[:search]}"), "%#{params[:search].downcase}%").count
+    else
+      @problems = Problem.where("lower(name) LIKE ?", "%#{params[:search].downcase}%").offset(problemStartId).limit(maxQuery).order(params[:order])
+      @problemTotal = Problem.where("lower(name) LIKE ?", "%#{params[:search].downcase}%").count
+    end
+
+    if problemStartId+maxQuery >= @problemTotal
+      @disableProblemNextButton = " disabled"
+    end
+    if problemStartId == 0
+      @disableProblemPrevButton = " disabled"
+    end
+  end
+
+  def rejudge
+    problem = Problem.find(params[:id])
+    judge = JudgeApi.new
+    problem.submissions.each do |submission|
+      submission.verdict = 'Pending'
+      submission.execution_time = '-'
+      submission.api_ids = judge.sendSubmission(submission)
+      submission.in_queue = false
+      submission.save
+    end
+    redirect_to submissions_problem_path(params[:id])
+  end
 
   private
+
+  def init_pagination
+    @disableProblemPrevButton = ""
+    @disableProblemNextButton = ""
+
+    @send_order ={
+      'id' => "DESC",
+      'name' => "DESC",
+      'created_at' => "DESC"
+    }
+    @icon_order ={
+      'id' => "",
+      'name' => "",
+      'created_at' => ""
+    }
+
+    if params.has_key?( :order ) and params[:order].split[1].eql?"DESC"
+      field = params[:order].split[0]
+      @send_order[ field ] = "ASC"
+      @icon_order[ field ] = "-alt"
+    end
+  end
 
   def create_temporary_file(file)
     filename = file.name
@@ -182,5 +254,9 @@ class ProblemController < ApplicationController
   
   def problem_params
     params.require(:problem).permit(:name, :time_limit)
+  end
+
+  def is_number? string
+    true if Integer(string) rescue false
   end
 end

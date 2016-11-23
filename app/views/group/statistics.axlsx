@@ -1,0 +1,35 @@
+wb = xlsx_package.workbook
+header = wb.styles.add_style(:bg_color => '353535', :fg_color => 'FF', :b => true, :u => true, :border=>Axlsx::STYLE_THIN_BORDER, alignment: { horizontal: :center })
+info = wb.styles.add_style(:bg_color => 'a5a5a4', :fg_color => '00', :border=>Axlsx::STYLE_THIN_BORDER)
+last = wb.styles.add_style(:bg_color => '5daf64', :fg_color => '00', :border=>Axlsx::STYLE_THIN_BORDER)
+nulo = wb.styles.add_style(:border=>Axlsx::STYLE_THIN_BORDER, alignment: { horizontal: :center })
+
+wb.add_worksheet(name: "Notas") do |sheet|
+	lenghts_columns = [15, 20, 7]
+	@name_contests.each do |s| 
+		lenghts_columns.push( s.length+2 )
+	end
+	style_header = [nulo]
+	style_info = [header]
+	style_last = [header]
+	for i in 1..(@name_contests.count+2)
+		style_header.push(header)
+		style_info.push(info)
+		style_last.push(last)
+	end
+
+    sheet.add_row ['Profesor:', @name_teacher], :style=>[header, info], :height => 14
+    sheet.add_row ['Grupo:', @name_group], :style=>[header, info], :height => 14
+    sheet.add_row
+    sheet.add_row [''] + ["Nota"] + ["Total"] + @name_contests , :style=>style_header, :height => 14
+    @info_student.each do |s|
+    	sheet.add_row s, :style=>style_info, :height => 14
+    end
+    sheet.add_row ["Puntaje Maximo:"] + @total_contests, :style=>style_last, :height => 14
+
+    sheet.column_widths *lenghts_columns
+    color_scale = Axlsx::ColorScale.three_tone
+    profitable = wb.styles.add_style( :fg_color => "FF428751", :type => :dxf )
+    sheet.add_conditional_formatting("B3:B#{5+@info_student.length}", { :type => :colorScale, :operator => :greaterThan, :formula => "2.999", :dxfId => profitable, :priority => 1, :color_scale => color_scale })
+end
+

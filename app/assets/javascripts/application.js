@@ -14,13 +14,9 @@
 //= require jquery_ujs
 //= require tether
 //= require bootstrap-sprockets
+//= require bootstrap
 //= require turbolinks
-//= require jquery.min
-//= require metisMenu.min
-//= require raphael.min
-//= require morris.min
-//= require morris-data
-//= require sb-admin-2.min
+//= require bootstrap_sb_admin_base_v2
 //= require excanvas
 //= require spinners.min
 //= require lightview

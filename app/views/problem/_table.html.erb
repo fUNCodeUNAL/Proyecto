@@ -1,0 +1,65 @@
+<%if @problems.length == 0%>
+	<p>No se encontraron resultados de problemas.</p>
+<%else%>
+	<% isContestTable = params.has_key?(:contestId) %>
+	<% if isContestTable and params[:contestId][0] == '{' %>
+		<% params[:contestId] = eval(params[:contestId])[:value] %>
+	<% end %>
+	<h1>Problemas <span class="badge" ><%=@problemTotal%> </span></h1>
+	<div class="table-responsive">
+		<!--striped condensed -->
+		<table class="table table-bordered table-hoverm table-condensed">
+			
+			<tr class = "success">
+				
+				<th>
+					ID
+					<%new_params = params.merge({controller: "problem", action: "search", order:'id ' + @send_order['id']}).permit!%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order['id'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+				
+				<th>
+					Nombre
+					<%new_params[:order] = 'name ' + @send_order['name']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-alphabet" + @icon_order['name'] +"' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+
+				<th>
+					Fecha de creación
+					<%new_params[:order] = 'created_at ' + @send_order['created_at']%>
+					<%= link_to raw("<span class='pull-right glyphicon glyphicon glyphicon-sort-by-order" + @icon_order['created_at'] + "' aria-hidden='true'></span>"), new_params, method: 'get',remote: true, class: "no-link" %>
+				</th>
+
+				<%if isContestTable%>
+				<th>Agregar</th>
+				<%end%>
+
+			</tr>
+
+			<% @problems.each do |problem| %>
+			<tr>
+				<td> <%= link_to problem.id, problem_path(problem.id) %> </td>
+				<td> <%= problem.name %> </td>
+				<td> <%= problem.created_at %></td>
+				<%if isContestTable%>
+				<td>
+					<% contest = Contest.find(params[:contestId]) %>
+					<%= link_to 'Agregar', contest_add_problem_path({contest_id: contest.id, problem_id: problem.id }), method: 'post', remote: true %>
+				</td>
+				<%end%>
+			</tr>
+			<% end %>
+
+		</table>
+	</div>
+
+	<div class="text-center">
+		<%new_params = params.merge({controller: "problem", action: "search", pageIdProblem: params[:pageIdProblem].to_i-1}).permit!%>
+		<%= button_to 'Anterior', new_params, method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableProblemPrevButton) %>
+		
+		<%new_params[:pageIdProblem] = params[:pageIdProblem].to_i+1%>
+		<%= button_to 'Siguiente', new_params , method: 'get', remote: true, class: ("btn btn-default btn-round" + @disableProblemNextButton) %>
+	</div>
+
+<%end%>
+

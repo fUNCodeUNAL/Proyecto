@@ -1,0 +1,63 @@
+<%
+    Struct.new("Error", :error_class, :error_message)
+
+    def check_error(errors, param)
+        if errors.include?(param)
+            return Struct::Error.new(" has-error", "*"+errors.full_messages_for(param)[0])
+        else 
+            return Struct::Error.new( "", "" )
+        end
+    end
+%>
+
+<div class="form-horizontal dropzone">
+  <legend><%= title %> Competencia</legend>
+  <%= form_for (@contest) do |f| %>
+    <% error = check_error(@contest.errors, :name) %>
+    <div class="form-group <%= error[:error_class] %>" >
+      <label class="col-md-4 control-label">Nombre</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.text_field :name, autofocus: true, class: "form-control input-md", placeholder: "nombre" %>
+        </div>
+        <p class="help-block"> <%= error[:error_message] %></p> 
+      </div>
+    </div>
+    <% error = check_error(@contest.errors, :start_date) %>
+    <div class="form-group <%= error[:error_class] %>" >
+      <label class="col-md-4 control-label">Fecha de inicio</label>  
+      <div class="col-md-5">
+        <div>
+          <% 
+            cur_time = Time.new;
+            if @contest.start_date != nil and @contest.start_date < cur_time
+          %>
+              <%= f.datetime_select :start_date, :disabled => true, class: "form-control input-md"%>
+          <%else%>
+              <%= f.datetime_select :start_date, class: "form-control input-md"%>
+          <%end%>
+
+        </div>
+        <p class="help-block"> <%= error[:error_message] %></p> 
+      </div>
+    </div>
+    <% error = check_error(@contest.errors, :end_date) %>
+    <div class="form-group <%= error[:error_class] %>" >
+      <label class="col-md-4 control-label">Fecha de finalización</label>  
+      <div class="col-md-5">
+        <div>
+          <%= f.datetime_select :end_date, class: "form-control input-md"%>
+        </div>
+        <p class="help-block"> <%= error[:error_message] %></p> 
+      </div>
+    </div>
+    <%= f.hidden_field :teacher_id, value: @teacher_id%>
+
+    <div class="form-group">
+      <label class="col-md-4 control-label"></label>
+      <div class="col-md-4">
+        <%= f.submit button_text, class: "btn btn-primary", data: {disable_with: "Creando..."}%>
+      </div>
+    </div>
+  <% end %>
+</div>

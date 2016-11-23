@@ -1,0 +1,64 @@
+<div id="contestInfo">
+	<center>
+		<h1> <%= @contest.name %> </h1>
+	</center>
+	Fecha de inicio: <%= @contest.start_date %>
+	<br>
+	Fecha de finalización: <%= @contest.end_date %>
+	<% if user_signed_in? %>
+		<% if Time.new < @contest.end_date and @registeredUsers.include?(current_user) == false %>
+			<%= button_to 'Registrar', contest_register_path(contest_id: @contest.id, user_id: current_user.id), method: 'post', class: "btn btn-default btn-round" %>
+		<% end %>
+		<% tmp_teacher = Teacher.find_by(username: current_user.username) %>
+		<% if tmp_teacher != nil and tmp_teacher.id == @contest.teacher_id %>
+			<%= button_to 'Editar', contest_edit_path(@contest.id), method: 'get', class: "btn btn-default btn-round" %>
+		<% end %>
+
+		<% if @teacher_groups != nil and @teacher_groups.count != 0%>
+			<%= form_tag contest_register_group_path(@contest.id), method: 'post' do %>
+			  <div class="" >
+			      <label class=" control-label">Registrar Grupo</label>  
+			      <div class="">
+			        <div>
+			          <%= select_tag 'group_id', options_for_select(@teacher_groups.collect{ |u| [u.name, u.id] }) %>
+			          <%= button_tag(type: "submit", class: "btn btn-default") do %>
+			            <i class="fa fa-sign-in"> Registrar</i>
+			        <% end %>
+			        </div>
+			      </div>
+			    </div>
+
+			    
+			<% end %>
+		<% end %>
+
+	<% end %>
+
+	
+	<br>
+	<br>
+</div>
+
+<div class="table-responsive">
+	<!--striped condensed -->
+	<table id="scoreboard" class="table table-bordered table-hoverm table-condensed">
+		<tr class = "success">
+			<th>#</th>
+			<th>Correo</th>
+			<th>Puntuación</th>
+			<% @problemsIn.each do |r| %>
+				<th> <%= link_to r.problem.id, problem_path(r.problem.id) %> </th>
+			<% end %>
+		</tr>
+		<% number = 0 %>
+		<% @registeredUsers.each do |user| %>
+			<tr>
+				<td> <%= number = number + 1 %> </td>
+				<td> <%= user.email %> </td>
+				<td> <%= calculate_score(user.id) %></td>
+				<% @problemsIn.each do |r| %>
+					<td> <%= count_accepted(user.id, r.problem.id) * r.score %> / <%= r.problem.test_cases.count * r.score %></td>
+			<% end %>
+		<% end %>
+	</table>
+</div>
