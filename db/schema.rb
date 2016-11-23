@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161120181214) do
+ActiveRecord::Schema.define(version: 20161122065637) do
 
   create_table "contests", force: :cascade do |t|
     t.datetime "start_date"
@@ -76,7 +76,6 @@ ActiveRecord::Schema.define(version: 20161120181214) do
 
   create_table "submissions", force: :cascade do |t|
     t.string   "verdict"
-    t.string   "final_verdict"
     t.string   "language"
     t.float    "execution_time"
     t.text     "url_code"
@@ -86,6 +85,7 @@ ActiveRecord::Schema.define(version: 20161120181214) do
     t.integer  "user_id"
     t.string   "api_ids"
     t.boolean  "in_queue"
+    t.string   "final_verdict"
     t.index ["problem_id"], name: "index_submissions_on_problem_id"
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
