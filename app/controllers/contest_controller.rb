@@ -94,6 +94,7 @@ class ContestController < ApplicationController
 		if @contest.save
     		redirect_to contest_index_path
     	else
+    		@teacher_id = Teacher.find_by(username: current_user.username).id
     		@contest.start_date = Time.new + 6*60
     		render :new
     	end
